@@ -72,8 +72,8 @@ class GetAllCustomersCommand  extends Command {
                 $customer->upTimeTo = $upTimeTo;
                 $customer->upTimeSchedule = $upTimeSchedule;
                 $customer->tariffId = $tariffId;
-                $customer->tariffName = $tariffName;
                 $customer->balance = $balance;
+                $customer->tariffName = $tariffName;
                 array_push($customers, $customer);
             }
             $stmt->close();

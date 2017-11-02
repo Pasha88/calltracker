@@ -5,7 +5,7 @@ require_once(dirname(__DIR__). "/AppConfig.php");
 
 class RecallPwdCommand extends Command {
 
-    private $getCustomerByEmailSQL = 'select * from customer where email = ?';
+    private $getCustomerByEmailSQL = 'select c.*, t.tariff_name from customer c left join tariff t on t.tariff_id = c.tariff_id where c.email = ?';
     private $saveResoreTokenSQL = 'update customer set restore_uid = ?, restore_valid_till = ? where customer_id = ?';
     private $args;
 
@@ -45,8 +45,8 @@ class RecallPwdCommand extends Command {
                 $customer->upTimeTo,
                 $customer->upTimeSchedule,
                 $customer->tariffId,
-                $customer->tariffName,
-                $customer->balance
+                $customer->balance,
+                $customer->tariffName
             );
 
             $stmt->execute();

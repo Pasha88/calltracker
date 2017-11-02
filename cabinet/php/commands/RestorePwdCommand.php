@@ -4,7 +4,8 @@ require_once ('Command.php');
 
 class RestorePwdCommand extends Command {
 
-    private $checkRestoreTokenSQL = 'select * from customer where customer_id = ?  and restore_uid = ? and timestampdiff(second, now(), restore_valid_till) > 0';
+    private $checkRestoreTokenSQL = 'select c.*, t.tariff_name from customer c left join tariff t on t.tariff_id = c.tariff_id where  
+                                        c.customer_id = ?  and c.restore_uid = ? and c.timestampdiff(second, now(), c.restore_valid_till) > 0';
     private $clearRestoreTokenSQL = 'update customer set restore_uid = null, restore_valid_till = null where customer_uid = ?';
     private $saveResetPwdTokenSQL = 'update customer set reset_pwd_uid = ?, reset_pwd_valid_till = ? where customer_uid = ?';
     private $args;
@@ -45,8 +46,8 @@ class RestorePwdCommand extends Command {
                 $customer->upTimeTo,
                 $customer->upTimeSchedule,
                 $customer->tariffId,
-                $customer->tariffName,
-                $customer->balance
+                $customer->balance,
+                $customer->tariffName
             );
 
             $stmt->execute();

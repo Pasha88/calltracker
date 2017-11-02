@@ -5,7 +5,7 @@ require_once(dirname(__DIR__) . '/../domain/Customer.php');
 
 class FindCustomerCommand  extends Command {
 
-    private $getCustomerSQL = 'select * from customer where customer_id = ?';
+    private $getCustomerSQL = 'select c.*, t.tariff_name from customer c left join tariff t on t.tariff_id = c.tariff_id where c.customer_id = ?';
     private $args;
 
     function __construct($a) {
@@ -45,8 +45,8 @@ class FindCustomerCommand  extends Command {
                 $customer->upTimeTo,
                 $customer->upTimeSchedule,
                 $customer->tariffId,
-                $customer->tariffName,
-                $customer->balance
+                $customer->balance,
+                $customer->tariffName
             );
             $stmt->execute();
             $stmt->fetch();
