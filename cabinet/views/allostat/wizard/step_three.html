@@ -1,0 +1,46 @@
+<div class="row">
+    <div class="col-sm-10">
+        <fieldset>
+            <h2>Google analytics и Яндекс.Метрика</h2>
+            <p>Введите Google Analytics ID для вашего сайта<br>
+            <div class="row">
+                <div class="col-sm-9">
+                    <div class="form-group">
+                        <div class="m-b form-inline">
+                            <input type="text" ng-model="gaId.val" class="form-control" placeholder="GA-XXXXXX" style="width: 50%;">
+                            <button class="btn btn-primary" type="submit" ng-click="saveGaId(gaId.val)" style="width: 15%;">Сохранить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row"></div>
+            <p>Введите ID Яндекс.Метрики для вашего сайта и разрешите доступ для отправки статистики Allostat с помощью кнопки "Авторизовать"<br>
+            <div class="row">
+                <div class="col-sm-9">
+                    <div class="form-group">
+                        <div class="m-b form-inline">
+                            <input type="text" ng-model="yaId.val" class="form-control" placeholder="12345678" style="width: 50%;">
+                            <button class="btn btn-primary" type="submit" ng-click="saveYaId(yaId.val)" ng-disabled="isEmpty(yaId.val)" ng-if="!hasYaId">Авторизовать</button>
+                            <button class="btn btn-primary" type="submit" ng-click="unbindYaId()" ng-if="hasYaId" style="width: 15%;">Удалить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-9">
+
+                    <!--<button class="btn btn-primary" type="submit" ng-click="restoreGaId()">Отмена&nbsp;&nbsp;</button>-->
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="col-sm-2">
+        <fieldset class="m-t-md">
+            <a ui-sref="container.wizard.step_two" class="btn btn-default pull-left">Назад</a>
+            <a ui-sref="container.wizard.step_four" class="btn btn-primary pull-right">Далее</a>
+        </fieldset>
+    </div>
+</div>
+
+
+

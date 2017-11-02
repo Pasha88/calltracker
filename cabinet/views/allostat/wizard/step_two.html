@@ -1,0 +1,41 @@
+<div class="row">
+    <div class="col-sm-10">
+        <fieldset>
+            <div class="row">
+                <h2>Телефон по умолчанию</h2>
+                <p>Этот телефон будет отображаться на сайте в случае, если что-то пойдет не так<br>
+                    <small>(Формат номера может быть любым - таким как вы хотите чтобы он отображался на вашем сайте)</small></p>
+                <div class="form-group">
+                    <div class="col-sm-9">
+                        <div class="m-b form-inline">
+                            <input type="text" ng-model="defaultNumber.val" class="form-control" placeholder="+7 (495) 000-00-00" style="width: 50%;" ng-required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <h2>Домен вашего сайта</h2>
+                <small>(Введите домен второго уровня, например <b>site.com</b>)</small></p>
+                <div class="form-group">
+                    <div class="col-sm-9">
+                        <div class="m-b form-inline">
+                            <input type="text" ng-model="defaultDomain.val" class="form-control" placeholder="site.com" style="width: 50%;" ng-required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <button class="btn btn-primary" type="submit" ng-click="saveDefaultNumber()">Сохранить</button>
+                <button class="btn btn-primary" type="submit" ng-click="restoreDefaultNumber()">Сброс</button>
+            </div>
+        </fieldset>
+    </div>
+    <div class="col-sm-2">
+        <fieldset class="m-t-md">
+            <a ui-sref="container.wizard.step_one" class="btn btn-default pull-left">Назад</a>
+            <a ui-sref="container.wizard.step_three" class="btn btn-primary pull-right">Далее</a>
+        </fieldset>
+    </div>
+</div>
+
+

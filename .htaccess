@@ -1,0 +1,53 @@
+# Turn rewrite engine on
+Options +FollowSymlinks
+RewriteEngine on
+RewriteBase /
+
+RewriteRule ^public_api/register$ cabinet/php/PublicRestController.php?view=register [nc,qsa]
+RewriteRule ^public_api/authenticate$ cabinet/php/PublicRestController.php?view=auth [nc,qsa]
+RewriteRule ^public_api/recallpwd$ cabinet/php/PublicRestController.php?view=recallpwd [nc,qsa]
+RewriteRule ^public_api/restorepwd$ cabinet/php/PublicRestController.php?view=restorepwd&recallUID=$1customerId=$2 [nc,qsa]
+RewriteRule ^public_api/reset_pwd$ cabinet/php/PublicRestController.php?view=resetPwd [nc,qsa]
+RewriteRule ^public_api/allostat/numloader.js$ /cabinet/php/PublicRestController.php?view=numloader&customerUid=$1 [ne,qsa]
+
+RewriteRule ^api/authenticate$   cabinet/php/RestController.php?view=auth [nc,qsa]
+RewriteRule ^api/install/savePhoneList$ cabinet/php/RestController.php?view=savePhoneList [nc,qsa]
+RewriteRule ^api/install/getPhoneList$ cabinet/php/RestController.php?view=getPhoneList [nc,qsa]
+RewriteRule ^api/install/save/gaid$ cabinet/php/RestController.php?view=saveGaId [nc,qsa]
+RewriteRule ^api/install/save/defaultNumber$ cabinet/php/RestController.php?view=saveDefaultNumber [nc,qsa]
+RewriteRule ^api/install/check$ cabinet/php/RestController.php?view=checkinstall&customerId=$1 [nc,qsa]
+RewriteRule ^api/install/save/yaId$ cabinet/php/RestController.php?view=saveYaId [nc,qsa]
+RewriteRule ^api/install/confirm/yaId$ cabinet/php/RestController.php?view=confirmYaId [nc,qsa]
+RewriteRule ^api/install/free/number$ cabinet/php/RestController.php?view=freeNumber&id=$1 [nc,qsa]
+RewriteRule ^api/install/free/numbers$ cabinet/php/RestController.php?view=freeNumbers [nc,qsa]
+
+RewriteRule ^api/settings/change_pwd$ cabinet/php/RestController.php?view=resetPwd [nc,qsa]
+RewriteRule ^api/settings/load$ cabinet/php/RestController.php?view=loadUserSettings [nc,qsa]
+RewriteRule ^api/settings/save$ cabinet/php/RestController.php?view=saveUserSettings [nc,qsa]
+RewriteRule ^api/mainSettings/load$ cabinet/php/RestController.php?view=loadMainSettings [nc,qsa]
+RewriteRule ^api/mainSettings/save$ cabinet/php/RestController.php?view=saveMainSettings [nc,qsa]
+
+RewriteRule ^api/saveCall$   cabinet/php/ApiRestController.php?view=saveCall [nc,qsa]
+RewriteRule ^api/freenumber$ cabinet/php/ApiRestController.php?view=getFreePhoneNumber [nc,qsa]
+RewriteRule ^api/calls/changeStatus$ cabinet/php/RestController.php?view=callstatechange [nc,qsa]
+RewriteRule ^api/calls/delete$ cabinet/php/RestController.php?view=deletecall [nc,qsa]
+RewriteRule ^api/calls/hasNewCalls$ cabinet/php/RestController.php?view=hasNewCalls [nc,qsa]
+RewriteRule ^api/calls/setNoYaAuth cabinet/php/RestController.php?view=setNoYaAuth [nc,qsa]
+RewriteRule ^api/calls/page$   cabinet/php/RestController.php?view=callspage [nc,qsa]
+RewriteRule ^api_back/calls/page$   cabinet/php/RestController.php?view=callspage [nc,qsa]
+RewriteRule ^api_back/calls/hasNewCalls$ cabinet/php/RestController.php?view=hasNewCalls [nc,qsa]
+
+RewriteRule ^api/support/upload$ cabinet/php/RestController.php?view=uploadFile [nc,qsa]
+RewriteRule ^api/support/deleteFile$ cabinet/php/RestController.php?view=deleteFile [nc,qsa]
+RewriteRule ^api/support/createRequest$ cabinet/php/RestController.php?view=supportRequest [nc,qsa]
+
+
+#RewriteEngine On
+#RewriteCond %{HTTPS} !=on [NC]
+#RewriteRule ^(.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+#RewriteCond %{HTTP_HOST} ^www.allostat.ru$ [NC]
+#RewriteRule ^(.*)$ http://allostat.ru/$1 [R=301,L]
+
+ErrorDocument 404 https://allostat.ru/cabinet/#/errorOne
+ErrorDocument 500 https://allostat.ru/cabinet/#/errorTwo

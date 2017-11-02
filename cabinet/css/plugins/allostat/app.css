@@ -1,0 +1,60 @@
+.allostat-alert-danger {
+    background-color: #f2dede;
+    border-color: #ebccd1;
+    color: #a94442;
+}
+
+table.callstable td,
+table.callstable th {
+    text-align: center;
+}
+
+.newCalls {
+    background-color: antiquewhite;
+}
+
+table.callstable tr.newCalls {
+    background-color: antiquewhite;
+}
+
+input.ng-invalid.ng-touched {
+    background-color: antiquewhite;
+}
+
+.data-loading {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    background-image:url('../../../img/loader.gif');
+    background-position:50% 30%;
+    background-repeat:no-repeat;
+    z-index: 100001;
+}
+
+.modal-mini > .modal-dialog {
+    width: 450px;
+}
+
+.center-div
+{
+    position: fixed;
+    display: block;
+    top: 50%;
+    left: 55%;
+    margin: 0;
+}
+
+.center-div1
+{
+    position: absolute;
+    margin: auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100px;
+    height: 100px;
+    border-radius: 3px;
+}

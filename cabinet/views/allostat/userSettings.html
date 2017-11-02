@@ -1,0 +1,108 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Настройки</h2>
+        <div ncy-breadcrumb></div>
+    </div>
+    <div class="col-lg-2">
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-7">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Смена пароля
+                    </h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-8">
+                            <form name="resetPwdForm" method="get" class="form-horizontal ng-pristine ng-alid">
+                                <div class="form-group"><label class="col-sm-4 control-label">Старый пароль</label>
+                                    <div class="col-sm-8"><input type="password" ng-model="oldPwd" class="form-control" name="password"></div>
+                                </div>
+                                <div class="form-group"><label class="col-sm-4 control-label">Новый пароль</label>
+                                    <div class="col-sm-8"><input type="password" ng-model="newPwd" class="form-control" name="password" ng-required ng-minlength="pwdMinLength()"></div>
+                                </div>
+                                <div class="form-group"><label class="col-sm-4 control-label">Еще раз новый</label>
+                                    <div class="col-sm-8"><input type="password" ng-model="newPwdRepeat" class="form-control" name="password" ng-required ng-minlength="pwdMinLength()"></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-lg-offset-9 col-lg-3">
+                                        <button class="btn btn-sm" type="submit" ng-disabled="resetPwdForm.$invalid" ng-click="resetPwd()">Сохранить</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-sm-2"></div>
+                    </div>
+                </div>
+                <div class="ibox-title">
+                    <h5>Часовой пояс
+                    </h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-sm-12" style="text-align: center;">
+                            <select name="tzone" ng-model="customerTimeZone">
+                                <option ng-repeat="tz in tzList" value="{{tz.offset}}">{{tz.value}}</option>
+                            </select>
+                            <!--<button class="btn btn-sm" type="submit" ng-disabled="resetPwdForm.$invalid" ng-click="saveUserSettings()">Сохранить</button>-->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ibox-title">
+                    <h5>Подмена номера
+                    </h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                            <div class="form-group">
+                                <div class="col-sm-5">
+                                    <label class="control-label pull-right" style="padding-right:1px;">Менять номер: </label>
+                                </div>
+                                <div class="col-sm-7"  style="padding-left:1px;">
+                                    <!--<label> <input type="checkbox" ng-model="upTimeSchedule">По расписанию</label>-->
+
+                                    <div>
+                                        <label>
+                                            <input icheck type="radio" id="upTimeAlways" name="upTimeOption" ng-model="upTimeSchedule" value="false">Всегда
+                                        </label>
+                                    </div>
+                                    <div>
+                                        <label>
+                                            <input icheck type="radio" id="upTimeSchedule" name="upTimeOption" ng-model="upTimeSchedule" value="true">По расписанию
+                                        </label>
+                                    </div>
+
+                                </div>
+                            </div>
+                    </div>
+                    <div class="row" ng-show="isScheduledUptime()" style="margin-top:10px;">
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-8">
+                            <div class="form-group"><label class="col-sm-4 control-label" style="padding-right:3px; text-align: right;">Замена с: </label>
+                                <div class="col-sm-8"  style="padding-left:1px;">
+                                    <input type="text" class="col-sm-4" ui-timepicker="timePickerFromOptions" ng-model="upTimeFrom">
+                                    <label class="col-sm-1 control-label" style="padding-right:25px;">по: </label>
+                                    <input type="text" class="col-sm-4" ui-timepicker="timePickerToOptions" ng-model="upTimeTo">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top:20px;">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-8">
+                        <button class="btn btn-sm pull-right" type="submit" ng-disabled="resetPwdForm.$invalid" ng-click="saveUserSettings()">Сохранить</button>
+                    </div>
+                </div>
+                <!--<div class="ibox-content">-->
+                <!--</div>-->
+            </div>
+        </div>
+    </div>
+</div>

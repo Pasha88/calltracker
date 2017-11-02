@@ -1,0 +1,39 @@
+<div class="middle-box text-center loginscreen   animated fadeInDown">
+    <div>
+        <!--<div class="row alertBox" ng-if="wrong">-->
+            <!--<div class="col-md-4 col-md-offset-4">-->
+                <!--<div class="alert alert-danger alert-dismissible" role="alert">-->
+                    <!--<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+                    <!--{{ error.data.error }}-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+
+        <div>
+
+            <!--<h1 class="logo-name">ALLOSTAT</h1>-->
+
+        </div>
+
+        <h3>Регистрация в AlloStat.ru</h3>
+        <p>Пароль и логин будут отправлены на e-mail</p>
+        <form class="m-t" role="form" name="registerForm">
+            <div class="form-group">
+                <!--<input type="email"  name="regEmailInput" class="form-control" placeholder="Email" required ng-model="email" ng-pattern="emailPattern" title="{{registerForm.regEmailInput.$invalid ? getEmailErrMsg() : ''}}">-->
+                <input type="text"  name="regEmailInput" class="form-control" placeholder="Email" ng-model="email">
+            </div>
+            <div class="form-group">
+                <!--<input type="password" name="regPwdInput" class="form-control" placeholder="Пароль" required ng-model="pwd" ng-pattern="pwdPattern" title="{{registerForm.regPwdInput.$invalid ? getPwdErrMsg() : ''}}">-->
+                <input type="password" name="regPwdInput" class="form-control" placeholder="Пароль" ng-model="pwd">
+            </div>
+            <div class="form-group">
+                <div class="checkbox i-checks"><label> <input type="checkbox" ng-model="agree"><i></i> Согласие </label></div>
+            </div>
+            <button type="submit" class="btn btn-primary block full-width m-b" ng-disabled="registerForm.$invalid" ng-click="register()">Зарегистрироваться</button>
+
+            <p class="text-muted text-center"><small>Уже зарегистрированы?</small></p>
+            <a class="btn btn-sm btn-white btn-block" ui-sref="login">Войти</a>
+        </form>
+        <p class="m-t"> <small>ALLOSTAT.RU &copy; 2017</small> </p>
+    </div>
+</div>

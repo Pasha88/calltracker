@@ -1,0 +1,88 @@
+<!-- Main view  -->
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Поддержка</h2>
+        <div ncy-breadcrumb></div>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>Отправить запрос в службу поддержки</h5>
+                </div>
+                <div class="ibox-content" ng-class="doingResolve == false ? '' : 'sk-loading'">
+                    <div class="sk-spinner sk-spinner-circle">
+                        <div class="sk-circle1 sk-circle"></div>
+                        <div class="sk-circle2 sk-circle"></div>
+                        <div class="sk-circle3 sk-circle"></div>
+                        <div class="sk-circle4 sk-circle"></div>
+                        <div class="sk-circle5 sk-circle"></div>
+                        <div class="sk-circle6 sk-circle"></div>
+                        <div class="sk-circle7 sk-circle"></div>
+                        <div class="sk-circle8 sk-circle"></div>
+                        <div class="sk-circle9 sk-circle"></div>
+                        <div class="sk-circle10 sk-circle"></div>
+                        <div class="sk-circle11 sk-circle"></div>
+                        <div class="sk-circle12 sk-circle"></div>
+                    </div>
+<div class="row">
+<div class="col-sm-1"></div>
+<div class="col-sm-6">
+                        <form>
+                            <!--<div class="form-group">-->
+                                <!--<label for="exampleInputEmail1">Адрес отправителя</label>-->
+                                <!--<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                <!--<label for="exampleSelect1">Example select</label>-->
+                                <!--<select class="form-control" id="exampleSelect1">-->
+                                    <!--<option>1</option>-->
+                                    <!--<option>2</option>-->
+                                    <!--<option>3</option>-->
+                                    <!--<option>4</option>-->
+                                    <!--<option>5</option>-->
+                                <!--</select>-->
+                            <!--</div>-->
+                            <div class="form-group">
+                                <label for="exampleTextarea">Введите текст сообщения</label>
+                                <textarea class="form-control" id="exampleTextarea" rows="3" ng-model="supportRequest.requestText"></textarea>
+                            </div>
+                            <div>
+                                <div class="progress" style="">
+                                    <div class="progress-bar" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputFile">Добавить файл &nbsp;<small id="fileHelp" class="form-text text-muted">(Общим объемом не более 1 Мб</small></label>
+                                <!--<input type="file" class="form-control-file" id="exampleInputFile" aria-describedby="fileHelp">-->
+
+
+                                <ul class="list-inline uploadFileList">
+                                    <li>
+                                        <input type="file" id="inputFile" nv-file-select="" uploader="uploader" multiple>
+                                    </li>
+                                    <li ng-repeat="f in uploader.queue">{{f.file.name}} &nbsp;<a class="deleteHandle" ng-click="deleteFile(f)"><i class="fa fa-trash"></i></a></li>
+                                </ul>
+                            </div>
+
+                            <!--<button ng-click="removePhoneNumber(item)" class="btn-small form-control">-->
+                            <!--<div class="form-check">-->
+                                <!--<label class="form-check-label">-->
+                                    <!--<input type="checkbox" class="form-check-input">-->
+                                    <!--Check me out-->
+                                <!--</label>-->
+                            <!--</div>-->
+                            <button type="submit" class="btn btn-primary" ng-click="sendRequest()" ng-disabled="uploader.isUploading == true || supportRequest.requestText.length == 0">Отправить</button>
+                        </form>
+</div>
+</div>
+                </div>
+            </div>
+
+    </div>
+</div>
+<div ng-include="'views/common/footer.html'"></div>

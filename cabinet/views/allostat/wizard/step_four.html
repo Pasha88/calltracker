@@ -1,0 +1,69 @@
+<div ng-controller="InstallCheckCtrl">
+    <div class="row" ng-if="installConditionsGood() == true">
+        <div class="col-sm-10">
+            <fieldset>
+                <h2>Скрипт AlloStat</h2>
+                <p>Установите этот скрипт на вашем сайте после открывающего тега <code>&lt;body&gt; </code></p>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <pre class="m-t-sm" id="copycode">{{getScriptHeadString()}}</pre>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <div class="col-sm-2">
+            <fieldset class="m-t-md">
+                <a ui-sref="container.wizard.step_three" class="btn btn-default pull-left">Назад</a>
+                <a ui-sref="container.wizard.step_five" class="btn btn-primary pull-right">Далее</a>
+            </fieldset>
+        </div>
+    </div>
+    <div class="row" ng-if="installConditionsGood() == false">
+        <div class="col-sm-10">
+            <fieldset>
+                <h2>Пожалуйста, заполните недостающие поля</h2>
+                <!--<p>Пожалуйста, заполните недостающие поля</p>-->
+                <br>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="col-sm-8">
+                            Номера телефонов для подстановки
+                        </div>
+                        <div class="col-sm-2">
+                            <i class="fa fa-check fa-2x" aria-hidden="true" ng-if="installConditions.phoneNumbers == true"></i>
+                            <i class="fa fa-close fa-2x" aria-hidden="true" ng-if="installConditions.phoneNumbers == false"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="col-sm-8">
+                            Домен сайта
+                        </div>
+                        <div class="col-sm-2">
+                            <i class="fa fa-check fa-2x" aria-hidden="true" ng-if="installConditions.defaultDomain == true"></i>
+                            <i class="fa fa-close fa-2x" aria-hidden="true" ng-if="installConditions.defaultDomain == false"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="col-sm-8">
+                            Google Analytics ID
+                        </div>
+                        <div class="col-sm-2">
+                            <i class="fa fa-check fa-2x" aria-hidden="true" ng-if="installConditions.gaId == true"></i>
+                            <i class="fa fa-close fa-2x" aria-hidden="true" ng-if="installConditions.gaId == false"></i>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <div class="col-sm-2">
+            <fieldset class="m-t-md">
+                <a ui-sref="container.wizard.step_three" class="btn btn-default pull-left">Назад</a>
+                <a ui-sref="container.wizard.step_five" class="btn btn-primary pull-right">Далее</a>
+            </fieldset>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,16 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="no();">&times;</button>
+    <h3>{{confirmation.header}}</h3>
+</div>
+
+<div class="modal-body" style="max-height: 380px;overflow-y: auto;">
+    <div class="alert alert-error">
+        <!--<p><h4>Внимание!</h4></p>-->
+        <p ng-bind-html="confirmation.message"></p>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-default nriv-btn" ng-click="yes();">Да</button>
+    <button class="btn btn-default nriv-btn" data-dismiss="modal" aria-hidden="true" ng-click="no();">Нет</button>
+</div>
