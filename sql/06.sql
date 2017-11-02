@@ -55,3 +55,6 @@ ALTER TABLE customer
 
 ALTER TABLE cash_operation
   RENAME TO  balance_operation;
+  
+INSERT INTO tariff VALUES(1, 'Тариф по умолчанию', 1, 0.0);
+UPDATE customer SET tariff_id = 1 WHERE tariff_id IS NULL;  
