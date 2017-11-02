@@ -27,7 +27,8 @@
 		'inspinia.calls',
 		'inspinia.install',
         'inspinia.support',
-        'inspinia.mainsettings'
+        'inspinia.mainsettings',
+        'inspinia.tariffsettings'
     ])
 })();
 

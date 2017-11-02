@@ -69,6 +69,10 @@ function MainCtrl($rootScope, $http) {
         return  $rootScope.user.role > 100;
     };
 
+    $rootScope.showTariffSettings = function() {
+        return  $rootScope.user.role > 100;
+    };
+
     /**
      * countries - Used as duallistbox in form advanced view
      */
@@ -3658,6 +3662,7 @@ angular
     .controller('ForgotPwdCtrl', ForgotPwdCtrl)
     .controller('ResetForgottenPwdCtrl', ResetForgottenPwdCtrl)
     .controller('MainSettingsCtrl', MainSettingsCtrl)
+    .controller('TariffSettingsCtrl', TariffSettingsCtrl)
 
 
     .controller('dashboardFlotOne', dashboardFlotOne)

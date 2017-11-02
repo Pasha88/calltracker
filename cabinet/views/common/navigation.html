@@ -41,6 +41,9 @@
             <li ui-sref-active="active" ng-if="showMainSettings()">
                 <a ui-sref="container.main_settings"><i class="fa fa-wrench"></i> <span class="nav-label">{{ 'Консоль администратора' | translate }}</span></a>
             </li>
+            <li ui-sref-active="active" ng-if="showTariffSettings()">
+                <a ui-sref="container.tariff_settings"><i class="fa fa-wrench"></i> <span class="nav-label">{{ 'Тарифы' | translate }}</span></a>
+            </li>
             <li ui-sref-active="active">
                 <a ui-sref="container.support"><i class="fa fa-handshake-o"></i> <span class="nav-label">{{ 'Поддержка' | translate }}</span> </a>
             </li>

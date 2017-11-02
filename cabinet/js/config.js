@@ -265,6 +265,15 @@ function config($httpProvider, $stateProvider, $urlRouterProvider, $ocLazyLoadPr
                 label: 'Основные настройки'
             }
         })
+        .state('container.tariff_settings', {
+            url: "/tariff_settings",
+            templateUrl: "views/allostat/tariffSettings.html",
+            controller: MainSettingsCtrl,
+            data: { pageTitle: 'Тарифы' },
+            ncyBreadcrumb: {
+                label: 'Тарифы'
+            }
+        })
         .state('container.support', {
             url: "/support",
             templateUrl: "views/allostat/support.html",
