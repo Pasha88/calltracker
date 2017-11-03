@@ -268,28 +268,50 @@ function config($httpProvider, $stateProvider, $urlRouterProvider, $ocLazyLoadPr
         .state('container.tariff_settings', {
             url: "/tariff_settings",
             templateUrl: "views/allostat/tariffSettings.html",
-            controller: MainSettingsCtrl,
+            controller: TariffSettingsCtrl,
             data: { pageTitle: 'Тарифы' },
             ncyBreadcrumb: {
                 label: 'Тарифы'
             }
         })
         .state('container.payment', {
+            abstract: true,
             url: "/payment",
+            templateUrl: "views/allostat/abstract.html",
+        })
+        .state('container.payment.process', {
+            url: "/payment_process",
             templateUrl: "views/allostat/payment.html",
-            controller: MainSettingsCtrl,
+            controller: PaymentCtrl,
             data: { pageTitle: 'Пополнение' },
             ncyBreadcrumb: {
                 label: 'Пополнение'
             }
         })
-        .state('container.payment_history', {
+        .state('container.payment.history', {
             url: "/payment_history",
             templateUrl: "views/allostat/payment_history.html",
-            controller: MainSettingsCtrl,
+            controller: PaymentHistoryCtrl,
             data: { pageTitle: 'История платежей' },
             ncyBreadcrumb: {
                 label: 'История платежей'
+            },
+            loadPlugin: function ($ocLazyLoad) {
+                return $ocLazyLoad.load([
+                    {
+                        name: 'datePicker',
+                        files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+                    }
+                ])
+            }
+        })
+        .state('container.payment.tariff', {
+            url: "/payment_tariff",
+            templateUrl: "views/allostat/payment_tariff.html",
+            controller: PaymentTariffCtrl,
+            data: { pageTitle: 'Смена тарифа' },
+            ncyBreadcrumb: {
+                label: 'Смена тарифа'
             }
         })
         .state('container.support', {

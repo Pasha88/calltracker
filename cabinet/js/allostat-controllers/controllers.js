@@ -3665,6 +3665,7 @@ angular
     .controller('TariffSettingsCtrl', TariffSettingsCtrl)
     .controller('PaymentCtrl', PaymentCtrl)
     .controller('PaymentHistoryCtrl', PaymentHistoryCtrl)
+    .controller('PaymentTariffCtrl', PaymentTariffCtrl)
 
     .controller('dashboardFlotOne', dashboardFlotOne)
     .controller('dashboardFlotTwo', dashboardFlotTwo)

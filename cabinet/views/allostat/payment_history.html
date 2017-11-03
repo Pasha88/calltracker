@@ -1,39 +1,240 @@
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-        <h2>Настройки</h2>
+        <h2>История платежей</h2>
         <div ncy-breadcrumb></div>
     </div>
     <div class="col-lg-2">
     </div>
 </div>
-<div class="wrapper animated fadeInRight">
+<div class="wrapper wrapper-content animated fadeInRight ecommerce">
+
+    <div class="ibox-content m-b-sm border-bottom">
+        <div class="row">
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label class="control-label" for="order_id">ID платежа</label>
+                    <input type="text" id="order_id" name="order_id" value="" placeholder="Order ID" class="form-control">
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label class="control-label" for="status">Статус платежа</label>
+                    <!--<input type="text" id="status" name="status" value="" placeholder="Status" class="form-control">-->
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle form-control" type="button" id="status" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            {{"В обработке"}}
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <li><a href ng-click="setStatusFilter(1);">В обработке</a></li>
+                            <li><a href ng-click="setStatusFilter(2);">Отправлен</a></li>
+                            <li><a href ng-click="setStatusFilter(3);">Принят</a></li>
+                            <li><a href ng-click="setStatusFilter(4);">Проведен</a></li>
+                            <li><a href ng-click="setStatusFilter(5);">Ошибка</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label class="control-label" for="orderDateFrom">Дата от</label>
+                    <div class="input-group date">
+                        <input id="orderDateFrom" type="datetime" class="form-control" date-time ng-model="orderDateFrom" view="date" auto-close="true" min-view="date" format="DD-MM-YYYY">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label class="control-label" for="orderDateTo">Дата до</label>
+                    <div class="input-group date">
+                        <input id="orderDateTo" type="datetime" class="form-control" date-time ng-model="orderDateTo" view="date" auto-close="true" min-view="date" format="DD-MM-YYYY">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label class="control-label" for="customer">Клиент</label>
+                    <input type="text" id="customer" name="customer" value="" placeholder="client@mail.com" class="form-control">
+                </div>
+            </div>
+            <div class="col-sm-2">
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label class="control-label" for="amountMin">Сумма от</label>
+                    <input type="text" id="amountMin" name="amount" value="" placeholder="0.0" class="form-control">
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label class="control-label" for="amountMax">Сумма до</label>
+                    <input type="text" id="amountMax" name="amount" value="" placeholder="0.0" class="form-control">
+                </div>
+            </div>
+        </div>
+
+    </div>
+
     <div class="row">
-        <div class="col-lg-10">
-            <div class="ibox float-e-margins">
-                <!--<div class="ibox-title">-->
-                <!--</div>-->
-                <form name="mainsettingsForm">
-                    <div class="ibox-content">
-                        <div class="row" ng-repeat="settingsItem in settings">
-                            <div class="col-sm-12" style="text-align: right; padding-top: 5px; padding-bottom: 5px;">
-                                <div class="form-group"><label class="col-sm-4 control-label">{{settingsItem.visibleName}}</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" ng-model="settingsItem.value">
-                                    </div>
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-content">
+
+                    <div class="table-responsive" style="overflow-x: hidden;">
+
+                        <div class="row">
+                            <notifications-bar class="notifications" closeIcon="fa fa-times-circle"></notifications-bar>
+                        </div>
+
+                        <div class="row" style="padding-left:15px; padding-right:15px;">
+                            <div class="col-sm-4">
+                                <div class="dropdown pagination">
+                                    <label>Показывать по</label>
+                                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                        {{pageSize}}
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                        <li><a href ng-click="setPageSize(10);">10</a></li>
+                                        <li><a href ng-click="setPageSize(20);">20</a></li>
+                                        <li><a href ng-click="setPageSize(50);">50</a></li>
+                                        <li><a href ng-click="setPageSize(100);">100</a></li>
+                                    </ul>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row" style="padding-top: 5px; padding-bottom: 5px;">
-                            <div class="col-sm-1"></div>
-                            <div class="col-sm-10">
-                                <button class="btn btn-sm  pull-right" type="submit" ng-disabled="mainsettingsForm.$invalid" ng-click="save()">Сохранить</button>
+                            <div class="col-sm-4">
+                                <nav aria-label="Page navigation">
+                                    <ul class="pagination">
+                                        <li>
+                                            <a href ng-click="prev()" aria-label="Previous" title="Предыдущая">
+                                                <span aria-hidden="true">&lsaquo;</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href ng-click="first()" aria-label="First" title="Первая">
+                                                <span aria-hidden="true">&laquo;</span>
+                                            </a>
+                                        </li>
+                                        <li ng-repeat="i in pageNumbers()"><a href ng-click="loadPage($index)">{{$index+1}}</a></li>
+                                        <li>
+                                            <a href ng-click="last()" aria-label="Next" title="Последняя">
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href ng-click="next()" aria-label="Next" title="Следующая">
+                                                <span aria-hidden="true">&rsaquo;</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
                             </div>
-                            <div class="col-sm-1"></div>
+                            <div class="col-sm-4"></div>
                         </div>
+
+                        <!--<div class="row">-->
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover callstable">
+                                <!--Денис-17-10-17<table class="table table-striped table-bordered table-hover callstable" style="table-layout: fixed;">-->
+                                <thead>
+                                <tr>
+                                    <th width="9%">Дата</th>
+                                    <th width="7%">Время</th>
+                                    <th width="20%">Тариф</th>
+                                    <th width="16%">Сумма</th>
+                                    <th width="10%">Статус</th>
+                                    <th width="5%"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="gradeX" ng-repeat="item in calls" ng-class="item.type_id == 3 ? 'newCalls' : ''">
+                                    <td>{{item.call_date_str}}</td>
+                                    <td>{{item.call_time_str}}</td>
+                                    <td>{{item.client_id}}</td>
+                                    <!--                                    <td class="center">купить кирпич</td> -->
+                                    <td class="center">{{item.number}}</td>
+                                    <td class="center">
+                                        <ul class="list-inline">
+                                            <li>
+                                                <i class="fa fa-flag" aria-hidden="true" ng-if="item.type_id == 3" title="Звонка не было"></i>
+                                                <i class="fa fa-question" aria-hidden="true" ng-if="item.type_id == 1" title=""></i>
+                                                <i class="fa fa-check" aria-hidden="true" ng-if="item.type_id == 2" title="Входящий звонок"></i>
+                                            </li>
+                                            <li></li>
+                                            <li></li>
+                                            <li>
+                                                <button class="btn-small btn-default" ng-click="hasCall(item)" ng-disabled="item.type_id == 2" ng-if="item.type_id > 0"><i class="fa fa-phone" aria-hidden="true"></i></button>
+                                            </li>
+                                        </ul>
+                                        <!--
+                                                                                <button data-toggle="dropdown" class="btn btn-default btn-xs dropdown-toggle" aria-expanded="false">Выбрать <span class="caret"></span></button>
+                                                                                <ul class="dropdown-menu">
+                                                                                    <li><a href ng-click="callStateChange(item, 2)">Был звонок</a></li>
+                                                                                    <li><a href ng-click="callStateChange(item, 3)">Не было звонка</a></li>
+                                                                                </ul>
+                                        -->
+                                    </td>
+                                    <td class="center">
+                                        <button class="btn-small btn-default" ng-click="deleteCall(item)"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <th>Дата</th>
+                                    <th>Время</th>
+                                    <th>Истоник/канал</th>
+                                    <!--                                    <th>Ключевая фраза</th> -->
+                                    <th>Номер телефона</th>
+                                    <th>Статус</th>
+                                    <th></th>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                        <div class="row" style="padding-left:15px; padding-right:15px;">
+                            <div class="col-sm-4">
+                            </div>
+                            <div class="col-sm-4">
+                                <nav aria-label="Page navigation">
+                                    <ul class="pagination">
+                                        <li>
+                                            <a href ng-click="prev()" aria-label="Previous" title="Предыдущая">
+                                                <span aria-hidden="true">&lsaquo;</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href ng-click="first()" aria-label="First" title="Первая">
+                                                <span aria-hidden="true">&laquo;</span>
+                                            </a>
+                                        </li>
+                                        <li ng-repeat="i in pageNumbers()"><a href ng-click="loadPage($index)">{{$index+1}}</a></li>
+                                        <li>
+                                            <a href ng-click="last()" aria-label="Next" title="Последняя">
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href ng-click="next()" aria-label="Next" title="Следующая">
+                                                <span aria-hidden="true">&rsaquo;</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                            <div class="col-sm-4"></div>
+                        </div>
+
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+
 </div>

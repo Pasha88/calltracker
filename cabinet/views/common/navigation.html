@@ -47,11 +47,12 @@
             <li ui-sref-active="active">
                 <a ui-sref="container.support"><i class="fa fa-handshake-o"></i> <span class="nav-label">{{ 'Поддержка' | translate }}</span> </a>
             </li>
-            <li ng-class="{active: $state.includes('payment')}">
-                <a href="#"><i class="fa fa-files-o"></i> <span class="nav-label">{{ 'Состояние счета' | translate }}</span><span class="fa arrow"></span></a>
+            <li ng-class="{active: $state.includes('container.payment')}">
+                <a href="#"><i class="fa fa-files-o"></i> <span class="nav-label">{{ 'Счет' | translate }}</span><span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('payment')}">
-                    <li ui-sref-active="active"><a ui-sref="container.payment">{{ 'Пополнение' | translate }}</a></li>
-                    <li><a ui-sref="container.payment_history">{{ 'История платежей' | translate }}</a></li>
+                    <li ui-sref-active="active"><a ui-sref="container.payment.tariff">{{ 'Смена тарифа' | translate }}</a></li>
+                    <li ui-sref-active="active"><a ui-sref="container.payment.process">{{ 'Пополнение' | translate }}</a></li>
+                    <li ui-sref-active="active"><a ui-sref="container.payment.history">{{ 'История платежей' | translate }}</a></li>
                 </ul>
             </li>
 

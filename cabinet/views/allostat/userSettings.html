@@ -58,14 +58,24 @@
                     </h5>
                 </div>
                 <div class="ibox-content">
-                    <div class="row">
-                            <div class="form-group">
-                                <div class="col-sm-5">
+                    <div class="row" style="margin-top:10px;">
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-10">
+                            <div class="form-group"><label class="col-sm-4 control-label" style="padding-right:3px; text-align: right;">Количество телефонов: </label>
+                                <div class="col-sm-8"  style="padding-left:1px;">
+                                    <input type="text" class="col-sm-1" ng-model="maxPhoneNumberCount" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
+                        <div class="form-group">
+                            <div class="col-sm-2"></div>
+                            <div class="col-sm-10">
+                                <div class="col-sm-4">
                                     <label class="control-label pull-right" style="padding-right:1px;">Менять номер: </label>
                                 </div>
-                                <div class="col-sm-7"  style="padding-left:1px;">
-                                    <!--<label> <input type="checkbox" ng-model="upTimeSchedule">По расписанию</label>-->
-
+                                <div class="col-sm-8"  style="padding-left:1px;">
                                     <div>
                                         <label>
                                             <input icheck type="radio" id="upTimeAlways" name="upTimeOption" ng-model="upTimeSchedule" value="false">Всегда
@@ -76,13 +86,13 @@
                                             <input icheck type="radio" id="upTimeSchedule" name="upTimeOption" ng-model="upTimeSchedule" value="true">По расписанию
                                         </label>
                                     </div>
-
                                 </div>
                             </div>
+                        </div>
                     </div>
                     <div class="row" ng-show="isScheduledUptime()" style="margin-top:10px;">
                         <div class="col-sm-2"></div>
-                        <div class="col-sm-8">
+                        <div class="col-sm-10">
                             <div class="form-group"><label class="col-sm-4 control-label" style="padding-right:3px; text-align: right;">Замена с: </label>
                                 <div class="col-sm-8"  style="padding-left:1px;">
                                     <input type="text" class="col-sm-4" ui-timepicker="timePickerFromOptions" ng-model="upTimeFrom">
@@ -96,7 +106,7 @@
 
                 <div class="row" style="margin-top:20px;">
                     <div class="col-sm-2"></div>
-                    <div class="col-sm-8">
+                    <div class="col-sm-10">
                         <button class="btn btn-sm pull-right" type="submit" ng-disabled="resetPwdForm.$invalid" ng-click="saveUserSettings()">Сохранить</button>
                     </div>
                 </div>
