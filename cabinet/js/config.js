@@ -274,6 +274,24 @@ function config($httpProvider, $stateProvider, $urlRouterProvider, $ocLazyLoadPr
                 label: 'Тарифы'
             }
         })
+        .state('container.payment', {
+            url: "/payment",
+            templateUrl: "views/allostat/payment.html",
+            controller: MainSettingsCtrl,
+            data: { pageTitle: 'Пополнение' },
+            ncyBreadcrumb: {
+                label: 'Пополнение'
+            }
+        })
+        .state('container.payment_history', {
+            url: "/payment_history",
+            templateUrl: "views/allostat/payment_history.html",
+            controller: MainSettingsCtrl,
+            data: { pageTitle: 'История платежей' },
+            ncyBreadcrumb: {
+                label: 'История платежей'
+            }
+        })
         .state('container.support', {
             url: "/support",
             templateUrl: "views/allostat/support.html",

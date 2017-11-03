@@ -3663,7 +3663,8 @@ angular
     .controller('ResetForgottenPwdCtrl', ResetForgottenPwdCtrl)
     .controller('MainSettingsCtrl', MainSettingsCtrl)
     .controller('TariffSettingsCtrl', TariffSettingsCtrl)
-
+    .controller('PaymentCtrl', PaymentCtrl)
+    .controller('PaymentHistoryCtrl', PaymentHistoryCtrl)
 
     .controller('dashboardFlotOne', dashboardFlotOne)
     .controller('dashboardFlotTwo', dashboardFlotTwo)

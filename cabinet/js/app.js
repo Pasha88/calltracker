@@ -28,7 +28,8 @@
 		'inspinia.install',
         'inspinia.support',
         'inspinia.mainsettings',
-        'inspinia.tariffsettings'
+        'inspinia.tariffsettings',
+        'inspinia.payment'
     ])
 })();
 
