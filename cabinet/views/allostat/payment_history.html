@@ -35,7 +35,7 @@
                 <div class="form-group">
                     <label class="control-label" for="orderDateFrom">Дата от</label>
                     <div class="input-group date">
-                        <input id="orderDateFrom" type="datetime" class="form-control" date-time ng-model="orderDateFrom" view="date" auto-close="true" min-view="date" format="DD-MM-YYYY">
+                        <input id="orderDateFrom" type="datetime" class="form-control" date-time ng-model="filters['orderDateFrom']" view="date" auto-close="true" min-view="date" format="DD-MM-YYYY">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                     </div>
                 </div>
@@ -44,7 +44,7 @@
                 <div class="form-group">
                     <label class="control-label" for="orderDateTo">Дата до</label>
                     <div class="input-group date">
-                        <input id="orderDateTo" type="datetime" class="form-control" date-time ng-model="orderDateTo" view="date" auto-close="true" min-view="date" format="DD-MM-YYYY">
+                        <input id="orderDateTo" type="datetime" class="form-control" date-time ng-model="filters['orderDateTo']" view="date" auto-close="true" min-view="date" format="DD-MM-YYYY">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                     </div>
                 </div>
@@ -60,7 +60,7 @@
             <div class="col-sm-2">
                 <div class="form-group">
                     <label class="control-label" for="customer">Клиент</label>
-                    <input type="text" id="customer" name="customer" value="" placeholder="client@mail.com" class="form-control">
+                    <input type="text" id="customer" name="customer" ng-model="filters['customerEmail']" placeholder="client@mail.com" class="form-control">
                 </div>
             </div>
             <div class="col-sm-2">
@@ -68,13 +68,13 @@
             <div class="col-sm-2">
                 <div class="form-group">
                     <label class="control-label" for="amountMin">Сумма от</label>
-                    <input type="text" id="amountMin" name="amount" value="" placeholder="0.0" class="form-control">
+                    <input type="text" id="amountMin" name="amount" ng-model="filters['sumFrom']" placeholder="0.0" class="form-control">
                 </div>
             </div>
             <div class="col-sm-2">
                 <div class="form-group">
                     <label class="control-label" for="amountMax">Сумма до</label>
-                    <input type="text" id="amountMax" name="amount" value="" placeholder="0.0" class="form-control">
+                    <input type="text" id="amountMax" name="amount" ng-model="filters['sumTo']" placeholder="0.0" class="form-control">
                 </div>
             </div>
         </div>
@@ -97,58 +97,41 @@
                         <!--<div class="row">-->
                         <div class="table-responsive">
                             <table class="table table-striped table-bordered table-hover callstable">
-                                <!--Денис-17-10-17<table class="table table-striped table-bordered table-hover callstable" style="table-layout: fixed;">-->
                                 <thead>
                                 <tr>
+                                    <th width="5%">ID</th>
                                     <th width="9%">Дата</th>
                                     <th width="7%">Время</th>
                                     <th width="20%">Тариф</th>
-                                    <th width="16%">Сумма</th>
+                                    <th width="11%">Сумма</th>
                                     <th width="10%">Статус</th>
-                                    <th width="5%"></th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr class="gradeX" ng-repeat="item in calls" ng-class="item.type_id == 3 ? 'newCalls' : ''">
-                                    <td>{{item.call_date_str}}</td>
-                                    <td>{{item.call_time_str}}</td>
-                                    <td>{{item.client_id}}</td>
-                                    <!--                                    <td class="center">купить кирпич</td> -->
-                                    <td class="center">{{item.number}}</td>
+                                    <td class="center">{{item.orderId}}</td>
+                                    <td class="center">{{item.orderDateStr}}</td>
+                                    <td class="center">{{item.orderTimeStr}}</td>
+                                    <td class="center">{{item.tariffName}}</td>
+                                    <td class="center">{{item.sum}}</td>
                                     <td class="center">
                                         <ul class="list-inline">
                                             <li>
-                                                <i class="fa fa-flag" aria-hidden="true" ng-if="item.type_id == 3" title="Звонка не было"></i>
-                                                <i class="fa fa-question" aria-hidden="true" ng-if="item.type_id == 1" title=""></i>
-                                                <i class="fa fa-check" aria-hidden="true" ng-if="item.type_id == 2" title="Входящий звонок"></i>
-                                            </li>
-                                            <li></li>
-                                            <li></li>
-                                            <li>
-                                                <button class="btn-small btn-default" ng-click="hasCall(item)" ng-disabled="item.type_id == 2" ng-if="item.type_id > 0"><i class="fa fa-phone" aria-hidden="true"></i></button>
+                                                <i class="fa fa-hourglass-half" aria-hidden="true" ng-if="item.statusCode == 'PENDING'" title="{{orderStatusName}}"></i>
+                                                <!--<i class="fa fa-question" aria-hidden="true" ng-if="item.statusCode == ''" title="{{orderStatusName}}"></i>-->
                                             </li>
                                         </ul>
-                                        <!--
-                                                                                <button data-toggle="dropdown" class="btn btn-default btn-xs dropdown-toggle" aria-expanded="false">Выбрать <span class="caret"></span></button>
-                                                                                <ul class="dropdown-menu">
-                                                                                    <li><a href ng-click="callStateChange(item, 2)">Был звонок</a></li>
-                                                                                    <li><a href ng-click="callStateChange(item, 3)">Не было звонка</a></li>
-                                                                                </ul>
-                                        -->
-                                    </td>
-                                    <td class="center">
-                                        <button class="btn-small btn-default" ng-click="deleteCall(item)"><i class="fa fa-times" aria-hidden="true"></i></button>
                                     </td>
                                 </tr>
                                 </tbody>
                                 <tfoot>
                                 <tr>
+                                    <th>ID</th>
                                     <th>Дата</th>
                                     <th>Время</th>
                                     <th>Тариф</th>
                                     <th>Сумма</th>
                                     <th>Статус</th>
-                                    <th></th>
                                 </tr>
                                 </tfoot>
                             </table>

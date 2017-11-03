@@ -278,10 +278,11 @@ switch ($view) {
 
     case "getOrders":
         $repo = OrderRepo::getInstance();
-        $orders = $repo->orderList($requestObj->filters);
+        $list = $repo->orderList($requestObj->filters);
         $handler = new RawDataHandler();
         $result = new stdClass();
-        $result->statuses = $orders;
+        $result->orders = $list->orders;
+        $result->totalPages = $list->totalPages;
         $handler->handleResult($result);
         break;
 
