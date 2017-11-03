@@ -80,3 +80,33 @@ CREATE TABLE order_status_history (
     ON UPDATE CASCADE);
 
 INSERT INTO order_status (`order_status_id`, `code`, `dsc`) VALUES ('1', 'PENDING', 'В обработке');
+
+ALTER TABLE order_status_history
+DROP FOREIGN KEY `FK_ORD_STA_CHA_ORDER`;
+
+ALTER TABLE balance_operation
+DROP FOREIGN KEY `FK_CASH_OPER_ORDER`;
+ALTER TABLE balance_operation
+DROP INDEX `FK_CASH_OPER_ORDER_idx` ;
+
+ALTER TABLE order
+CHANGE COLUMN `order_id` `order_id` BIGINT(20) NOT NULL ;
+
+ALTER TABLE balance_operation
+CHANGE COLUMN `order_id` `order_id` BIGINT(20) NULL DEFAULT NULL ,
+ADD INDEX `FK_BALANCE_OPER_ORDER_idx` (`order_id` ASC);
+ALTER TABLE balance_operation
+ADD CONSTRAINT `FK_BALANCE_OPER_ORDER`
+  FOREIGN KEY (`order_id`)
+  REFERENCES order (`order_id`)
+  ON DELETE NO ACTION
+  ON UPDATE CASCADE;
+
+ALTER TABLE order_status_history
+CHANGE COLUMN `order_id` `order_id` BIGINT(20) NOT NULL ;
+ALTER TABLE order_status_history
+ADD CONSTRAINT `FK_ORD_STA_CHA_ORDER`
+  FOREIGN KEY (`order_id`)
+  REFERENCES order (`order_id`)
+  ON DELETE NO ACTION
+  ON UPDATE CASCADE;
