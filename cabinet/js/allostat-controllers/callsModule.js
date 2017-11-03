@@ -46,86 +46,25 @@ app.service('CallsService', function(Restangular, BackRestangular) {
 });
 
 function CallsCtrl ($rootScope, $scope, CallsService, localStorageService, util, notify, $filter, $ngConfirm, $interval, confirmation, Idle, $state, $cookies) {
-    var MAX_PAGE_BUTTONS = 5;
-	$scope.calls = [];
-	
-	$scope.filters = [];
-	$scope.totalPages = 0;
-	$scope.pageSize = 20;
-
-    $scope.lastCallId = null;
-
-    $scope.alerts = [];
 
     var backGroundRequest = false;
+	$scope.calls = [];
+    $scope.lastCallId = null;
+    $scope.alerts = [];
+    $scope.yaIdAuthNotValid = null;
+    util.pager($scope, localStorageService);
+	util.searchPage($scope, localStorageService, "allostat_filters_v1.2");
 
     $scope.closeAlert = function(index) {
         $scope.alerts.splice(index, 1);
     };
-
-    $scope.yaIdAuthNotValid = null;
 
 	$scope.arrayByNumber = function(num) {
 		var res = [];
 		for(var i=0; i<num; i++) { res.push(i+1); }
 		return res;
 	};
-	var loadFilters = function() {
-		$scope.filters = localStorageService.get("allostat_filters_v1.2");
-		if(util.isEmpty($scope.filters)) {
-			$scope.filters = {};
-			$scope.filters['page'] = 0;
-			$scope.filters['size'] = $scope.pageSize;
-			// Еще фильтры
-			localStorageService.set("allostat_filters_v1.2", $scope.filters);
-		}
-		else {
-            $scope.pageSize = $scope.filters['size'];
-		}
-	};
-	
-	$scope.prev = function() { 
-		$scope.filters['page']	= $scope.filters['page'] > 0 ? $scope.filters['page']-1 : 0;
-		$scope.load();
-	};
-	$scope.next = function() {  
-		$scope.filters['page']	= $scope.filters['page'] < $scope.totalPages-1 ? $scope.filters['page']+1 : $scope.totalPages-1;
-		$scope.load();
-	};
-    $scope.first = function() {
-        $scope.filters['page']	= 0;
-        $scope.load();
-    };
-    $scope.last = function() {
-        $scope.filters['page']	= $scope.totalPages-1;
-        $scope.load();
-    };
-    $scope.pageNumbers = function() {
-        var current = $scope.filters['page'];
-        var result = [];
-        var first = current-(MAX_PAGE_BUTTONS/2); first = first < 0 ? 0 : first;
-        var last = first + MAX_PAGE_BUTTONS - 1; last = last > $scope.totalPages-1 ? $scope.totalPages-1 : last;
-        for(var i=first; i<=last; i++) {
-            result.push(i);
-        }
-        return result;
-    };
-	
-	$scope.setPageSize = function(val) {
-		if($scope.pageSize > val) {
-            $scope.filters['page'] = 0;
-		}
-		$scope.pageSize = val;
-		$scope.filters['size'] = val;
-        localStorageService.set("allostat_filters_v1.2", $scope.filters);
-		$scope.load();
-	};
-	
-	$scope.loadPage = function(pageNum) {
-		$scope.filters['page'] = pageNum;
-		$scope.load();
-	};
-	
+
 	$scope.load = function(backGroundRequest) {
 	    var filters = {
 	        page: $scope.filters['page'],
@@ -349,14 +288,9 @@ function CallsCtrl ($rootScope, $scope, CallsService, localStorageService, util,
         );
     });
 
-
-    loadFilters();
-
     backGroundRequest = false;
 	$scope.load(backGroundRequest);
     startNewCallsPoller();
     Idle.watch();
-
-
 }
 

@@ -41,6 +41,9 @@ RewriteRule ^api/support/upload$ cabinet/php/RestController.php?view=uploadFile 
 RewriteRule ^api/support/deleteFile$ cabinet/php/RestController.php?view=deleteFile [nc,qsa]
 RewriteRule ^api/support/createRequest$ cabinet/php/RestController.php?view=supportRequest [nc,qsa]
 
+RewriteRule ^api/order/allstatuses$ cabinet/php/RestController.php?view=allOrderStatuses [nc,qsa]
+RewriteRule ^api/order/getOrders cabinet/php/RestController.php?view=getOrders [nc,qsa]
+
 
 #RewriteEngine On
 #RewriteCond %{HTTPS} !=on [NC]

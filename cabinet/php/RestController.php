@@ -43,6 +43,8 @@ require_once("repo/AppPropertyRepo.php");
 require_once("repo/CustomerRepo.php");
 require_once("util/YaUtil.php");
 require_once("repo/PhoneNumberPoolRepo.php");
+require_once("repo/OrderStatusRepo.php");
+require_once("repo/OrderRepo.php");
 
 $view = "";
 if(isset($_GET["view"])) {
@@ -263,6 +265,24 @@ switch ($view) {
         }
         $handler = new RawDataHandler();
         $handler->result = true;
+        break;
+
+    case "allOrderStatuses":
+        $repo = OrderStatusRepo::getInstance();
+        $statuses = $repo->getAll();
+        $handler = new RawDataHandler();
+        $result = new stdClass();
+        $result->statuses = $statuses;
+        $handler->handleResult($result);
+        break;
+
+    case "getOrders":
+        $repo = OrderRepo::getInstance();
+        $orders = $repo->orderList($requestObj->filters);
+        $handler = new RawDataHandler();
+        $result = new stdClass();
+        $result->statuses = $orders;
+        $handler->handleResult($result);
         break;
 
     default:

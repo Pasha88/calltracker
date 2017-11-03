@@ -13,7 +13,7 @@
             <div class="col-sm-2">
                 <div class="form-group">
                     <label class="control-label" for="order_id">ID платежа</label>
-                    <input type="text" id="order_id" name="order_id" value="" placeholder="Order ID" class="form-control">
+                    <input type="text" id="order_id" name="order_id" ng-model="filters['orderId']" placeholder="123456" class="form-control">
                 </div>
             </div>
             <div class="col-sm-2">
@@ -22,15 +22,11 @@
                     <!--<input type="text" id="status" name="status" value="" placeholder="Status" class="form-control">-->
                     <div class="dropdown">
                         <button class="btn btn-default dropdown-toggle form-control" type="button" id="status" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                            {{"В обработке"}}
+                            {{filters['orderStatusName']}}
                             <span class="caret"></span>
                         </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                            <li><a href ng-click="setStatusFilter(1);">В обработке</a></li>
-                            <li><a href ng-click="setStatusFilter(2);">Отправлен</a></li>
-                            <li><a href ng-click="setStatusFilter(3);">Принят</a></li>
-                            <li><a href ng-click="setStatusFilter(4);">Проведен</a></li>
-                            <li><a href ng-click="setStatusFilter(5);">Ошибка</a></li>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" ng-repeat="statusItem in orderStatuses">
+                            <li><a href ng-click="setFilter('orderStatusId', statusItem.orderStatusId); setFilter('orderStatusName', statusItem.orderStatusName);">{{statusItem.orderStatusName}}</a></li>
                         </ul>
                     </div>
                 </div>
@@ -51,6 +47,12 @@
                         <input id="orderDateTo" type="datetime" class="form-control" date-time ng-model="orderDateTo" view="date" auto-close="true" min-view="date" format="DD-MM-YYYY">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                     </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label class="control-label"></label>
+                    <button class="btn btn-default form-control" type="button" id="load" ng-click="load()">Поиск</button>
                 </div>
             </div>
         </div>
@@ -90,51 +92,7 @@
                             <notifications-bar class="notifications" closeIcon="fa fa-times-circle"></notifications-bar>
                         </div>
 
-                        <div class="row" style="padding-left:15px; padding-right:15px;">
-                            <div class="col-sm-4">
-                                <div class="dropdown pagination">
-                                    <label>Показывать по</label>
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                        {{pageSize}}
-                                        <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                        <li><a href ng-click="setPageSize(10);">10</a></li>
-                                        <li><a href ng-click="setPageSize(20);">20</a></li>
-                                        <li><a href ng-click="setPageSize(50);">50</a></li>
-                                        <li><a href ng-click="setPageSize(100);">100</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <nav aria-label="Page navigation">
-                                    <ul class="pagination">
-                                        <li>
-                                            <a href ng-click="prev()" aria-label="Previous" title="Предыдущая">
-                                                <span aria-hidden="true">&lsaquo;</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href ng-click="first()" aria-label="First" title="Первая">
-                                                <span aria-hidden="true">&laquo;</span>
-                                            </a>
-                                        </li>
-                                        <li ng-repeat="i in pageNumbers()"><a href ng-click="loadPage($index)">{{$index+1}}</a></li>
-                                        <li>
-                                            <a href ng-click="last()" aria-label="Next" title="Последняя">
-                                                <span aria-hidden="true">&raquo;</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href ng-click="next()" aria-label="Next" title="Следующая">
-                                                <span aria-hidden="true">&rsaquo;</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </nav>
-                            </div>
-                            <div class="col-sm-4"></div>
-                        </div>
+                        <div ng-include="'views/allostat/pagerTop.html'"></div>
 
                         <!--<div class="row">-->
                         <div class="table-responsive">
@@ -187,9 +145,8 @@
                                 <tr>
                                     <th>Дата</th>
                                     <th>Время</th>
-                                    <th>Истоник/канал</th>
-                                    <!--                                    <th>Ключевая фраза</th> -->
-                                    <th>Номер телефона</th>
+                                    <th>Тариф</th>
+                                    <th>Сумма</th>
                                     <th>Статус</th>
                                     <th></th>
                                 </tr>
@@ -197,38 +154,7 @@
                             </table>
                         </div>
 
-                        <div class="row" style="padding-left:15px; padding-right:15px;">
-                            <div class="col-sm-4">
-                            </div>
-                            <div class="col-sm-4">
-                                <nav aria-label="Page navigation">
-                                    <ul class="pagination">
-                                        <li>
-                                            <a href ng-click="prev()" aria-label="Previous" title="Предыдущая">
-                                                <span aria-hidden="true">&lsaquo;</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href ng-click="first()" aria-label="First" title="Первая">
-                                                <span aria-hidden="true">&laquo;</span>
-                                            </a>
-                                        </li>
-                                        <li ng-repeat="i in pageNumbers()"><a href ng-click="loadPage($index)">{{$index+1}}</a></li>
-                                        <li>
-                                            <a href ng-click="last()" aria-label="Next" title="Последняя">
-                                                <span aria-hidden="true">&raquo;</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href ng-click="next()" aria-label="Next" title="Следующая">
-                                                <span aria-hidden="true">&rsaquo;</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </nav>
-                            </div>
-                            <div class="col-sm-4"></div>
-                        </div>
+                        <div ng-include="'views/allostat/pagerBottom.html'"></div>
 
                     </div>
                 </div>

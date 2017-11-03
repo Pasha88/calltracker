@@ -45,6 +45,7 @@
                 <div class="ibox-title">
                     <h5>ВАЖНО! Для правильной статистики информацию о звонках необходимо передать в Гугл Аналитикс по окончании звонка. </h5>
                 </div>
+
                 <div class="ibox-content" style="min-height: 300px;">
 
                     <uib-alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</uib-alert>
@@ -55,51 +56,7 @@
                             <notifications-bar class="notifications" closeIcon="fa fa-times-circle"></notifications-bar>
                         </div>
 
-                        <div class="row" style="padding-left:15px; padding-right:15px;">
-                            <div class="col-sm-4">
-                                <div class="dropdown pagination">
-                                    <label>Показывать по</label>
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                        {{pageSize}}
-                                        <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                        <li><a href ng-click="setPageSize(10);">10</a></li>
-                                        <li><a href ng-click="setPageSize(20);">20</a></li>
-                                        <li><a href ng-click="setPageSize(50);">50</a></li>
-                                        <li><a href ng-click="setPageSize(100);">100</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <nav aria-label="Page navigation">
-                                    <ul class="pagination">
-                                        <li>
-                                            <a href ng-click="prev()" aria-label="Previous" title="Предыдущая">
-                                                <span aria-hidden="true">&lsaquo;</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href ng-click="first()" aria-label="First" title="Первая">
-                                                <span aria-hidden="true">&laquo;</span>
-                                            </a>
-                                        </li>
-                                        <li ng-repeat="i in pageNumbers()"><a href ng-click="loadPage($index)">{{$index+1}}</a></li>
-                                        <li>
-                                            <a href ng-click="last()" aria-label="Next" title="Последняя">
-                                                <span aria-hidden="true">&raquo;</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href ng-click="next()" aria-label="Next" title="Следующая">
-                                                <span aria-hidden="true">&rsaquo;</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </nav>
-                            </div>
-                            <div class="col-sm-4"></div>
-                        </div>
+                        <div ng-include="'views/allostat/pagerTop.html'"></div>
 
                         <!--<div class="row">-->
 						<div class="table-responsive">
@@ -163,38 +120,7 @@
                             </table>
                         </div>
 
-                        <div class="row" style="padding-left:15px; padding-right:15px;">
-                            <div class="col-sm-4">
-                            </div>
-                            <div class="col-sm-4">
-                                <nav aria-label="Page navigation">
-                                    <ul class="pagination">
-                                        <li>
-                                            <a href ng-click="prev()" aria-label="Previous" title="Предыдущая">
-                                                <span aria-hidden="true">&lsaquo;</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href ng-click="first()" aria-label="First" title="Первая">
-                                                <span aria-hidden="true">&laquo;</span>
-                                            </a>
-                                        </li>
-                                        <li ng-repeat="i in pageNumbers()"><a href ng-click="loadPage($index)">{{$index+1}}</a></li>
-                                        <li>
-                                            <a href ng-click="last()" aria-label="Next" title="Последняя">
-                                                <span aria-hidden="true">&raquo;</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href ng-click="next()" aria-label="Next" title="Следующая">
-                                                <span aria-hidden="true">&rsaquo;</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </nav>
-                            </div>
-                            <div class="col-sm-4"></div>
-                        </div>
+                        <div ng-include="'views/allostat/pagerBottom.html'"></div>
 
                     </div>
                 </div>

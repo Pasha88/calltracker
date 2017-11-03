@@ -296,13 +296,15 @@ function config($httpProvider, $stateProvider, $urlRouterProvider, $ocLazyLoadPr
             ncyBreadcrumb: {
                 label: 'История платежей'
             },
-            loadPlugin: function ($ocLazyLoad) {
-                return $ocLazyLoad.load([
-                    {
-                        name: 'datePicker',
-                        files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
-                    }
-                ])
+            resolve: {
+                loadPlugin: function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([
+                        {
+                            name: 'datePicker',
+                            files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+                        }
+                    ])
+                }
             }
         })
         .state('container.payment.tariff', {

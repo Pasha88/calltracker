@@ -72,6 +72,7 @@ class ErrorRegistry
     public $USER_ERR_GET_ALL_TARIFFS;
     public $USER_ERR_GET_CUSTOMER_ORDERS;
     public $USER_ERR_UPDATE_CUSTOMER_ORDER;
+    public $USER_ERR_GET_ALL_ORDER_STATUSES;
 
     public function __construct()
     {
@@ -141,6 +142,7 @@ class ErrorRegistry
         $this->USER_ERR_GET_CUSTOMER_ORDERS = new ErrCode('USER_ERR_GET_CUSTOMER_ORDERS', "Ошибка получения списка платежей клиента");
         $this->USER_ERR_UPDATE_CUSTOMER_ORDER = new ErrCode('USER_ERR_UPDATE_CUSTOMER_ORDER', "Ошибка обновления платежа клиента");
         $this->USER_ERR_INSERT_CUSTOMER_ORDER = new ErrCode('USER_ERR_INSERT_CUSTOMER_ORDER', "Ошибка создания платежа клиента");
+        $this->USER_ERR_GET_ALL_ORDER_STATUSES = new ErrCode('USER_ERR_GET_ALL_ORDER_STATUSES', "Ошибка получения списка статусов платежей");
     }
 
 }

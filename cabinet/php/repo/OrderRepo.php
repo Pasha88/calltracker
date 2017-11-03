@@ -20,8 +20,8 @@ class OrderRepo extends Repository {
         return self::$_instance;
     }
 
-    public function orderList($customerUid) {
-        $params = array('customerUid' => $customerUid);
+    public function orderList($filters) {
+        $params = array('filters' => $filters);
         $c = new OrderListCommand($params);
         return  $this->executeTransaction($c);
     }
