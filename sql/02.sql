@@ -25,4 +25,4 @@ ADD COLUMN `ga_id` VARCHAR(128) NULL AFTER `reset_pwd_valid_till`;
 ALTER TABLE customer
 ADD COLUMN `default_phone_number` VARCHAR(20) NULL AFTER `ga_id`;
 
-update call_type set name = 'GA error' where call_type_id = 1
+update call_type set name = 'GA error' where call_type_id = 1;

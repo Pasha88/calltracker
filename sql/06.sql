@@ -6,7 +6,7 @@ CREATE TABLE tariff (
   `rate` DECIMAL(15,2) NOT NULL,
   PRIMARY KEY (`tariff_id`));
 
-CREATE TABLE order (
+CREATE TABLE orders (
   `order_id` VARCHAR(38) NOT NULL,
   `customer_uid` VARCHAR(38) NOT NULL,
   `order_date` DATETIME NOT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE cash_operation (
     ON UPDATE CASCADE,
   CONSTRAINT `FK_CASH_OPER_ORDER`
   FOREIGN KEY (`order_id`)
-  REFERENCES order (`order_id`)
+  REFERENCES orders (`order_id`)
     ON DELETE NO ACTION
     ON UPDATE CASCADE);
 

@@ -39,7 +39,7 @@ ADD CONSTRAINT `FK_EVENT_CUSTOMER`
   ON DELETE NO ACTION
   ON UPDATE CASCADE;
 
-ALTER TABLE `host1563047`.`call_event`
+ALTER TABLE call_event
 ADD COLUMN `ya_client_id` VARCHAR(256) NULL AFTER `ya_upload`;
 
 ALTER TABLE customer
@@ -60,6 +60,6 @@ insert into application_property(name, value, visible_name) values('CALLS_PAGE_I
 ALTER TABLE call_object
 ADD COLUMN `url` VARCHAR(2048) NULL AFTER `ya_upload`;
 
-update customer set time_zone = null where time_zone = 0;
+update customer set time_zone = null where customer_id > 0 and time_zone = 0;
 
 insert into call_type(call_type_id, name) values(-1, 'NoFreeNumber');
