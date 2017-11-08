@@ -18,11 +18,32 @@ app.service('PaymentService', function(Restangular) {
         },
         getOrders: function(filters) {
             return Restangular.all("order/getOrders").post({filters: filters});
+        },
+        makePayment: function(customerUid, sum) {
+            return Restangular.all("order/makePayment").post( {customerUid: customerUid, sum: sum } );
         }
     }
 });
 
-function PaymentCtrl ($scope, notify, PaymentService, util) {
+function PaymentCtrl ($rootScope, $scope, notify, PaymentService, util) {
+
+    $scope.sum = 0.0;
+    $scope.numberPattern = '^[1-9][0-9]{1,6}$';
+
+    $scope.redirectConfirm = function() {
+        PaymentService.makePayment($rootScope.user.customerUid, $scope.sum).then(
+            function(data){
+                window.location = data.confirmationUrl;
+            },
+            function(err) {
+                notify({
+                    message: err.data.error,
+                    classes: 'allostat-alert-danger',
+                    position: 'center',
+                    duration: '5000'
+                });
+        });
+    }
 
 }
 

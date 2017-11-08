@@ -2,7 +2,7 @@
 
 require_once(dirname(__DIR__) . '/util/Repository.php');
 require_once(dirname(__DIR__) . '/commands/order/OrderListCommand.php');
-require_once(dirname(__DIR__) . '/commands/order/SaveOrderCommand.php');
+require_once(dirname(__DIR__) . '/commands/order/InsertOrderCommand.php');
 
 
 class OrderRepo extends Repository {
@@ -26,10 +26,15 @@ class OrderRepo extends Repository {
         return  $this->executeTransaction($c);
     }
 
-    public function saveOrder($order) {
+    public function insertOrder($order) {
         $params = array('order' => $order);
-        $c = new SaveOrderCommand($params);
+        $c = new InsertOrderCommand($params);
         return  $this->executeTransaction($c);
     }
 
+    public function updateOrder($order) {
+        $params = array('order' => $order);
+        $c = new UpdateOrderCommand($params);
+        return  $this->executeTransaction($c);
+    }
 }

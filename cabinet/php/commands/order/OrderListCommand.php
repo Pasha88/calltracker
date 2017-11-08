@@ -2,6 +2,7 @@
 
 require_once(dirname(__DIR__) . '/Command.php');
 require_once(dirname(__DIR__) . '/../domain/Order.php');
+require_once(dirname(__DIR__) . '/../util/Util.php');
 
 class OrderListCommand  extends Command {
 
@@ -18,14 +19,17 @@ class OrderListCommand  extends Command {
         $orders = [];
         $orderId = null;
         $customerUid = null;
+        $createDate = null;
         $orderDate = null;
         $sum = null;
-        $tariffId = null;
+        $currencyCode = null;
         $status = null;
         $statusCode = null;
         $customerEmail = null;
         $orderStatusName = null;
         $tariffName = null;
+        $confirmationUrl = null;
+        $idempotenceKey = null;
 
         $filters = $this->args['filters'];
         $sqlMeta = $this->createGetOrdersSQL();
@@ -33,27 +37,33 @@ class OrderListCommand  extends Command {
         $page = $filters->page;
         $size = $filters->size;
 
+        $df = Util::createCommonDate($filters->orderDateFrom);
+        $dt = Util::createCommonDate($filters->orderDateTo);
+
         if ($stmt = $conn->prepare($sqlMeta->sql)) {
-            $stmt->bind_param($sqlMeta->bindString,
+            $stmt->bind_param("ssssssiiddddssss",
                 $filters->customerUid, $filters->customerUid,
                 $filters->orderId, $filters->orderId,
-                $filters->customerEmail, $filters->customerEmail,
+                $likeVar = "%" . $filters->customerEmail . "%", $filters->customerEmail,
                 $filters->orderStatusId, $filters->orderStatusId,
                 $filters->sumFrom, $filters->sumFrom,
                 $filters->sumTo, $filters->sumTo,
                 $filters->orderDateFrom, $filters->orderDateFrom,
                 $filters->orderDateTo, $filters->orderDateTo
             );
-            $stmt->bind_result($orderId, $customerUid, $orderDate, $sum, $tariffId, $status, $statusCode, $customerEmail, $orderStatusName, $tariffName);
+            $stmt->bind_result($orderId, $customerUid, $createDate, $orderDate, $sum, $currencyCode, $status,
+                $confirmationUrl, $idempotenceKey, $statusCode, $customerEmail, $orderStatusName);
             $stmt->execute();
+            $stmt->store_result();
             while($stmt->fetch() != false) {
-                $order = new Order($orderId, $customerUid, $orderDate, $sum, $tariffId, $status, $statusCode, $customerEmail, $orderStatusName, $tariffName);
+                $order = Order::create(Util::bin2uuidString($orderId), $customerUid, $createDate, $orderDate, $sum, $currencyCode, $tariffName,
+                    $status, $statusCode, $orderStatusName, $customerEmail, $confirmationUrl, Util::bin2uuidString($idempotenceKey));
                 array_push($orders, $order);
             }
             $stmt->close();
         }
         else {
-            throw new Exception( $this->getErrorRegistry()->USER_ERR_GET_ORDERS->message);
+            throw new Exception( $this->getErrorRegistry()->USER_ERR_GET_CUSTOMER_ORDERS->message);
         }
 
         $totalCount = 0;
@@ -79,12 +89,11 @@ class OrderListCommand  extends Command {
         $result = new stdClass();
         $orderParam = 'order_date';
         $orderAsc = 'DESC';
-        $sql = "select o.*, os.code, c.email, os.dsc, t.tariff_name from orders o join customer c on c.customer_uid = o.customer_uid 
-                                        join order_status os on os.order_status_id = o.status 
-                                        join tariff t on t.tariff_id = o.tariff_id where ";
+        $sql = "select o.*, os.code, c.email, os.dsc from orders o join customer c on c.customer_uid = o.customer_uid 
+                                        join order_status os on os.order_status_id = o.status where ";
         $sql .= " (o.customer_uid = ? or ? is null)";
-        $sql .= " and (o.order_id = ? or ? is null)";
-        $sql .= " and (c.email like '%?%' or ? is null)";
+        $sql .= " and (o.order_id = unhex(replace(?,'-','')) or ? is null)";
+        $sql .= " and (c.email like ? or ? is null)";
         $sql .= " and (o.status = ? or ? is null)";
         $sql .= " and (o.sum >= ? or ? is null)";
         $sql .= " and (o.sum <= ? or ? is null)";

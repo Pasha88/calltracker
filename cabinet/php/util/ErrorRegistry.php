@@ -73,6 +73,8 @@ class ErrorRegistry
     public $USER_ERR_GET_CUSTOMER_ORDERS;
     public $USER_ERR_UPDATE_CUSTOMER_ORDER;
     public $USER_ERR_GET_ALL_ORDER_STATUSES;
+    public $USER_ERR_GET_STATUS_BY_CODE;
+    public $USER_ERR_WRONG_PAYMENT_RESPONSE;
 
     public function __construct()
     {
@@ -143,6 +145,8 @@ class ErrorRegistry
         $this->USER_ERR_UPDATE_CUSTOMER_ORDER = new ErrCode('USER_ERR_UPDATE_CUSTOMER_ORDER', "Ошибка обновления платежа клиента");
         $this->USER_ERR_INSERT_CUSTOMER_ORDER = new ErrCode('USER_ERR_INSERT_CUSTOMER_ORDER', "Ошибка создания платежа клиента");
         $this->USER_ERR_GET_ALL_ORDER_STATUSES = new ErrCode('USER_ERR_GET_ALL_ORDER_STATUSES', "Ошибка получения списка статусов платежей");
+        $this->USER_ERR_GET_STATUS_BY_CODE = new ErrCode('USER_ERR_GET_STATUS_BY_CODE', "Ошибка получения статуса по коду");
+        $this->USER_ERR_WRONG_PAYMENT_RESPONSE = new ErrCode('USER_ERR_WRONG_PAYMENT_RESPONSE', "Данные платежа не соответствуют имеющимся в базе данных");
     }
 
 }

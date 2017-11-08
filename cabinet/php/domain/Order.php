@@ -4,26 +4,78 @@ class Order {
 	
 	public $orderId;
 	public $customerUid;
+	public $createDate;
 	public $orderDate;
 	public $sum;
-    public $tariffId;
-    public $status;
-    public $statusCode;
-    public $customerEmail;
-    public $orderStatusName;
+    public $currencyCode;
+	public $tariffId;
     public $tariffName;
+    public $statusId;
+    public $statusCode;
+    public $statusName;
+    public $confirmationUrl;
+    public $idempotenceKey;
+    public $customerEmail;
 
-    function __construct($orderId, $customerUid, $orderDate, $sum, $tariffId, $status, $statusCode, $customerEmail, $orderStatusName, $tariffName)	{
-        $this->orderId = $orderId;
-        $this->customerUid = $customerUid;
-        $this->orderDate = $orderDate;
-        $this->sum = $sum;
-        $this->tariffId = $tariffId;
-        $this->status = $status;
-        $this->statusCode = $statusCode;
-        $this->customerEmail = $customerEmail;
-        $this->orderStatusName = $orderStatusName;
-        $this->tariffName = $tariffName;
+    static function create($orderId, $customerUid, $createDate, $orderDate, $sum , $currencyCode, $tariffName, $statusId, $statusCode, $statusName, $customerEmail, $confirmationUrl, $idempotenceKey)	{
+        $obj = new Order();
+        $obj->orderId = $orderId;
+        $obj->customerUid = $customerUid;
+        $obj->createDate = $createDate;
+        $obj->orderDate = $orderDate;
+        $obj->sum = $sum;
+        $obj->currencyCode = $currencyCode;
+        $obj->tariffName = $tariffName;
+        $obj->statusId  = $statusId;
+        $obj->statusCode = $statusCode;
+        $obj->statusName  = $statusName;
+        $obj->confirmationUrl  = $confirmationUrl;
+        $obj->idempotenceKey  = $idempotenceKey;
+        $obj->customerEmail = $customerEmail;
+        return $obj;
 	}
 
+    static function createNew($customerUid, $sum, $currencyCode, $idempotenceKey)	{
+        $obj = new Order();
+        $obj->sum = $sum;
+        $obj->createDate = Util::getCurrentDateFormatted();
+        $obj->currencyCode = $currencyCode;
+        $obj->customerUid = $customerUid;
+        $obj->idempotenceKey = $idempotenceKey;
+        return $obj;
+    }
+
+    static function createByReponse($ymResponse, $status, $idempotenceKey)	{
+        $obj = new Order();
+        $obj->orderId = $ymResponse['id'];
+        $obj->orderDate = $ymResponse['createdAt']->date;
+        $obj->sum = $ymResponse['amount']->_value;
+        $obj->currencyCode = $ymResponse['amount']->_currency;
+        $obj->statusId = $status->id;
+        $obj->statusCode = $status->code;
+        $obj->statusName = $status->dsc;
+        $obj->confirmationUrl = $ymResponse['confirmation']->_confirmationUrl;
+        $obj->idempotenceKey = $idempotenceKey;
+        return $obj;
+    }
+
+    static function check($ord, $ordResponse) {
+        if($ord->sum != $ordResponse->sum
+            || $ord->currencyCode != $ordResponse->currencyCode) {
+            return false;
+        }
+        return true;
+    }
+
+    static function fillFromReponse($order, $status, $id, $orderDate, $sum, $currency, $confirmationUrl) {
+        $order->orderId = $id;
+        $order->orderDate = $orderDate;
+        $order->sum = $sum;
+        $order->currencyCode = $currency;
+        $order->statusId = $status->orderStatusId;
+        $order->statusCode = $status->code;
+        $order->statusName = $status->orderStatusName;
+        $order->confirmationUrl = $confirmationUrl;
+        return $order;
+    }
 }

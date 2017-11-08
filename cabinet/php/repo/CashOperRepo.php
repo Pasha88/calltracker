@@ -28,7 +28,7 @@ class BalanceOper extends Repository {
 
     public function saveOrder($order) {
         $params = array('order' => $order);
-        $c = new SaveOrderCommand($params);
+        $c = new InsertOrderCommand($params);
         return  $this->executeTransaction($c);
     }
 

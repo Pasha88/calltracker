@@ -194,10 +194,6 @@ class YaUtil {
     }
 
     public function checkYaCounterId($yaId, $yaIdAuth) {
-//        $repo = CustomerRepo::getInstance();
-//        $customer = $repo->getCustomer($customerId);
-
-//        $url = AppConfig::YA_LOAD_CALLS_URL . $customer->yaId . "/offline_conversions/calls_uploadings?&oauth_token=" . $customer->yaIdAuth;
         $url = AppConfig::YA_COUNTER_URL . $yaId;
 
         $yaCurl = curl_init();

@@ -2,7 +2,7 @@
 
 require_once(dirname(__DIR__) . '/util/Repository.php');
 require_once(dirname(__DIR__) . '/commands/order/OrderStatusesListCommand.php');
-
+require_once(dirname(__DIR__) . '/commands/order/OrderStatusByCodeCommand.php');
 
 class OrderStatusRepo extends Repository {
 
@@ -21,6 +21,11 @@ class OrderStatusRepo extends Repository {
 
     public function getAll() {
         $c = new OrderStatusesListCommand(null);
+        return  $this->executeTransaction($c);
+    }
+
+    public function byCode($code) {
+        $c = new OrderStatusByCodeCommand(array('code' => $code));
         return  $this->executeTransaction($c);
     }
 

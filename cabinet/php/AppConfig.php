@@ -29,7 +29,10 @@ class AppConfig {
     public const DB_USER = "api_user";
     public const DB_PWD = "lsGer6ham";
 
-
+    public const DEFAULT_CURRENCY = 'RUB';
+    public const SHOP_ID = '500100';
+    public const YKKEY = 'test_e--IZTd6epnEUcZ4stY23CrpKPug6XHkE88a0Hr1SYY';
+    public const YK_RETURN_URL = 'http://localhost:8100/cabinet/#/container/payment/payment_process';
 
 }
 

@@ -43,6 +43,7 @@ RewriteRule ^api/support/createRequest$ cabinet/php/RestController.php?view=supp
 
 RewriteRule ^api/order/allstatuses$ cabinet/php/RestController.php?view=allOrderStatuses [nc,qsa]
 RewriteRule ^api/order/getOrders cabinet/php/RestController.php?view=getOrders [nc,qsa]
+RewriteRule ^api/order/makePayment cabinet/php/RestController.php?view=makePayment [nc,qsa]
 
 
 #RewriteEngine On
