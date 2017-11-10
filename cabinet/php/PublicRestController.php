@@ -36,6 +36,7 @@ register_shutdown_function('catch_fatal_error');
 
 require_once("handlers/AuthHandler.php");
 require_once("handlers/CustomerHandler.php");
+require_once("handlers/YkHandler.php");
 
 $view = "";
 if(isset($_GET["view"])) {
@@ -76,11 +77,13 @@ switch($view){
         $authHandler->restoreForgottenPwd($requestObj->customerUid, $requestObj->token, $requestObj->newPwd);
         break;
     case "numloader":
-        $authHandler= new CustomerHandler();
-        $authHandler->loadNumHandler($_GET['customerUid']);
+        $handler= new CustomerHandler();
+        $handler->loadNumHandler($_GET['customerUid']);
         break;
-
-				
+    case "pnservice":
+        $handler= new YkHandler();
+        $handler->process($requestObj);
+        break;
 	case "" :
 		//404 - not found;
 		break;

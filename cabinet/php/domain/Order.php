@@ -8,8 +8,6 @@ class Order {
 	public $orderDate;
 	public $sum;
     public $currencyCode;
-	public $tariffId;
-    public $tariffName;
     public $statusId;
     public $statusCode;
     public $statusName;
@@ -17,7 +15,7 @@ class Order {
     public $idempotenceKey;
     public $customerEmail;
 
-    static function create($orderId, $customerUid, $createDate, $orderDate, $sum , $currencyCode, $tariffName, $statusId, $statusCode, $statusName, $customerEmail, $confirmationUrl, $idempotenceKey)	{
+    static function create($orderId, $customerUid, $createDate, $orderDate, $sum , $currencyCode, $statusId, $statusCode, $customerEmail, $confirmationUrl, $idempotenceKey)	{
         $obj = new Order();
         $obj->orderId = $orderId;
         $obj->customerUid = $customerUid;
@@ -25,10 +23,8 @@ class Order {
         $obj->orderDate = $orderDate;
         $obj->sum = $sum;
         $obj->currencyCode = $currencyCode;
-        $obj->tariffName = $tariffName;
         $obj->statusId  = $statusId;
-        $obj->statusCode = $statusCode;
-        $obj->statusName  = $statusName;
+        $obj->statusCode  = $statusCode;
         $obj->confirmationUrl  = $confirmationUrl;
         $obj->idempotenceKey  = $idempotenceKey;
         $obj->customerEmail = $customerEmail;

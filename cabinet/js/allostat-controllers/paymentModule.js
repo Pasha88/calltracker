@@ -54,8 +54,8 @@ function PaymentHistoryCtrl ($rootScope, $scope, notify, PaymentService, util, l
 
     util.pager($scope, localStorageService);
     util.searchPage($scope, localStorageService, "allostat_payment_history_filters_v1.0");
-    $scope.filters['orderDateFrom'] = new Date();
-    $scope.filters['orderDateTo'] = new Date();
+    $scope.filters['orderDateFrom'] = moment();
+    $scope.filters['orderDateTo'] = moment();
 
     PaymentService.loadOrderStatuses().then(
         function(data) {
@@ -64,8 +64,8 @@ function PaymentHistoryCtrl ($rootScope, $scope, notify, PaymentService, util, l
     );
 
     $scope.load = function() {
-        var df = $scope.filters['orderDateFrom'].setHours(0,0,0,0);
-        var dt = $scope.filters['orderDateTo'].setHours(23,59,59,999);
+        var df = $scope.filters['orderDateFrom'].toDate().setHours(0,0,0,0);
+        var dt = $scope.filters['orderDateTo'].toDate().setHours(23,59,59,999);
 
         var filters = {
             page: $scope.filters['page'],

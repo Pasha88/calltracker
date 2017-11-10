@@ -10,6 +10,8 @@ RewriteRule ^public_api/restorepwd$ cabinet/php/PublicRestController.php?view=re
 RewriteRule ^public_api/reset_pwd$ cabinet/php/PublicRestController.php?view=resetPwd [nc,qsa]
 RewriteRule ^public_api/allostat/numloader.js$ /cabinet/php/PublicRestController.php?view=numloader&customerUid=$1 [ne,qsa]
 
+RewriteRule ^public_api/pnservice$ /cabinet/php/PublicRestController.php?view=pnservice [ne,qsa]
+
 RewriteRule ^api/authenticate$   cabinet/php/RestController.php?view=auth [nc,qsa]
 RewriteRule ^api/install/savePhoneList$ cabinet/php/RestController.php?view=savePhoneList [nc,qsa]
 RewriteRule ^api/install/getPhoneList$ cabinet/php/RestController.php?view=getPhoneList [nc,qsa]
@@ -44,7 +46,6 @@ RewriteRule ^api/support/createRequest$ cabinet/php/RestController.php?view=supp
 RewriteRule ^api/order/allstatuses$ cabinet/php/RestController.php?view=allOrderStatuses [nc,qsa]
 RewriteRule ^api/order/getOrders cabinet/php/RestController.php?view=getOrders [nc,qsa]
 RewriteRule ^api/order/makePayment cabinet/php/RestController.php?view=makePayment [nc,qsa]
-
 
 #RewriteEngine On
 #RewriteCond %{HTTPS} !=on [NC]

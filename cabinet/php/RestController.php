@@ -43,6 +43,7 @@ require_once("repo/AppPropertyRepo.php");
 require_once("repo/CustomerRepo.php");
 require_once("util/YaUtil.php");
 require_once("util/billing/YKUtil.php");
+require_once("util/Util.php");
 require_once("repo/PhoneNumberPoolRepo.php");
 require_once("repo/OrderStatusRepo.php");
 require_once("repo/OrderRepo.php");
@@ -291,7 +292,7 @@ switch ($view) {
         $ykUtil = new YKUtil();
         $handler = new RawDataHandler();
         $result = new stdClass();
-        $result->confirmationUrl = $ykUtil->makePayment($requestObj->customerUid, $requestObj->sum, AppConfig::DEFAULT_CURRENCY);;
+        $result->confirmationUrl = $ykUtil->makePayment($requestObj->customerUid, $requestObj->sum, AppConfig::DEFAULT_CURRENCY, Util::uuid());
         $handler->handleResult($result);
         break;
 

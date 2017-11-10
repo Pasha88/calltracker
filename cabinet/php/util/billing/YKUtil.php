@@ -25,9 +25,7 @@ class YKUtil {
         $this->errorRegistry = new ErrorRegistry();
     }
 
-    public function makePayment($customerUid, $sum, $currencyCode) {
-        $idempotenceKey = Util::uuid();
-
+    public function makePayment($customerUid, $sum, $currencyCode, $idempotenceKey) {
         $ord = Order::createNew($customerUid, $sum, $currencyCode, $idempotenceKey);
 
         $client = new Client();
@@ -35,6 +33,9 @@ class YKUtil {
 
         $payment = [
             'amount' => $ord->sum,
+            'payment_method_data' => [
+                'type' => 'bank_card'
+            ],
             'confirmation' => [
                 'type' => 'redirect',
                 'return_url' => AppConfig::YK_RETURN_URL
@@ -43,9 +44,75 @@ class YKUtil {
 
         $paymentResponse = $client->createPayment($payment, $idempotenceKey);
         $status = OrderStatusRepo::getInstance()->byCode(strtoupper($paymentResponse['status']));
-        $ord = Order::fillFromReponse($ord, $status, $paymentResponse['id'], Util::formatDate($paymentResponse['createdAt']),
+        $ord = Order::fillFromReponse($ord, $status, $paymentResponse['id'], Util::formatDate($paymentResponse['createdAt']->setTimeZone(Util::getServerTz())),
             $paymentResponse['amount']->_value, $paymentResponse['amount']->_currency, $paymentResponse['confirmation']->_confirmationUrl);
         OrderRepo::getInstance()->insertOrder($ord);
         return $ord->confirmationUrl;
     }
+
+    public function checkPayment($paymentId) {
+        $client = new Client();
+        $client->setAuth(AppConfig::SHOP_ID, AppConfig::YKKEY);
+        $response = $client->getPaymentInfo($paymentId);
+        $status = OrderStatusRepo::getInstance()->byCode(strtoupper($response['status']));
+        return $status;
+    }
+
+    public function capturePayment($order) {
+        $client = new Client();
+        $client->setAuth(AppConfig::SHOP_ID, AppConfig::YKKEY);
+        $captureRequest = [
+            'amount' => [
+                'value' => $order->sum,
+                'currency' => $order->currencyCode
+            ]
+        ];
+        $response = $client->capturePayment($captureRequest, $order->orderId, $order->idempotenceKey);
+        return $this->checkCapture($order, $response);
+    }
+
+    public function cancelPayment($order) {
+        $client = new Client();
+        $client->setAuth(AppConfig::SHOP_ID, AppConfig::YKKEY);
+        $response = $client->cancelPayment($order->orderId, $order->idempotenceKey);
+        return $this->checkCancel($order, $response);
+    }
+
+    public function checkCancel($order, $payment) {
+        if($payment['id'] != $order->orderId) { return false; }
+        if($payment['status'] != 'canceled') { return false; }
+        if($payment['paid'] != true) { return false; }
+        if($payment->amount->value != $order->sum || $payment->amount->currency != $order->currencyCode ) { return false; }
+        //charge или  refunded_amount
+        return true;
+    }
+
+    public function checkCapture($order, $payment) {
+        if($payment['id'] != $order->orderId) { return false; }
+        if($payment['status'] != 'succeeded') { return false; }
+        if($payment['paid'] != true) { return false; }
+        if($payment->amount->value != $order->sum || $payment->amount->currency != $order->currencyCode ) { return false; }
+        return true;
+    }
+
+    public function checkOrderWaiting($order, $payment) {
+        if($payment['type'] != 'notification') { return false; }
+        if($payment['event'] != 'payment.waiting_for_capture') { return false; }
+        if($payment->object->status != 'waiting_for_capture') { return false; }
+        if($payment->object->paid != true) { return false; }
+        if($payment->object->amount->value != $order->sum || $payment->object->amount->currency != $order->currencyCode ) { return false; }
+        if($payment->object->paid != true) { return false; }
+        return true;
+    }
+
+    public function normalizeNotificationDateStr($dateObj) {
+        $createdDate = str_replace('T', ' ', $dateObj);
+        $createdDate = str_replace('Z', '', $createdDate);
+        $dotPosition = strpos($createdDate, '.');
+        $createdDate = $dotPosition != false ? substr($createdDate, 0, $dotPosition) : $createdDate;
+        return $createdDate;
+    }
 }
+
+//$e = new YKUtil();
+//$e->checkPayment('21968c13-000f-500a-b000-0cef0417afa7');

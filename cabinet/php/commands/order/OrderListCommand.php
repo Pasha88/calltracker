@@ -27,18 +27,19 @@ class OrderListCommand  extends Command {
         $statusCode = null;
         $customerEmail = null;
         $orderStatusName = null;
-        $tariffName = null;
         $confirmationUrl = null;
         $idempotenceKey = null;
 
         $filters = $this->args['filters'];
-        $sqlMeta = $this->createGetOrdersSQL();
-
         $page = $filters->page;
         $size = $filters->size;
 
+        $sqlMeta = $this->createGetOrdersSQL($page, $size);
+
         $df = Util::createCommonDate($filters->orderDateFrom);
         $dt = Util::createCommonDate($filters->orderDateTo);
+
+        $statuses = OrderStatusRepo::getInstance()->getAll();
 
         if ($stmt = $conn->prepare($sqlMeta->sql)) {
             $stmt->bind_param("ssssssiiddddssss",
@@ -56,8 +57,8 @@ class OrderListCommand  extends Command {
             $stmt->execute();
             $stmt->store_result();
             while($stmt->fetch() != false) {
-                $order = Order::create(Util::bin2uuidString($orderId), $customerUid, $createDate, $orderDate, $sum, $currencyCode, $tariffName,
-                    $status, $statusCode, $orderStatusName, $customerEmail, $confirmationUrl, Util::bin2uuidString($idempotenceKey));
+                $order = Order::create(Util::bin2uuidString($orderId), $customerUid, $createDate, $orderDate, $sum, $currencyCode,
+                    $status, $statusCode, $customerEmail, $confirmationUrl, Util::bin2uuidString($idempotenceKey));
                 array_push($orders, $order);
             }
             $stmt->close();
@@ -85,7 +86,7 @@ class OrderListCommand  extends Command {
         return $rawData;
     }
 
-    private function createGetOrdersSQL() {
+    private function createGetOrdersSQL($page, $size) {
         $result = new stdClass();
         $orderParam = 'order_date';
         $orderAsc = 'DESC';
