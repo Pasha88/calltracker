@@ -49,6 +49,7 @@ class YKUtil {
     }
 
     public function capturePayment($order) {
+        error_log("[pnservice]: " . " Capture order [" . $order->id . "]");
         $client = new Client();
         $client->setAuth(AppConfig::SHOP_ID, AppConfig::YKKEY);
         $captureRequest = [

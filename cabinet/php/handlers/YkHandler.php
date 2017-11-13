@@ -11,6 +11,8 @@ class YkHandler extends SimpleRest {
 
     private $orderByIdSQL = 'select * from orders where order_id = unhex(replace(?,\'-\',\'\'))';
     private $updateOrderSQL = 'update orders set status = ? where order_id = unhex(replace(?,\'-\',\'\'))';
+    private $insertCashOperationSQL = 'insert into balance_operation(customer_uid, oper_date, sum, dsc, order_id)
+                      values(?,?,?,?,?, unhex(replace(?,\'-\',\'\')) )';
 
     function init(){
         $dbname = $this->isTestInstance ? "host1563047" : "host1563047_main";
@@ -30,27 +32,54 @@ class YkHandler extends SimpleRest {
     }
 
     public function process($requestObj) {
-        $yk = YKUtil();
-        $paymentObj = array('request' => $requestObj);
-        $order = $this->getOrderById($paymentObj['object']->id);
-        if($yk->checkOrderWaiting($order, $paymentObj) == false) {
-            throw new Exception( "[Сервис обработки платежных уведомлений]: Получено некорректное платежное уведомление");
-        }
-
-        $this->updateOrderStatus($order->orderId, Status::WAITING_FOR_CAPTURE);
-
-        if($yk->capturePayment($order)) {
-            $this->updateOrderStatus($order->orderId, Status::CAPTURE_FAILED);
-        }
-        else {
-            $this->updateOrderStatus($order->orderId, Status::SUCCEEDED);
-        }
+        $conn = $this->init();
 
         $result = new stdClass();
+
+        try {
+
+            $paymentObj = array('request' => $requestObj);
+            error_log("[pnservice]: " . " Processing order [" . $paymentObj['object']->id . "]");
+            $yk = YKUtil();
+            $order = $this->getOrderById($conn, $paymentObj['object']->id);
+
+            if ($order->currencyCode != AppConfig::DEFAULT_CURRENCY) {
+                $this->handleResult("Валюта не поддерживается");
+                return;
+            }
+
+
+            if ($yk->checkOrderWaiting($order, $paymentObj) == false) {
+                $this->updateOrderStatus($conn, $order->orderId, Status::WAITING_FOR_CAPTURE_WRONG_NOTIFICATION);
+                throw new Exception("[Сервис обработки платежных уведомлений]: Получено некорректное платежное уведомление");
+            }
+            error_log("[pnservice]: " . " Order [" . $paymentObj['object']->id . "] is in waiting status. Updating.");
+            $this->updateOrderStatus($order->orderId, Status::WAITING_FOR_CAPTURE);
+
+            if ($yk->capturePayment($order)) {
+                error_log("[pnservice]: " . " Capture order [" . $order->id . "] Failed. Updating status.");
+                $this->updateOrderStatus($conn, $order->orderId, Status::CAPTURE_FAILED);
+            } else {
+                error_log("[pnservice]: " . " Capture order [" . $order->id . "] OK. Updating status.");
+                $msg = "Пополнение баланса клиента";
+                $cashOperation = new CashOper(null, $order->customerUid, Util::getCurrentServerDateFormatted(), $order->sum, $msg, null);
+                $this->refill($conn, $cashOperation);
+                $this->updateOrderStatus($conn, $order->orderId, Status::SUCCEEDED);
+            }
+        }
+        catch(Exception $ex) {
+            $conn->rollback();
+            $this->close($conn);
+            throw new Exception($ex->getMessage());
+        }
+
+        $conn->commit();
+        $this->close($conn);
+
         $this->handleResult($result);
     }
 
-    private function getOrderById($id) {
+    private function getOrderById($conn, $id) {
         $order = null;
 
         $orderId = null;
@@ -63,8 +92,6 @@ class YkHandler extends SimpleRest {
         $statusCode = null;
         $confirmationUrl = null;
         $idempotenceKey = null;
-
-        $conn = $this->init();
 
         if ($stmt = $conn->prepare($this->orderByIdSQL)) {
             $stmt->bind_param("s", $id);
@@ -88,9 +115,8 @@ class YkHandler extends SimpleRest {
         return $order;
     }
 
-    private function execute($orderId, $statusId)
+    private function updateOrderStatus($conn, $orderId, $statusId)
     {
-        $conn = $this->init();
         if ($stmt = $conn->prepare($this->updateOrderSQL)) {
             $stmt->bind_param("is", $statusId, $orderId);
             $stmt->execute();
@@ -99,6 +125,27 @@ class YkHandler extends SimpleRest {
         else {
             throw new Exception( "[Сервис обработки платежных уведомлений]: Ошибка обновления статуса платежа");
         }
+        return true;
+    }
+
+    public function refill($conn, $operation)
+    {
+        if ($stmt = $conn->prepare($this->insertCashOperationSQL)) {
+            $stmt->bind_param("ssdsss",
+                $operation->customerUid,
+                $operation->operDate,
+                $operation->sum,
+                $operation->dsc,
+                $operation->orderId,
+                $operation->orderId
+            );
+            $stmt->execute();
+            $stmt->close();
+        }
+        else {
+            throw new Exception( $this->getErrorRegistry()->USER_ERR_INSERT_CASH_OPERATION->message);
+        }
+
         return true;
     }
 

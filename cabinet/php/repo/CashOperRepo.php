@@ -1,11 +1,10 @@
 <?php
 
 require_once(dirname(__DIR__) . '/util/Repository.php');
-require_once(dirname(__DIR__) . '/commands/cash/CashOperListCommand.php');
-require_once(dirname(__DIR__) . '/commands/cash/SaveCashOperCommand.php');
+require_once(dirname(__DIR__) . '/commands/cash_oper/InsertCashOperationCommand.php');
 
 
-class BalanceOper extends Repository {
+class CashOperRepo extends Repository {
 
     private static $_instance = null;
 
@@ -20,15 +19,9 @@ class BalanceOper extends Repository {
         return self::$_instance;
     }
 
-    public function orderList($customerUid) {
-        $params = array('customerUid' => $customerUid);
-        $c = new OrderListCommand($params);
-        return  $this->executeTransaction($c);
-    }
-
-    public function saveOrder($order) {
-        $params = array('order' => $order);
-        $c = new InsertOrderCommand($params);
+    public function saveOperation($operation) {
+        $params = array('operation' => $operation);
+        $c = new InsertCashOperationCommand($params);
         return  $this->executeTransaction($c);
     }
 

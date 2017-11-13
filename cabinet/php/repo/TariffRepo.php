@@ -2,6 +2,7 @@
 
 require_once(dirname(__DIR__) . '/util/Repository.php');
 require_once(dirname(__DIR__) . '/commands/tariff/TariffListCommand.php');
+require_once(dirname(__DIR__) . '/commands/tariff/TariffByIdCommand.php');
 require_once(dirname(__DIR__) . '/commands/tariff/SaveTariffListCommand.php');
 
 
@@ -19,6 +20,11 @@ class TariffRepo extends Repository {
         }
         return self::$_instance;
     }
+    public function tariffById() {
+        $c = new TariffByIdCommand(null);
+        return  $this->executeTransaction($c);
+    }
+
 
     public function tariffList() {
         $c = new TariffListCommand(null);

@@ -39,5 +39,8 @@ class AppConfig {
     public const YKKEY = 'test_e--IZTd6epnEUcZ4stY23CrpKPug6XHkE88a0Hr1SYY';
     public const YK_RETURN_URL = 'http://localhost:8100/cabinet/#/container/payment/payment_process';
 
+    public const CASH_MOVE_KOEFF = 30.4;
+    public const CASH_MOVE_DEFAULT_DSC = "Ежедневное списание со счета клиента";
+
 }
 

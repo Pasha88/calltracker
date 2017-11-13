@@ -78,6 +78,9 @@ class ErrorRegistry
     public $USER_ERR_ORDER_BY_ID;
     public $USER_ERR_NO_SUCH_ORDER;
     public $USER_ERR_WRONG_PAYMENT_NOTIFICATION;
+    public $USER_ERR_GET_TARIFF_BY_ID;
+    public $USER_ERR_INSERT_CASH_OPERATION;
+    public $USER_ERR_GET_EXPENSE_OPERATIONS;
 
     public function __construct()
     {
@@ -153,6 +156,9 @@ class ErrorRegistry
         $this->USER_ERR_ORDER_BY_ID = new ErrCode('USER_ERR_ORDER_BY_ID', "Не удалось получить данные платежа");
         $this->USER_ERR_NO_SUCH_ORDER = new ErrCode('USER_ERR_NO_SUCH_ORDER', "Отсутствует платеж с указанным ID");
         $this->USER_ERR_WRONG_PAYMENT_NOTIFICATION = new ErrCode('USER_ERR_WRONG_PAYMENT_NOTIFICATION', "Получено некорректное уведомление о платеже");
+        $this->USER_ERR_GET_TARIFF_BY_ID = new ErrCode('USER_ERR_GET_TARIFF_BY_ID', "Ошибка получения тарифа по ID");
+        $this->USER_ERR_INSERT_CASH_OPERATION = new ErrCode('USER_ERR_INSERT_CASH_OPERATION', "Ошибка добавления операции списания/зачисления на баланс клиента");
+        $this->USER_ERR_GET_EXPENSE_OPERATIONS = new ErrCode('USER_ERR_GET_EXPENSE_OPERATIONS', "Ошибка получения расходов за прошедшие сутки");
     }
 
 }
