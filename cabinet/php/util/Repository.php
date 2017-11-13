@@ -4,11 +4,13 @@ require_once(dirname(__DIR__).'/AppConfig.php');
 
 class Repository {
 
+    public $isTestInstance = false;
+
 	function init(){
-		$dbname = AppConfig::DB_NAME;
-		$servername = AppConfig::DB_SERVER;
-		$username = AppConfig::DB_USER;
-		$password = AppConfig::DB_PWD;
+		$dbname = $this->isTestInstance ? AppConfig::DB_NAME : AppConfig::TEST_DB_NAME;
+		$servername = $this->isTestInstance ? AppConfig::DB_SERVER : AppConfig::TEST_DB_SERVER;
+		$username = $this->isTestInstance ? AppConfig::DB_USER : AppConfig::TEST_DB_USER;
+		$password = $this->isTestInstance ? AppConfig::DB_PWD : AppConfig::TEST_DB_PWD;
 
 		// Create connection
 		$conn = new mysqli($servername, $username, $password, $dbname);

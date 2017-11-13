@@ -20,6 +20,15 @@ class OrderRepo extends Repository {
         return self::$_instance;
     }
 
+    static public function getTestInstance() {
+        if(is_null(self::$_instance))
+        {
+            self::$_instance = new self();
+            self::$_instance->isTestInstance = true;
+        }
+        return self::$_instance;
+    }
+
     public function orderList($filters) {
         $params = array('filters' => $filters);
         $c = new OrderListCommand($params);

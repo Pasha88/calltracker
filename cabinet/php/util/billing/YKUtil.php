@@ -25,9 +25,7 @@ class YKUtil {
         $this->errorRegistry = new ErrorRegistry();
     }
 
-    public function makePayment($customerUid, $sum, $currencyCode, $idempotenceKey) {
-        $ord = Order::createNew($customerUid, $sum, $currencyCode, $idempotenceKey);
-
+    public function makePayment($ord) {
         $client = new Client();
         $client->setAuth(AppConfig::SHOP_ID, AppConfig::YKKEY);
 
@@ -41,21 +39,13 @@ class YKUtil {
                 'return_url' => AppConfig::YK_RETURN_URL
             ]
         ];
-
-        $paymentResponse = $client->createPayment($payment, $idempotenceKey);
-        $status = OrderStatusRepo::getInstance()->byCode(strtoupper($paymentResponse['status']));
-        $ord = Order::fillFromReponse($ord, $status, $paymentResponse['id'], Util::formatDate($paymentResponse['createdAt']->setTimeZone(Util::getServerTz())),
-            $paymentResponse['amount']->_value, $paymentResponse['amount']->_currency, $paymentResponse['confirmation']->_confirmationUrl);
-        OrderRepo::getInstance()->insertOrder($ord);
-        return $ord->confirmationUrl;
+        return $client->createPayment($payment, $ord->idempotenceKey);
     }
 
     public function checkPayment($paymentId) {
         $client = new Client();
         $client->setAuth(AppConfig::SHOP_ID, AppConfig::YKKEY);
-        $response = $client->getPaymentInfo($paymentId);
-        $status = OrderStatusRepo::getInstance()->byCode(strtoupper($response['status']));
-        return $status;
+        return $client->getPaymentInfo($paymentId);
     }
 
     public function capturePayment($order) {

@@ -39,7 +39,7 @@ class OrderListCommand  extends Command {
         $df = Util::createCommonDate($filters->orderDateFrom);
         $dt = Util::createCommonDate($filters->orderDateTo);
 
-        $statuses = OrderStatusRepo::getInstance()->getAll();
+//        $statuses = OrderStatusRepo::getInstance()->getAll();
 
         if ($stmt = $conn->prepare($sqlMeta->sql)) {
             $stmt->bind_param("ssssssiiddddssss",

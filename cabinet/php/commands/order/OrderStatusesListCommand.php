@@ -26,7 +26,6 @@ class OrderStatusesListCommand  extends Command {
             while($stmt->fetch() != false) {
                 $orderStatus = new OrderStatus($orderStatusId, $code, $orderStatusName);
                 $statuses[$code] = $orderStatus;
-                array_push($statuses, $orderStatus);
             }
             $stmt->close();
         }

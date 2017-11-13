@@ -45,8 +45,7 @@ require_once("util/YaUtil.php");
 require_once("util/billing/YKUtil.php");
 require_once("util/Util.php");
 require_once("repo/PhoneNumberPoolRepo.php");
-require_once("repo/OrderStatusRepo.php");
-require_once("repo/OrderRepo.php");
+require_once("handlers/OrderHandler.php");
 
 $view = "";
 if(isset($_GET["view"])) {
@@ -270,18 +269,15 @@ switch ($view) {
         break;
 
     case "allOrderStatuses":
-        $repo = OrderStatusRepo::getInstance();
-        $statuses = $repo->getAll();
-        $handler = new RawDataHandler();
+        $handler = new OrderHandler();
         $result = new stdClass();
-        $result->statuses = $statuses;
+        $result->statuses = $handler->getAllStatuses();
         $handler->handleResult($result);
         break;
 
     case "getOrders":
-        $repo = OrderRepo::getInstance();
-        $list = $repo->orderList($requestObj->filters);
-        $handler = new RawDataHandler();
+        $handler = new OrderHandler();
+        $list = $handler->getOrders($requestObj);
         $result = new stdClass();
         $result->orders = $list->orders;
         $result->totalPages = $list->totalPages;
@@ -289,10 +285,9 @@ switch ($view) {
         break;
 
     case "makePayment":
-        $ykUtil = new YKUtil();
-        $handler = new RawDataHandler();
+        $handler = new OrderHandler();
         $result = new stdClass();
-        $result->confirmationUrl = $ykUtil->makePayment($requestObj->customerUid, $requestObj->sum, AppConfig::DEFAULT_CURRENCY, Util::uuid());
+        $result->confirmationUrl = $handler->makePayment($requestObj);
         $handler->handleResult($result);
         break;
 
