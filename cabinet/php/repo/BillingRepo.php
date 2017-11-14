@@ -25,6 +25,8 @@ class BillingRepo extends Repository {
 
         $conn = $this->init();
 
+        $msg = null;
+
         try {
             $params = array('customerUid' => $customer->customerUid);
             $c = new GetLastExpenseOperationCommand($params);
