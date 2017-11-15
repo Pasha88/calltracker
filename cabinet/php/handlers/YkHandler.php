@@ -32,11 +32,9 @@ class YkHandler extends SimpleRest {
     }
 
     public function process($paymentObj) {
-        error_log("[pnservice]: " . " Processing order " . $paymentObj->object->id . " started ");
-        $conn = $this->init();
-        $result = new stdClass();
         try {
-            error_log("[pnservice]: " . " Processing order [" . $paymentObj->object->id . "]");
+            $conn = $this->init();
+            $result = new stdClass();
             $yk = new YKUtil();
             $order = $this->getOrderById($conn, $paymentObj->object->id);
 
@@ -85,8 +83,11 @@ class YkHandler extends SimpleRest {
             }
         }
         catch(Exception $ex) {
-            $conn->rollback();
-            $conn->close();
+            if(isset($conn)) {
+                $conn->rollback();
+                $conn->close();
+            }
+            $this->handleError($ex->getMessage());
             throw new Exception($ex->getMessage());
         }
         $conn->close();
