@@ -41,8 +41,8 @@ class YKUtil {
         return $client->getPaymentInfo($paymentId);
     }
 
-    public function capturePayment($order) {
-        error_log("[pnservice]: " . " Capture order [" . $order->id . "]");
+    public function capturePayment($order, $idempotenceKey) {
+        print("[pnservice]: " . " Capture order [" . Util::bin2uuidString($order->orderId) . "]\r\n");
         $client = new Client();
         $client->setAuth(AppConfig::SHOP_ID, AppConfig::YKKEY);
         $captureRequest = [
@@ -51,41 +51,41 @@ class YKUtil {
                 'currency' => $order->currencyCode
             ]
         ];
-        $response = $client->capturePayment($captureRequest, $order->orderId, $order->idempotenceKey);
+        $response = $client->capturePayment($captureRequest, strtolower(Util::bin2uuidString($order->orderId)), $idempotenceKey);
+        print(json_encode($response));
         return $this->checkCapture($order, $response);
     }
 
     public function cancelPayment($order) {
         $client = new Client();
         $client->setAuth(AppConfig::SHOP_ID, AppConfig::YKKEY);
-        $response = $client->cancelPayment($order->orderId, $order->idempotenceKey);
+        $response = $client->cancelPayment( strtolower(Util::bin2uuidString($order->orderId)), strtolower(Util::bin2uuidString($order->idempotenceKey)));
         return $this->checkCancel($order, $response);
     }
 
     public function checkCancel($order, $payment) {
-        if($payment['id'] != $order->orderId) { return false; }
-        if($payment['status'] != 'canceled') { return false; }
-        if($payment['paid'] != true) { return false; }
+        if($payment->id != $order->orderId) { return false; }
+        if($payment->status != 'canceled') { return false; }
+        if($payment->paid != true) { return false; }
         if($payment->amount->value != $order->sum || $payment->amount->currency != $order->currencyCode ) { return false; }
         //charge или  refunded_amount
         return true;
     }
 
     public function checkCapture($order, $payment) {
-        if($payment['id'] != $order->orderId) { return false; }
-        if($payment['status'] != 'succeeded') { return false; }
-        if($payment['paid'] != true) { return false; }
+        if($payment->id != $order->orderId) { return false; }
+        if($payment->status != 'succeeded') { return false; }
+        if($payment->paid != true) { return false; }
         if($payment->amount->value != $order->sum || $payment->amount->currency != $order->currencyCode ) { return false; }
         return true;
     }
 
     public function checkOrderWaiting($order, $payment) {
-        if($payment['type'] != 'notification') { return false; }
-        if($payment['event'] != 'payment.waiting_for_capture') { return false; }
+        if($payment->type != 'notification') { return false; }
+        if($payment->event != 'payment.waiting_for_capture') { return false; }
         if($payment->object->status != 'waiting_for_capture') { return false; }
-        if($payment->object->paid != true) { return false; }
+        if($payment->object->paid != true && $payment->object->paid != 1) { return false; }
         if($payment->object->amount->value != $order->sum || $payment->object->amount->currency != $order->currencyCode ) { return false; }
-        if($payment->object->paid != true) { return false; }
         return true;
     }
 
@@ -98,6 +98,3 @@ class YKUtil {
     }
 }
 
-
-//$e = new YKUtil();
-//$e->checkPayment('21968c13-000f-500a-b000-0cef0417afa7');

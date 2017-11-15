@@ -6,4 +6,5 @@ class Status {
     public const SUCCEEDED = 3;
     public const CANCELED = 4;
     public const CAPTURE_FAILED = -1;
+    public const WAITING_FOR_CAPTURE_WRONG_NOTIFICATION = -2;
 }

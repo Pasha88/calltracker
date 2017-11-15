@@ -10,7 +10,7 @@ $param->object = [
     "status" => "waiting_for_capture",
     "paid" => true,
     "amount" => [
-        "value" => "135.00",
+        "value" => "138.00",
         "currency" => "RUB"
     ],
     "created_at" => "2017-11-15T12:26:16.007Z",
