@@ -7,10 +7,10 @@ class Repository {
     public $isTestInstance = false;
 
 	function init(){
-		$dbname = $this->isTestInstance ? AppConfig::DB_NAME : AppConfig::TEST_DB_NAME;
-		$servername = $this->isTestInstance ? AppConfig::DB_SERVER : AppConfig::TEST_DB_SERVER;
-		$username = $this->isTestInstance ? AppConfig::DB_USER : AppConfig::TEST_DB_USER;
-		$password = $this->isTestInstance ? AppConfig::DB_PWD : AppConfig::TEST_DB_PWD;
+		$dbname = $this->isTestInstance ? AppConfig::TEST_DB_NAME : AppConfig::DB_NAME ;
+		$servername = $this->isTestInstance ? AppConfig::TEST_DB_SERVER : AppConfig::DB_SERVER;
+		$username = $this->isTestInstance ? AppConfig::TEST_DB_USER : AppConfig::DB_USER;
+		$password = $this->isTestInstance ? AppConfig::TEST_DB_PWD : AppConfig::DB_PWD;
 
 		// Create connection
 		$conn = new mysqli($servername, $username, $password, $dbname);

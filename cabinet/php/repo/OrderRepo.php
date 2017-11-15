@@ -24,7 +24,6 @@ class OrderRepo extends Repository {
         if(is_null(self::$_instance))
         {
             self::$_instance = new self();
-            self::$_instance->isTestInstance = true;
         }
         return self::$_instance;
     }

@@ -8,3 +8,19 @@ ADD COLUMN `is_deleted` INT NOT NULL DEFAULT 0 AFTER `rate`;
 
 ALTER TABLE tariff
 CHANGE COLUMN `is_deleted` `is_deleted` INT(1) NOT NULL DEFAULT '0' ;
+
+USE `host1563047`;
+DROP function IF EXISTS `uuid_from_bin`;
+
+DELIMITER $$
+USE `host1563047`$$
+CREATE FUNCTION `uuid_from_bin` (b BINARY(16))
+RETURNS CHAR(36) DETERMINISTIC
+BEGIN
+DECLARE hex CHAR(32);
+SET hex = HEX(b);
+RETURN LOWER(CONCAT(LEFT(hex, 8), '-', MID(hex, 9,4), '-', MID(hex, 13,4), '-', MID(hex, 17,4), '-', RIGHT(hex, 12)));
+END$$
+
+DELIMITER ;
+

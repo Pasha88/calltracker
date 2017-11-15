@@ -1,24 +1,24 @@
 <?php
 
 require_once("SimpleRest.php");
-require_once("../util/billing/YKUtil.php");
-require_once("../domain/Status.php");
-require_once("../domain/Order.php");
+require_once(dirname(__DIR__).'/util/billing/YKUtil.php');
+require_once(dirname(__DIR__).'/domain/Status.php');
+error_log("YH2");
+require_once(dirname(__DIR__).'/domain/Order.php');
+error_log("YH3");
 
 class YkHandler extends SimpleRest {
 
-    public $isTestInstance = true;
-
-    private $orderByIdSQL = 'select * from orders where order_id = unhex(replace(?,\'-\',\'\'))';
-    private $updateOrderSQL = 'update orders set status = ? where order_id = unhex(replace(?,\'-\',\'\'))';
-    private $insertCashOperationSQL = 'insert into balance_operation(customer_uid, oper_date, sum, dsc, order_id)
-                      values(?,?,?,?,?, unhex(replace(?,\'-\',\'\')) )';
+    private $orderByIdSQL = "select * from orders where order_id = unhex(replace(?,'-',''))";
+    private $updateOrderSQL = "update orders set status = ? where order_id = unhex(replace(?,'-',''))";
+    private $insertCashOperationSQL = "insert into balance_operation(customer_uid, oper_date, sum, dsc, order_id)
+                      values(?,?,?,?,?, unhex(replace(?,'-','')) )";
 
     function init(){
-        $dbname = $this->isTestInstance ? "host1563047" : "host1563047_main";
-        $servername = $this->isTestInstance ? "localhost" : "localhost";
-        $username = $this->isTestInstance ? "host1563047" : "host1563047_main";
-        $password = $this->isTestInstance ? "lsGer6ham" : "JHDpUJjE";
+        $dbname = "host1563047";
+        $servername = "localhost";
+        $username = "host1563047";
+        $password = "lsGer6ham";
 
         // Create connection
         $conn = new mysqli($servername, $username, $password, $dbname);
@@ -31,16 +31,13 @@ class YkHandler extends SimpleRest {
         return $conn;
     }
 
-    public function process($requestObj) {
+    public function process($paymentObj) {
+        error_log("[pnservice]: " . " Processing order " . $paymentObj->object->id . " started ");
         $conn = $this->init();
-
         $result = new stdClass();
-
         try {
-
-            $paymentObj = array('request' => $requestObj);
             error_log("[pnservice]: " . " Processing order [" . $paymentObj['object']->id . "]");
-            $yk = YKUtil();
+            $yk = new YKUtil();
             $order = $this->getOrderById($conn, $paymentObj['object']->id);
 
             if ($order->currencyCode != AppConfig::DEFAULT_CURRENCY) {
@@ -54,7 +51,7 @@ class YkHandler extends SimpleRest {
                 throw new Exception("[Сервис обработки платежных уведомлений]: Получено некорректное платежное уведомление");
             }
             error_log("[pnservice]: " . " Order [" . $paymentObj['object']->id . "] is in waiting status. Updating.");
-            $this->updateOrderStatus($order->orderId, Status::WAITING_FOR_CAPTURE);
+            $this->updateOrderStatus($conn, $order->orderId, Status::WAITING_FOR_CAPTURE);
 
             if ($yk->capturePayment($order)) {
                 error_log("[pnservice]: " . " Capture order [" . $order->id . "] Failed. Updating status.");
@@ -69,12 +66,12 @@ class YkHandler extends SimpleRest {
         }
         catch(Exception $ex) {
             $conn->rollback();
-            $this->close($conn);
+            $conn->close();
             throw new Exception($ex->getMessage());
         }
 
         $conn->commit();
-        $this->close($conn);
+        $conn->close();
 
         $this->handleResult($result);
     }

@@ -1,20 +1,14 @@
 <?php
-
-require_once dirname(__DIR__).'/../../../../vendor/ym/autoload.php';
-require_once dirname(__DIR__).'/../AppConfig.php';
-require_once dirname(__DIR__).'/../util/Repository.php';
-require_once dirname(__DIR__).'/../util/ErrorRegistry.php';
-require_once dirname(__DIR__).'/../util/Util.php';
-require_once dirname(__DIR__).'/../repo/OrderRepo.php';
-require_once dirname(__DIR__).'/../repo/OrderStatusRepo.php';
-require_once dirname(__DIR__).'/../domain/Order.php';
+require_once (dirname(__DIR__).'/../../../../vendor/ym/autoload.php');
+require_once (dirname(__DIR__).'/../AppConfig.php');
+require_once (dirname(__DIR__).'/Repository.php');
+require_once (dirname(__DIR__).'/Util.php');
 
 use \YandexCheckout\Client;
 
 class YKUtil {
 
     private $repository;
-    private $errorRegistry;
 
     /**
      * SimpleRest constructor.
@@ -22,7 +16,6 @@ class YKUtil {
     public function __construct()
     {
         $this->repository = new Repository();
-        $this->errorRegistry = new ErrorRegistry();
     }
 
     public function makePayment($ord) {
@@ -104,6 +97,7 @@ class YKUtil {
         return $createdDate;
     }
 }
+
 
 //$e = new YKUtil();
 //$e->checkPayment('21968c13-000f-500a-b000-0cef0417afa7');

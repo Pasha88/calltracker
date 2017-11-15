@@ -39,13 +39,22 @@ class OrderListCommand  extends Command {
         $df = Util::createCommonDate($filters->orderDateFrom);
         $dt = Util::createCommonDate($filters->orderDateTo);
 
-//        $statuses = OrderStatusRepo::getInstance()->getAll();
+        $filters->customerUid = isset($filters->customerUid) ? $filters->customerUid : null;
+        $filters->orderId = isset($filters->orderId) ? $filters->orderId : null;
+        $filters->customerEmail = isset($filters->customerEmail) ? $filters->customerEmail : null;
+        $filters->orderStatusId = isset($filters->orderStatusId) ? $filters->orderStatusId : null;
+        $filters->sumFrom = isset($filters->sumFrom) ? $filters->sumFrom : null;
+        $filters->sumTo = isset($filters->sumTo) ? $filters->sumTo : null;
+        $filters->orderDateFrom = isset($filters->orderDateFrom) ? $filters->orderDateFrom:  null;
+        $filters->orderDateTo = isset($filters->orderDateTo) ? $filters->orderDateTo : null;
+
+        $emailLike = "%" . $filters->customerEmail . "%";
 
         if ($stmt = $conn->prepare($sqlMeta->sql)) {
             $stmt->bind_param("ssssssiiddddssss",
                 $filters->customerUid, $filters->customerUid,
                 $filters->orderId, $filters->orderId,
-                $likeVar = "%" . $filters->customerEmail . "%", $filters->customerEmail,
+                $emailLike, $filters->customerEmail,
                 $filters->orderStatusId, $filters->orderStatusId,
                 $filters->sumFrom, $filters->sumFrom,
                 $filters->sumTo, $filters->sumTo,
@@ -68,8 +77,17 @@ class OrderListCommand  extends Command {
         }
 
         $totalCount = 0;
-        if ($stmt = $conn->prepare($this->orderCountSQL)) {
-            $stmt->bind_param("ss", $filters->customerUid, $filters->customerUid);
+        if ($stmt = $conn->prepare($sqlMeta->sqlCount)) {
+            $stmt->bind_param("ssssssiiddddssss",
+                $filters->customerUid, $filters->customerUid,
+                $filters->orderId, $filters->orderId,
+                $emailLike, $filters->customerEmail,
+                $filters->orderStatusId, $filters->orderStatusId,
+                $filters->sumFrom, $filters->sumFrom,
+                $filters->sumTo, $filters->sumTo,
+                $filters->orderDateFrom, $filters->orderDateFrom,
+                $filters->orderDateTo, $filters->orderDateTo
+            );
             $stmt->bind_result($totalCount);
             $stmt->execute();
             $stmt->fetch();
@@ -90,9 +108,15 @@ class OrderListCommand  extends Command {
         $result = new stdClass();
         $orderParam = 'order_date';
         $orderAsc = 'DESC';
-        $sql = "select o.*, os.code, c.email, os.dsc from orders o join customer c on c.customer_uid = o.customer_uid 
+
+        $sqlCount = "select count(o.order_id) as cnt  from orders o join customer c on c.customer_uid = o.customer_uid join order_status os on os.order_status_id = o.status where ";
+
+        $sqlSearch = "select o.*, os.code, c.email, os.dsc from orders o join customer c on c.customer_uid = o.customer_uid 
                                         join order_status os on os.order_status_id = o.status where ";
-        $sql .= " (o.customer_uid = ? or ? is null)";
+
+        $sqlOrder = "";
+
+        $sql = " (o.customer_uid = ? or ? is null)";
         $sql .= " and (o.order_id = unhex(replace(?,'-','')) or ? is null)";
         $sql .= " and (c.email like ? or ? is null)";
         $sql .= " and (o.status = ? or ? is null)";
@@ -107,11 +131,12 @@ class OrderListCommand  extends Command {
             if(!isset($size)) {
                 $size = 25;
             }
-            $sql .= " ORDER BY " . $orderParam . " " . $orderAsc;
-            $sql .= " LIMIT " . $page*$size . "," . $size;
+            $sqlOrder .= " ORDER BY " . $orderParam . " " . $orderAsc;
+            $sqlOrder .= " LIMIT " . $page*$size . "," . $size;
         }
 
-        $result->sql = $sql;
+        $result->sql = $sqlSearch . $sql . $sqlOrder;
+        $result->sqlCount = $sqlCount . $sql;
         $result->bindString = $bindString;
         return  $result;
     }
