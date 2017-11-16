@@ -1,10 +1,10 @@
 <?php
 
-require_once (dirname(__DIR__)."../commands/Command.php");
+require_once (dirname(__DIR__)."/../commands/Command.php");
 
 class GetLastExpenseOperationCommand extends Command{
 
-    private $getExpenseOperSQL = 'select * from balance_operation where customer_uid = ? order by oper_date desc limit 1';
+    private $getExpenseOperSQL = "select * from balance_operation where customer_uid = ? and sum <= 0 and dsc like '%списание%' order by oper_date desc limit 1";
 
     private $args;
 
@@ -29,11 +29,12 @@ class GetLastExpenseOperationCommand extends Command{
         if ($stmt = $conn->prepare($this->getExpenseOperSQL)) {
             $stmt->bind_param("s", $customerUidParam);
             $stmt->bind_result($operId, $customerUid, $operDate, $sum, $dsc, $orderId);
+            $stmt->execute();
+            $stmt->store_result();
             while($stmt->fetch() != false) {
                 $cashOperation = new CashOper($operId, $customerUid, $operDate, $sum, $dsc, Util::bin2uuidString($orderId));
                 array_push($cashOperations, $cashOperation);
             }
-            $stmt->execute();
             $stmt->close();
         }
         else {

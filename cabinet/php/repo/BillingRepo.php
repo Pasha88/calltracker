@@ -3,8 +3,11 @@
 require_once(dirname(__DIR__) . '/util/Repository.php');
 require_once(dirname(__DIR__) . '/commands/tariff/TariffListCommand.php');
 require_once(dirname(__DIR__) . '/commands/cash_oper/InsertCashOperationCommand.php');
+require_once(dirname(__DIR__) . '/commands/cash_oper/GetLastExpenseOperationCommand.php');
 require_once(dirname(__DIR__) . '/commands/customer/SaveCustomerByUidCommand.php');
 require_once(dirname(__DIR__) . '/repo/CashOperRepo.php');
+require_once(dirname(__DIR__) . '/repo/TariffRepo.php');
+require_once(dirname(__DIR__) . '/domain/CashOper.php');
 
 class BillingRepo extends Repository {
 
@@ -32,27 +35,32 @@ class BillingRepo extends Repository {
             $c = new GetLastExpenseOperationCommand($params);
             $lastOperation = $c->execute($conn);
 
+            $lastOperation = count($lastOperation) > 0 ? $lastOperation[0] : null;
+
+            $tariffRepo = TariffRepo::getInstance();
+            $tariffHistory = $tariffRepo->getTariffHistory($customer->customerId);
+            $firstDate = $tariffHistory[0]->setDate;
+
             $oneDay = new DateInterval('P1D');
-            $operDate = Util::createCommonDate($lastOperation->operDate);
+            $operDate = Util::createCommonDate(isset($lastOperation) && isset($lastOperation->operDate) ? $lastOperation->operDate : $firstDate);
             $today = Util::getCurrentDate();
             $delta = $today->diff($operDate);
 
             for($i=1; $i<=$delta->days; $i++) {
                 $operDate->add($oneDay);
 
-                $tariffRepo = TariffRepo::getInstance();
                 $tariff = $tariffRepo->tariffById($customer->tariffId);
-                $sum = $tariff->rate/AppConfig::CASH_MOVE_KOEFF;
+                $sum = $tariff->rate/AppConfig::CASH_MOVE_KOEFF * -1;
 
-                $msg = AppConfig::CASH_MOVE_DEFAULT_DSC * -1;
-                $cashOperation = new CashOper(null, $customer->customerUid, $operDate, $sum, $msg, null);
+                $msg = AppConfig::CASH_MOVE_DEFAULT_DSC;
+                $cashOperation = new CashOper(null, $customer->customerUid, Util::formatDate($operDate), $sum, $msg, null);
 
                 $params = array('operation' => $cashOperation);
                 $c = new InsertCashOperationCommand($params);
                 $c->execute($conn);
 
                 $customer->balance = $customer->balance + $sum;
-                $msg = "Списание " . $sum . " " . AppConfig::DEFAULT_CURRENCY . " по тарифу " . $tariff->tariffName . ". Текущий баланс после списания: " . $customer->balance . " " . AppConfig::DEFAULT_CURRENCY;
+                $msg = "Списание " . $sum . " " . AppConfig::DEFAULT_CURRENCY . " по тарифу [" . $tariff->tariffName . "]. Текущий баланс после списания: " . $customer->balance . " " . AppConfig::DEFAULT_CURRENCY;
 
                 $c = new SaveCustomerByUidCommand($customer);
                 $c->execute($conn);

@@ -24,7 +24,6 @@ class Command {
         return $r;
     }
 
-
     public function getErrorRegistry() {
         return $this->errorRegistry;
     }

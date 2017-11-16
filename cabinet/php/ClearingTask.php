@@ -7,7 +7,7 @@ require_once(dirname(__DIR__) . '/php/repo/CustomerRepo.php');
 require_once(dirname(__DIR__) . '/php/repo/BillingRepo.php');
 
 $r = new Repository();
-$brepo = new BillingRepo();
+$brepo = BillingRepo::getInstance();
 $customerId = isset($_GET['id']) ? intval($_GET['id']) : null;
 
 if(isset($customerId)) {

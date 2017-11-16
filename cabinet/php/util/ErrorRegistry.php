@@ -81,6 +81,8 @@ class ErrorRegistry
     public $USER_ERR_GET_TARIFF_BY_ID;
     public $USER_ERR_INSERT_CASH_OPERATION;
     public $USER_ERR_GET_EXPENSE_OPERATIONS;
+    public $USER_ERR_SAVE_TARIFF_HISTORY;
+    public $USER_ERR_GET_CUSTOMER_TARIFF_HISTORY;
 
     public function __construct()
     {
@@ -159,6 +161,8 @@ class ErrorRegistry
         $this->USER_ERR_GET_TARIFF_BY_ID = new ErrCode('USER_ERR_GET_TARIFF_BY_ID', "Ошибка получения тарифа по ID");
         $this->USER_ERR_INSERT_CASH_OPERATION = new ErrCode('USER_ERR_INSERT_CASH_OPERATION', "Ошибка добавления операции списания/зачисления на баланс клиента");
         $this->USER_ERR_GET_EXPENSE_OPERATIONS = new ErrCode('USER_ERR_GET_EXPENSE_OPERATIONS', "Ошибка получения расходов за прошедшие сутки");
+        $this->USER_ERR_SAVE_TARIFF_HISTORY = new ErrCode('USER_ERR_SAVE_TARIFF_HISTORY', "Ошибка сохранения тарифа в историю");
+        $this->USER_ERR_GET_CUSTOMER_TARIFF_HISTORY = new ErrCode('USER_ERR_GET_CUSTOMER_TARIFF_HISTORY', "Ошибка получения исторических данных о тарифах для пользователя");
     }
 
 }

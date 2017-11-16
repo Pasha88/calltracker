@@ -1,11 +1,11 @@
 <?php
 
-require_once (dirname(__DIR__)."../commands/Command.php");
+require_once (dirname(__DIR__)."/../commands/Command.php");
 
 class InsertCashOperationCommand extends Command{
 
     private $insertCashOperationSQL = 'insert into balance_operation(customer_uid, oper_date, sum, dsc, order_id)
-                      values(?,?,?,?,?, (case when ? is not null then unhex(replace(?,\'-\',\'\') else null end))';
+                      values(?,?,?,?, (case when ? is not null then unhex(replace(?,\'-\',\'\')) else null end))';
 
     private $args;
 
