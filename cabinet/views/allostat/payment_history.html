@@ -115,7 +115,8 @@
                                     <td class="center">
                                         <ul class="list-inline">
                                             <li>
-                                                <i class="fa fa-hourglass-half" aria-hidden="true" ng-if="item.statusCode == 'PENDING'" title="{{orderStatusName}}"></i>
+                                                <i class="fa fa-hourglass-half" aria-hidden="true" ng-if="item.statusCode == 'PENDING'" title="{{item.statusName}}"></i>
+                                                <i class="fa fa-check" aria-hidden="true" ng-if="item.statusCode == 'SUCCEEDED'" title="{{item.statusName}}"></i>
                                                 <!--<i class="fa fa-question" aria-hidden="true" ng-if="item.statusCode == ''" title="{{orderStatusName}}"></i>-->
                                                 <!--<i class="fa fa-question" aria-hidden="true" ng-if="item.statusCode == ''" title="{{orderStatusName}}"></i>-->
                                                 <!--<i class="fa fa-question" aria-hidden="true" ng-if="item.statusCode == ''" title="{{orderStatusName}}"></i>-->

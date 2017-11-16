@@ -15,7 +15,7 @@ class Order {
     public $idempotenceKey;
     public $customerEmail;
 
-    static function create($orderId, $customerUid, $createDate, $orderDate, $sum , $currencyCode, $statusId, $statusCode, $customerEmail, $confirmationUrl, $idempotenceKey)	{
+    static function create($orderId, $customerUid, $createDate, $orderDate, $sum , $currencyCode, $statusId, $statusCode, $customerEmail, $confirmationUrl, $idempotenceKey, $statusName)	{
         $obj = new Order();
         $obj->orderId = $orderId;
         $obj->customerUid = $customerUid;
@@ -28,6 +28,7 @@ class Order {
         $obj->confirmationUrl  = $confirmationUrl;
         $obj->idempotenceKey  = $idempotenceKey;
         $obj->customerEmail = $customerEmail;
+        $obj->statusName = $statusName;
         return $obj;
 	}
 

@@ -36,7 +36,7 @@ class OrderByIdCommand  extends Command {
             $stmt->execute();
 
             if($stmt->fetch() != false) {
-                $order = Order::create($orderId, $customerUid, $createDate, $orderDate, $sum , $currencyCode, $statusId, null, null, $confirmationUrl, $idempotenceKey);
+                $order = Order::create($orderId, $customerUid, $createDate, $orderDate, $sum , $currencyCode, $statusId, null, null, $confirmationUrl, $idempotenceKey, null);
             }
             $stmt->close();
         }

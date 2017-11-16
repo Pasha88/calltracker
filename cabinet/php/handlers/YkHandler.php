@@ -39,7 +39,9 @@ class YkHandler extends SimpleRest {
             $order = $this->getOrderById($conn, $paymentObj->object->id);
 
             if ($order->currencyCode != AppConfig::DEFAULT_CURRENCY) {
-                $this->handleResult("Валюта не поддерживается");
+                $msg = "[Сервис обработки платежных уведомлений]: Валюта не поддерживается для платежа [" . Util::bin2uuidString($order->orderId) . "]";
+                error_log($msg);
+                $this->handleResult($msg);
                 return;
             }
 
@@ -47,9 +49,11 @@ class YkHandler extends SimpleRest {
                 $this->updateOrderStatus($conn, $order->orderId, Status::WAITING_FOR_CAPTURE_WRONG_NOTIFICATION);
                 $conn->commit();
                 $conn->close();
-                throw new Exception("[Сервис обработки платежных уведомлений]: Получено некорректное платежное уведомление");
+                $msg = "[Сервис обработки платежных уведомлений]: Получено некорректное платежное уведомление для платежа [" . Util::bin2uuidString($order->orderId) . "]";
+                error_log($msg);
+                throw new Exception($msg);
             }
-            error_log("[pnservice]: " . " Order [" . $paymentObj->object->id . "] is in waiting status. Updating.");
+
             $this->updateOrderStatus($conn, $order->orderId, Status::WAITING_FOR_CAPTURE);
             $conn->commit();
 
@@ -58,27 +62,31 @@ class YkHandler extends SimpleRest {
                 $conn->commit();
             }
             else {
-                throw new Exception("[Сервис обработки платежных уведомлений]: Не удается сохранить idempotence key для подтверждения платежа");
+                $msg = "[Сервис обработки платежных уведомлений]: Не удается сохранить idempotence key для подтверждения платежа [" . Util::bin2uuidString($order->orderId) . "]";
+                error_log($msg);
+                throw new Exception($msg);
             }
 
             if ($yk->capturePayment($order, $idempotenceKey)) {
-                error_log("[pnservice]: " . " Capture order [" . $order->id . "] Failed. Updating status.");
                 if($this->updateOrderStatus($conn, $order->orderId, Status::CAPTURE_FAILED) == true) {
                     $conn->commit();
                 }
                 else {
-                    throw new Exception("[Сервис обработки платежных уведомлений]: Не удается сохранить статус CAPTURE_FAILED для платежа " . Util::bin2uuidString($order->orderId));
+                    $msg = "[Сервис обработки платежных уведомлений]: Не удается сохранить статус CAPTURE_FAILED для платежа " . Util::bin2uuidString($order->orderId);
+                    error_log($msg);
+                    throw new Exception($msg);
                 }
             } else {
-                error_log("[pnservice]: " . " Capture order [" . $order->id . "] OK. Updating status.");
-                $msg = "Пополнение баланса клиента";
-                $cashOperation = new CashOper(null, $order->customerUid, Util::getCurrentServerDateFormatted(), $order->sum, $msg, Util::bin2uuidString($order->orderId));
+                $infomsg = "Пополнение баланса клиента";
+                $cashOperation = new CashOper(null, $order->customerUid, Util::getCurrentServerDateFormatted(), $order->sum, $infomsg, Util::bin2uuidString($order->orderId));
                 $this->refill($conn, $cashOperation);
                 if($this->updateOrderStatus($conn, $order->orderId, Status::SUCCEEDED)) {
                     $conn->commit();
                 }
                 else {
-                    throw new Exception("[Сервис обработки платежных уведомлений]: Не удается сохранить статус SUCCEEDED для платежа " . Util::bin2uuidString($order->orderId));
+                    $msg = "[Сервис обработки платежных уведомлений]: Не удается сохранить статус SUCCEEDED для платежа " . Util::bin2uuidString($order->orderId);
+                    error_log($msg);
+                    throw new Exception($msg);
                 }
             }
         }
@@ -115,16 +123,20 @@ class YkHandler extends SimpleRest {
             $stmt->execute();
 
             if($stmt->fetch() != false) {
-                $order = Order::create($orderId, $customerUid, $createDate, $orderDate, $sum , $currencyCode, $statusId, null, null, $confirmationUrl, $idempotenceKey);
+                $order = Order::create($orderId, $customerUid, $createDate, $orderDate, $sum , $currencyCode, $statusId, null, null, $confirmationUrl, $idempotenceKey, null);
             }
             $stmt->close();
         }
         else {
-            throw new Exception( "[Сервис обработки платежных уведомлений]: Ошибка получения данных платежа");
+            $msg = "[Сервис обработки платежных уведомлений]: Ошибка получения данных платежа " . Util::bin2uuidString($order->orderId);
+            error_log($msg);
+            throw new Exception($msg);
         }
 
-        if($order == null) {
-            throw new Exception( "[Сервис обработки платежных уведомлений]: Платеж с указанным ID отсутствует");
+        if(!isset($order) || !isset($order->orderId)) {
+            $msg = "[Сервис обработки платежных уведомлений]: Платеж с указанным ID отсутствует " . Util::bin2uuidString($order->orderId);
+            error_log($msg);
+            throw new Exception($msg);
         }
 
         return $order;
@@ -138,7 +150,9 @@ class YkHandler extends SimpleRest {
             $stmt->close();
         }
         else {
-            throw new Exception( "[Сервис обработки платежных уведомлений]: Ошибка обновления статуса платежа");
+            $msg = "[Сервис обработки платежных уведомлений]: Ошибка обновления статуса платежа " . Util::bin2uuidString($orderId);
+            error_log($msg);
+            throw new Exception($msg);
         }
         return true;
     }
@@ -157,7 +171,9 @@ class YkHandler extends SimpleRest {
             $stmt->close();
         }
         else {
-            throw new Exception( "[Сервис обработки платежных уведомлений]: Ошибка создания балансовой операции пополнения" );
+            $msg = "[Сервис обработки платежных уведомлений]: Ошибка создания балансовой операции пополнения " . Util::bin2uuidString($operation->orderId);
+            error_log($msg);
+            throw new Exception($msg);
         }
 
         return true;
@@ -171,27 +187,11 @@ class YkHandler extends SimpleRest {
             $stmt->close();
         }
         else {
+            $msg = "[Сервис обработки платежных уведомлений]: Ошибка обновления статуса платежа " . Util::bin2uuidString($orderId);
+            error_log($msg);
             throw new Exception( "[Сервис обработки платежных уведомлений]: Ошибка обновления статуса платежа");
         }
         return true;
     }
-
-//    public function processMain($requestObj) {
-//        $yk = YKUtil();
-//        $paymentObj = array('request' => $requestObj);
-//        $repo = OrderRepo::getInstance();
-//        $order = $repo->getOrderById($paymentObj->object->id);
-//        if($yk->checkOrderWaiting($order, $paymentObj) == false) {
-//            throw new Exception( $this->getErrorRegistry()->USER_ERR_WRONG_PAYMENT_NOTIFICATION->message);
-//        }
-//        $repo->updateOrderStatus($order->orderId, Status::WAITING_FOR_CAPTURE);
-//
-//        if($yk->capturePayment($order)) {
-//            $repo->updateOrderStatus($order->orderId, Status::CAPTURE_FAILED);
-//        }
-//
-//        $result = new stdClass();
-//        $this->handleResult($result);
-//    }
 
 }

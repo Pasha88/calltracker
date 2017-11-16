@@ -67,7 +67,7 @@ class OrderListCommand  extends Command {
             $stmt->store_result();
             while($stmt->fetch() != false) {
                 $order = Order::create(Util::bin2uuidString($orderId), $customerUid, $createDate, $orderDate, $sum, $currencyCode,
-                    $status, $statusCode, $customerEmail, $confirmationUrl, Util::bin2uuidString($idempotenceKey));
+                    $status, $statusCode, $customerEmail, $confirmationUrl, Util::bin2uuidString($idempotenceKey), $orderStatusName);
                 array_push($orders, $order);
             }
             $stmt->close();
