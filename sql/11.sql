@@ -1,0 +1,1 @@
+INSERT INTO order_status (`order_status_id`, `code`, `dsc`) VALUES ('-2', 'WAITING_FOR_CAPTURE_WRONG_NOTIFICATION', 'Ошибка выполнения подтверждения');

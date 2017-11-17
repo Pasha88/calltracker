@@ -73,7 +73,7 @@ class YKUtil {
     }
 
     public function checkCapture($order, $payment) {
-        if($payment->id != $order->orderId) { return false; }
+        if($payment->id != strtolower(Util::bin2uuidString($order->orderId))) { return false; }
         if($payment->status != 'succeeded') { return false; }
         if($payment->paid != true) { return false; }
         if($payment->amount->value != $order->sum || $payment->amount->currency != $order->currencyCode ) { return false; }
