@@ -47,6 +47,8 @@ RewriteRule ^api/order/allstatuses$ cabinet/php/RestController.php?view=allOrder
 RewriteRule ^api/order/getOrders cabinet/php/RestController.php?view=getOrders [nc,qsa]
 RewriteRule ^api/order/makePayment cabinet/php/RestController.php?view=makePayment [nc,qsa]
 
+RewriteRule ^api/balance cabinet/php/RestController.php?view=balance [nc,qsa]
+
 #RewriteEngine On
 #RewriteCond %{HTTPS} !=on [NC]
 #RewriteRule ^(.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]

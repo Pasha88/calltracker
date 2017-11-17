@@ -81,11 +81,15 @@ class YKUtil {
     }
 
     public function checkOrderWaiting($order, $payment) {
+        if($payment->status != 'waiting_for_capture') { return false; }
+        if($payment->paid != true && $payment->paid != 1) { return false; }
+        if($payment->amount->value != $order->sum || $payment->amount->currency != $order->currencyCode ) { return false; }
+        return true;
+    }
+
+    public function checkNotification($payment) {
         if($payment->type != 'notification') { return false; }
         if($payment->event != 'payment.waiting_for_capture') { return false; }
-        if($payment->object->status != 'waiting_for_capture') { return false; }
-        if($payment->object->paid != true && $payment->object->paid != 1) { return false; }
-        if($payment->object->amount->value != $order->sum || $payment->object->amount->currency != $order->currencyCode ) { return false; }
         return true;
     }
 

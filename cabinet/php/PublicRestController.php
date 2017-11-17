@@ -82,7 +82,7 @@ switch($view){
         break;
     case "pnservice":
         $handler= new YkHandler();
-        $handler->process($requestObj);
+        $handler->process(null, $requestObj);
         break;
 	case "" :
 		//404 - not found;

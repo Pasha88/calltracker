@@ -66,11 +66,11 @@
 function MainCtrl($rootScope, $http) {
 
     $rootScope.showMainSettings = function() {
-        return  $rootScope.user.role > 100;
+        return  typeof $rootScope.user != 'undefined' && $rootScope.user.role > 100;
     };
 
     $rootScope.showTariffSettings = function() {
-        return  $rootScope.user.role > 100;
+        return  typeof $rootScope.user != 'undefined' && $rootScope.user.role > 100;
     };
 
     /**
@@ -3475,8 +3475,18 @@ function passwordMeterCtrl($scope){
 }
 
 
-function TopHeaderController($rootScope, $scope, $state, authenticate, localStorageService) {
+function TopHeaderController($http, $rootScope, $scope, $state, authenticate, localStorageService) {
     $scope.currentUser = $rootScope.user.email;
+    $scope.balance = 0.00;
+    $http.post(
+        "/api/balance",
+        {customerUid: $rootScope.user.customerUid},
+        { headers: {'Content-Type': 'application/json'} }
+    ).then(function(result) {
+        $scope.balance = result.data.balance;
+        $scope.balance = Number($scope.balance).toFixed(2);
+    });
+
     $scope.logoutme = function () {
         localStorageService.remove('apptoken');
         localStorageService.remove('user');

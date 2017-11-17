@@ -6,7 +6,7 @@ require_once(dirname(__DIR__) . '/util/Util.php');
 class RegisterCustomerCommand  extends Command {
 
     private $saveCustomerSQL = 'insert into customer(email, hkey, customer_uid) values(?,?,?)';
-    private $saveTariffHistorySQL = 'insert into customer_tariff_history(customer_uid, tariff_id, set_date) values(?,?,?)';
+    private $saveTariffHistorySQL = 'insert into customer_tariff_history(customer_id, tariff_id, set_date) values(?,?,?)';
     private $emailExistSQL = 'select count(customer_id) as cnt from customer where email = ?';
     private $pwdRegexp = '/^([0-9A-Za-z_!@#$%^&.]{3,20})$/';
     private $emailRegexp = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])";
@@ -57,7 +57,7 @@ class RegisterCustomerCommand  extends Command {
         $id = $conn->insert_id;
 
         if ($stmt = $conn->prepare($this->saveTariffHistorySQL)) {
-            $stmt->bind_param("sis", $id, 1, Util::getCurrentServerDateFormatted());
+            $stmt->bind_param("iis", $id, $tariffId = 1, $setDate = Util::getCurrentServerDateFormatted());
             $stmt->execute();
             $stmt->close();
         }

@@ -291,6 +291,15 @@ switch ($view) {
         $handler->handleResult($result);
         break;
 
+    case "balance":
+        $repo = CustomerRepo::getInstance();
+        $customer = $repo->getCustomerByUid($requestObj->customerUid);
+        $result = new stdClass();
+        $result->balance = $customer->balance;
+        $handler = new RawDataHandler();
+        $handler->handleResult($result);
+        break;
+
     default:
         forbid("Не найден метод");
 }
