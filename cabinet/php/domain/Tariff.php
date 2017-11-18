@@ -1,19 +1,44 @@
 <?php
-	
-class Tariff {
+
+require_once(dirname(__DIR__)."/util/Util.php");
+
+Class Tariff {
 	
 	public $tariffId;
 	public $tariffName;
 	public $maxPhoneNumber;
 	public $rate;
-    public $isDeleted;
+    public $is_deleted;
 
-    function __construct($tariffId, $tariffName, $maxPhoneNumber, $rate, $isDeleted) {
-        $this->tariffId = $tariffId;
-        $this->tariffName = $tariffName;
-        $this->maxPhoneNumber = $maxPhoneNumber;
-        $this->rate = $rate;
-        $this->isDeleted = $isDeleted;
-	}
+    public static function create($bdRow) {
+        $result = new Tariff();
+        if($bdRow == null) {
+            $result->tariff_id = -1;
+            $result->tariff_name = '0';
+            $result->max_phone_number = 0;
+            $result->rate = 0;
+            $result->is_deleted = 1;
+        }
+        else {
+            $result->tariff_id = $bdRow['tariff_id'];
+            $result->tariff_name = $bdRow['tariff_name'];
+            $result->max_phone_number = $bdRow['max_phone_number'];
+            $result->rate = $bdRow['rate'];
+            $result->is_deleted = $bdRow['is_deleted'];
+        }
+        return $result;
+    }
+
+    public static function createDefault($customerId, $number) {
+        $result = new Tariff();
+
+            $result->tariff_id = -1;
+            $result ->tariff_name = '0';
+            $result->max_phone_number = 0;
+            $result->rate = 0;
+            $result->is_deleted = 1;
+
+        return $result;
+    }
 
 }

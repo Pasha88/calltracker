@@ -7,32 +7,32 @@
     </div>
 </div>
 <div class="wrapper animated fadeInRight">
+
     <div class="row">
-        <div class="col-lg-10">
-            <div class="ibox float-e-margins">
-                <!--<div class="ibox-title">-->
-                <!--</div>-->
-                <form name="mainsettingsForm">
-                    <div class="ibox-content">
-                        <div class="row" ng-repeat="settingsItem in settings">
-                            <div class="col-sm-12" style="text-align: right; padding-top: 5px; padding-bottom: 5px;">
-                                <div class="form-group"><label class="col-sm-4 control-label">{{settingsItem.visibleName}}</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" ng-model="settingsItem.value">
-                                    </div>
-                                </div>
+        <div class="col-sm-10">
+            <fieldset>
+                <h2>Тарифы(Таблица)</h2>
+                </br>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <div ng-repeat="item in phoneNumberList" class="m-b form-inline">
+                                <input type="text" ng-model="item.max_phone_number" ng-blur="onBlur($index, item)" class="form-control" placeholder="+7 (495) 000-00-00" style="width: 50%;">
+                                <button ng-click="removePhoneNumber(item)" class="btn-default form-control"><i class="fa fa-trash"></i></button>
                             </div>
-                        </div>
-                        <div class="row" style="padding-top: 5px; padding-bottom: 5px;">
-                            <div class="col-sm-1"></div>
-                            <div class="col-sm-10">
-                                <button class="btn btn-sm  pull-right" type="submit" ng-disabled="mainsettingsForm.$invalid" ng-click="save()">Сохранить</button>
-                            </div>
-                            <div class="col-sm-1"></div>
+                            <button class="btn btn-gray" type="submit" ng-click="addPhoneNumber()">Добавить поле в таблице</button>
+                            <button class="btn btn-primary" type="submit" ng-click="savePhoneNumberList()">Сохранить&nbsp;&nbsp;</button>
+                            <button class="btn btn-primary" type="submit" ng-click="restorePhoneNumberList()">Отмена&nbsp;&nbsp;</button>
                         </div>
                     </div>
-                </form>
-            </div>
+                </div>
+            </fieldset>
+        </div>
+        <div class="col-sm-2">
+            <fieldset class="m-t-md">
+                <a ui-sref="container.wizard.step_two" class="btn btn-primary pull-right">Далее</a>
+            </fieldset>
         </div>
     </div>
+
 </div>
