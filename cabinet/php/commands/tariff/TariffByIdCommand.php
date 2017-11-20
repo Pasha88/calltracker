@@ -3,7 +3,7 @@
 require_once(dirname(__DIR__) . '/Command.php');
 require_once(dirname(__DIR__) . '/../domain/Tariff.php');
 
-class TariffByIdCommand  extends Command {
+class TariffListCommand  extends Command {
 
     private $getAllTariffsSQL = 'select * from tariff where tariff_id = ?';
     private $args;
@@ -19,15 +19,13 @@ class TariffByIdCommand  extends Command {
         $tariffName = null;
         $maxPhoneNumber = null;
         $rate = null;
-        $isDeleted = null;
 
         if ($stmt = $conn->prepare($this->getAllTariffsSQL)) {
             $stmt->bind_param("i", $this->args['id']);
-            $stmt->bind_result($tariffId, $tariffName, $maxPhoneNumber, $rate ,$isDeleted);
+            $stmt->bind_result($tariffId, $tariffName, $maxPhoneNumber, $rate);
             $stmt->execute();
-            $stmt->store_result();
             if($stmt->fetch() != false) {
-                $tariff = new Tariff($tariffId, $tariffName, $maxPhoneNumber, $rate, $isDeleted);
+                $tariff = new Tariff($tariffId, $tariffName, $maxPhoneNumber, $rate);
             }
             else {
                 throw new Exception( $this->getErrorRegistry()->USER_ERR_GET_TARIFF_BY_ID->message);
