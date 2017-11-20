@@ -25,11 +25,8 @@ class BillingRepo extends Repository {
     }
 
     public function dailyMove($customer) {
-
         $conn = $this->init();
-
         $msg = null;
-
         try {
             $params = array('customerUid' => $customer->customerUid);
             $c = new GetLastExpenseOperationCommand($params);
@@ -50,7 +47,7 @@ class BillingRepo extends Repository {
                 $operDate->add($oneDay);
 
                 $tariff = $tariffRepo->tariffById($customer->tariffId);
-                $sum = $tariff->rate/AppConfig::CASH_MOVE_KOEFF * -1;
+                $sum = round(($tariff->rate/AppConfig::CASH_MOVE_KOEFF * -1), 2);
 
                 $msg = AppConfig::CASH_MOVE_DEFAULT_DSC;
                 $cashOperation = new CashOper(null, $customer->customerUid, Util::formatDate($operDate), $sum, $msg, null);
@@ -64,18 +61,15 @@ class BillingRepo extends Repository {
 
                 $c = new SaveCustomerByUidCommand($customer);
                 $c->execute($conn);
+                $conn->commit();
             }
-
         }
         catch(Exception $ex) {
             $conn->rollback();
             $this->close($conn);
             throw new Exception($ex->getMessage());
         }
-
-        $conn->commit();
         $this->close($conn);
-
         return $msg;
     }
 

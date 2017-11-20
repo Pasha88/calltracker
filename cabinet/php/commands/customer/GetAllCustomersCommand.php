@@ -45,7 +45,7 @@ class GetAllCustomersCommand  extends Command {
         if ($stmt = $conn->prepare($this->getAllCustomersSQL)) {
             $stmt->bind_result($customerId,$email,$pwdHash,$description,$restore_uid,$restore_valid_till,$reset_pwd_uid,
                 $reset_pwd_valid_till,$gaId,$defaultNumber,$defaultDomain,$scriptToken,$customerUid,$timeZone,
-                $yaId,$yaIdAuth,$yaRefresh,$yaExpires,$role,$upTimeFrom,$upTimeTo,$upTimeSchedule, $tariffId, $tariffName, $balance);
+                $yaId,$yaIdAuth,$yaRefresh,$yaExpires,$role,$upTimeFrom,$upTimeTo,$upTimeSchedule, $tariffId, $balance);
             $stmt->execute();
             while($stmt->fetch() != false) {
                 $customer = new Customer();
