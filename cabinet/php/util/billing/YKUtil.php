@@ -42,7 +42,6 @@ class YKUtil {
     }
 
     public function capturePayment($order, $idempotenceKey) {
-        print("[pnservice]: " . " Capture order [" . Util::bin2uuidString($order->orderId) . "]\r\n");
         $client = new Client();
         $client->setAuth(AppConfig::SHOP_ID, AppConfig::YKKEY);
         $captureRequest = [
