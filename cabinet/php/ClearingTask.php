@@ -1,10 +1,10 @@
 <?php
 
-require_once(dirname(__DIR__) . '/php/util/Repository.php');
-require_once(dirname(__DIR__) . '/php/commands/customer/GetAllCustomersCommand.php');
-require_once(dirname(__DIR__) . '/php/util/Util.php');
-require_once(dirname(__DIR__) . '/php/repo/CustomerRepo.php');
-require_once(dirname(__DIR__) . '/php/repo/BillingRepo.php');
+require_once(dirname(__DIR__) . '/util/Repository.php');
+require_once(dirname(__DIR__) . '/commands/customer/GetAllCustomersCommand.php');
+require_once(dirname(__DIR__) . '/util/Util.php');
+require_once(dirname(__DIR__) . '/repo/CustomerRepo.php');
+require_once(dirname(__DIR__) . '/repo/BillingRepo.php');
 
 $r = new Repository();
 $brepo = BillingRepo::getInstance();
