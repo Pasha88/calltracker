@@ -9,11 +9,9 @@ ADD COLUMN `is_deleted` INT NOT NULL DEFAULT 0 AFTER `rate`;
 ALTER TABLE tariff
 CHANGE COLUMN `is_deleted` `is_deleted` INT(1) NOT NULL DEFAULT '0' ;
 
-USE `host1563047`;
 DROP function IF EXISTS `uuid_from_bin`;
 
 DELIMITER $$
-USE `host1563047`$$
 CREATE FUNCTION `uuid_from_bin` (b BINARY(16))
 RETURNS CHAR(36) DETERMINISTIC
 BEGIN

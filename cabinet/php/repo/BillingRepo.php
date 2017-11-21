@@ -41,6 +41,9 @@ class BillingRepo extends Repository {
             $oneDay = new DateInterval('P1D');
             $operDate = Util::createCommonDate(isset($lastOperation) && isset($lastOperation->operDate) ? $lastOperation->operDate : $firstDate);
             $today = Util::getCurrentDate();
+
+            $operDate->setTime(0,0);
+            $today->setTime(0,0);
             $delta = $today->diff($operDate);
 
             for($i=1; $i<=$delta->days; $i++) {
