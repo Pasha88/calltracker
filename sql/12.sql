@@ -22,3 +22,5 @@ ADD CONSTRAINT FK_CUSTOMER_TARIFF_TARIFF FOREIGN KEY (tariff_id)
 REFERENCES tariff (tariff_id);
 
 UNLOCK TABLES;
+
+insert into deploy_scripts values(13, now(), '13.sql');
