@@ -5,10 +5,10 @@ require_once (dirname(__DIR__)."/commands/Command.php");
 
 class TariffPoolCommand extends Command {
 
-    private $insertPhoneNumberToPoolSQL = 'INSERT INTO tariff(tariff_name, max_phone_number, is_deleted) VALUES(\'bad\',3,1)';
-    private $updatePhoneNumberToPoolSQL = 'update tariff set max_phone_number = ?, rate = ? where tariff_id = ?';
-    private $deletePhoneNumberPoolSQL = '';
-    private $getExistingIdsSQL = "select 1 from tariff";
+    private $insertTariffToPoolSQL = 'INSERT INTO tariff(tariff_name, max_phone_number, is_deleted) VALUES(?,?,?)';
+    private $updateTariffToPoolSQL = 'UPDATE tariff set max_phone_number = ?, rate = ? where tariff_id = ?';
+    private $deleteTariffPoolSQL = 'DELETE FROM tariff WHERE tariff_id = ?';
+    private $getExistingIdsSQL = "SELECT tariff_id FROM tariff";
 
     private $args;
 
@@ -26,12 +26,10 @@ class TariffPoolCommand extends Command {
         die;*/
         $fdt = null;
         $number = "";
-        $seven = $newNumberPool[0]->max_phone_number;
-        $one = 1;
-
+        $isDeleted = 0;
         $forDelete = array();
         $forUpdate = array();
-        $existingId = 1;
+        $existingId = null;
 
 /*        $c = new FindCustomerCommandByUid( array( 'customerUid' => $this->args['customerUid'] ) );
         $customer = $c->execute($conn);*/
@@ -55,14 +53,43 @@ class TariffPoolCommand extends Command {
             throw new Exception( $this->getErrorRegistry()->USER_ERR_GET_PHONE_NUMBER_POOL->message);
         }
 
-        if ($stmt = $conn->prepare($this->updatePhoneNumberToPoolSQL)) {
+        $numberId3 = null;
+        if ($stmt_del = $conn->prepare($this->deleteTariffPoolSQL)) {
+            $numberId = 3;
+            $stmt_del->bind_param("i", $numberId3);
+            for($i=0; $i<count($forDelete); $i++) {
+                $numberId3 = $forDelete[$i];
+                $stmt_del->execute();
+            }
+        }
+        else {
+            throw new Exception( $this->getErrorRegistry()->USER_ERR_GET_PHONE_NUMBER_POOL->message);
+        }
+
+        if ($stmt = $conn->prepare($this->insertTariffToPoolSQL)) {
+            $stmt->bind_param("iii", $number, $number, $isDeleted);
+
+            for($i=0; $i<count($this->args['numberPool']); $i++) {
+                $item = $this->args['numberPool'][$i];
+                if(empty($item->tariff_id)) {
+                    $number = $item->max_phone_number;
+                    $fdt = Util::getCurrentDateFormatted();
+                    $stmt->execute();
+                }
+            }
+        }
+        else {
+            throw new Exception( $this->getErrorRegistry()->USER_ERR_GET_PHONE_NUMBER_POOL->message);
+        }
+
+        if ($stmt = $conn->prepare($this->updateTariffToPoolSQL)) {
             $updateNumberId = null;
-            $stmt->bind_param("isi", $seven, $seven, $updateNumberId);
+            $stmt->bind_param("isi", $number, $number, $updateNumberId);
 
 
             for($i=0; $i<count($forUpdate); $i++) {
                 $item = $this->args['numberPool'][$i];
-                if($item->tariff_id != null) {
+                if(!empty($item->tariff_id)) {
                     $updateNumberId = $item->tariff_id;
                     $number = $item->max_phone_number;
                     $fdt = Util::getCurrentDateFormatted();
