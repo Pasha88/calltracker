@@ -1,13 +1,13 @@
 LOCK TABLES
 customer WRITE,
-customer_tariff WRITE,
+customer_tariff_history WRITE,
 tariff WRITE;
 
 ALTER TABLE customer
   DROP FOREIGN KEY FK_CUSTOMER_TARIFF,
 MODIFY tariff_id INT;
 
-ALTER TABLE customer_tariff
+ALTER TABLE customer_tariff_history
   DROP FOREIGN KEY FK_CUSTOMER_TARIFF_TARIFF,
 MODIFY tariff_id INT;
 
@@ -17,7 +17,7 @@ ALTER TABLE `customer`
 ADD CONSTRAINT FK_CUSTOMER_TARIFF FOREIGN KEY (tariff_id)
 REFERENCES tariff (tariff_id);
 
-ALTER TABLE `customer_tariff`
+ALTER TABLE `customer_tariff_history`
 ADD CONSTRAINT FK_CUSTOMER_TARIFF_TARIFF FOREIGN KEY (tariff_id)
 REFERENCES tariff (tariff_id);
 
