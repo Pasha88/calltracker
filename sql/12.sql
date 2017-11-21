@@ -23,4 +23,4 @@ REFERENCES tariff (tariff_id);
 
 UNLOCK TABLES;
 
-insert into deploy_scripts values(13, now(), '13.sql');
+insert into deploy_scripts values(12, now(), '12.sql');
