@@ -16,14 +16,14 @@ Class Tariff {
             $result->tariff_id = -1;
             $result->tariff_name = '0';
             $result->max_phone_number = 0;
-            $result->rate = 0;
+            $result->rate = 0.00;
             $result->is_deleted = 1;
         }
         else {
             $result->tariff_id = $bdRow['tariff_id'];
             $result->tariff_name = $bdRow['tariff_name'];
             $result->max_phone_number = $bdRow['max_phone_number'];
-            $result->rate = $bdRow['rate'];
+            $result->rate = (float) $bdRow['rate'];
             $result->is_deleted = $bdRow['is_deleted'];
         }
         return $result;
@@ -35,7 +35,7 @@ Class Tariff {
             $result->tariff_id = -1;
             $result ->tariff_name = '0';
             $result->max_phone_number = 0;
-            $result->rate = 0;
+            $result->rate = 0.00;
             $result->is_deleted = 1;
 
         return $result;

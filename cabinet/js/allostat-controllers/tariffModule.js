@@ -2,18 +2,18 @@ var app = angular.module('inspinia.tariffsettings', [ 'inspinia.services' ]);
 
 app.service('TariffSettingsService', function(Restangular) {
     return {
-        savePhoneList2: function(customerUid, phoneNumberList) {
+        saveTariffList: function(customerUid, phoneNumberList) {
             var params = {
                 phoneNumberList: phoneNumberList,
                 customerUid: customerUid
             };
-            return Restangular.all("install/savePhoneList2").post(params);
+            return Restangular.all("install/saveTariffList").post(params);
         },
-        getPhoneList2: function(customerUid) {
+        getTariffList: function(customerUid) {
             var params = {
                 customerUid: customerUid
             };
-            return Restangular.all("install/getPhoneList2").post(params);
+            return Restangular.all("install/getTariffList").post(params);
         }
     }
 });
@@ -29,7 +29,7 @@ function TariffSettingsCtrl ($rootScope, $scope, notify, TariffSettingsService, 
     $scope.phoneNumberListBkp = [];
 
     $scope.loadPhoneNumberList = function() {
-        TariffSettingsService.getPhoneList2($rootScope.user.customerUid).then(
+        TariffSettingsService.getTariffList($rootScope.user.customerUid).then(
             function(res) {
                 $scope.phoneNumberList = res.itemArray.slice();
                 $scope.phoneNumberListBkp = res.itemArray.slice();
@@ -66,7 +66,7 @@ function TariffSettingsCtrl ($rootScope, $scope, notify, TariffSettingsService, 
     };
 
     $scope.savePhoneNumberList = function() {
-        TariffSettingsService.savePhoneList2($rootScope.user.customerUid, $scope.phoneNumberList).then(
+        TariffSettingsService.saveTariffList($rootScope.user.customerUid, $scope.phoneNumberList).then(
             function(res) {
                 notify({
                     message: "Номера сохранены2",
@@ -84,22 +84,6 @@ function TariffSettingsCtrl ($rootScope, $scope, notify, TariffSettingsService, 
             }
         );
     };
-
-    $scope.getScriptHeadString = function() {
-        return "<script type=\"application\/javascript\"> \r\n" +
-            " function loadJS(file) { \r\n" +
-            "  var jsElm = document.createElement(\"script\"); \r\n" +
-            " jsElm.type = \"application\/javascript\"; \r\n" +
-            " jsElm.src = file;    \r\n" +
-            " document.body.appendChild(jsElm); } \r\n" +
-            " loadJS(\"http:\/\/develop2.allostat.ru\/public_api\/allostat\/numloader.js?customerUid=" + $rootScope.user.customerUid + "\"); \r\n" +
-            " <\/script>";
-    };
-
-    $scope.getPhoneNumberMarkup = function() {
-        return '<span class="phoneAllostat">' + $scope.defaultNumber.val + '<span>';
-    };
-
 
     $scope.isEmpty = function(val) {
         return util.isEmpty(val);

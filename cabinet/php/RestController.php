@@ -87,7 +87,7 @@ switch ($view) {
         $numberRestHandler->savePhoneNumberList($requestObj->phoneNumberList, $requestObj->customerUid);
         break;
 
-    case "savePhoneList2":
+    case "saveTariffList":
         $numberRestHandler = new TariffsPoolHandler();
         $numberRestHandler->savePhoneNumberList($requestObj->phoneNumberList, $requestObj->customerUid);
         break;
@@ -97,7 +97,7 @@ switch ($view) {
         $numberRestHandler->getPhoneNumberList($requestObj->customerUid);
         break;
 
-    case "getPhoneList2":
+    case "getTariffList":
         $numberRestHandler = new TariffsPoolHandler();
         $numberRestHandler->getPhoneNumberList($requestObj->customerUid);
         break;

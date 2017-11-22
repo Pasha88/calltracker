@@ -14,9 +14,9 @@ RewriteRule ^public_api/pnservice$ /cabinet/php/PublicRestController.php?view=pn
 
 RewriteRule ^api/authenticate$   cabinet/php/RestController.php?view=auth [nc,qsa]
 RewriteRule ^api/install/savePhoneList$ cabinet/php/RestController.php?view=savePhoneList [nc,qsa]
-RewriteRule ^api/install/savePhoneList2$ cabinet/php/RestController.php?view=savePhoneList2 [nc,qsa]
+RewriteRule ^api/install/saveTariffList$ cabinet/php/RestController.php?view=saveTariffList [nc,qsa]
 RewriteRule ^api/install/getPhoneList$ cabinet/php/RestController.php?view=getPhoneList [nc,qsa]
-RewriteRule ^api/install/getPhoneList2$ cabinet/php/RestController.php?view=getPhoneList2 [nc,qsa]
+RewriteRule ^api/install/getTariffList$ cabinet/php/RestController.php?view=getTariffList [nc,qsa]
 RewriteRule ^api/install/save/gaid$ cabinet/php/RestController.php?view=saveGaId [nc,qsa]
 RewriteRule ^api/install/save/defaultNumber$ cabinet/php/RestController.php?view=saveDefaultNumber [nc,qsa]
 RewriteRule ^api/install/check$ cabinet/php/RestController.php?view=checkinstall&customerId=$1 [nc,qsa]
