@@ -11,7 +11,7 @@
     <div class="row">
         <div class="col-sm-10">
             <fieldset>
-                <h2>Тарифы(Таблица)</h2>
+                <h2>Тарифы</h2>
                 </br>
                 <div class="row">
                     <div class="form-group">
@@ -22,18 +22,17 @@
                                 <h4 style="float: left; width: 20%; text-align: center; ">Ставка тарифа</h4>
                                 <h4 style="float: left; width: 10%; text-align: center; ">&#160;</h4>
                             </div>
-                            <div ng-repeat="item in phoneNumberList" class="m-b form-inline">
-                                <input type="text" ng-model="item.tariff_name" ng-blur="onBlur($index, item)" class="form-control" ng-maxlength="128" placeholder="Название тарифа" style="clear: both; float: left; width: 20%;">
-                                <input ng-model="item.max_phone_number" type="number" name="input" min="{{0}}" max="{{50}}" ng-blur="onBlur($index, item)" class="form-control" placeholder="Количество телефонов" style="float: left; width: 20%;">
-                                <input type="number" ng-model="item.rate" ng-currency
-                                       fraction="2" ng-blur="onBlur($index, item)"  ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01"  class="form-control" placeholder="Ставка тарифа" style=" float: left; width: 20%;">
-                                <button ng-click="removePhoneNumber(item)" class="btn-default form-control" style=" float: left; width: 10%;"><i class="fa fa-trash"></i></button>
-                            </div><input type="number" name="myDecimal" placeholder="Decimal" ng-model="myDecimal" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" />
+                            <div ng-repeat="item in tariffList" class="m-b form-inline">
+                                <input type="text" ng-model="item.tariff_name" class="form-control" ng-maxlength="128" placeholder="Название тарифа" style="clear: both; float: left; width: 20%;">
+                                <input ng-model="item.max_phone_number" type="number" name="input" min="{{0}}" max="{{50}}" class="form-control" placeholder="Количество телефонов" style="float: left; width: 20%;">
+                                <input type="number" ng-model="item.rate" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01"  class="form-control" placeholder="Ставка тарифа" style=" float: left; width: 20%;">
+                                <button ng-click="removeTariff(item)" class="btn-default form-control" style=" float: left; width: 10%;"><i class="fa fa-trash"></i></button>
+                            </div>
 
                             <div class="m-b form-inline" style="clear: both; padding-top: 15px;">
-                            <button class="btn btn-gray" type="submit" ng-click="addPhoneNumber()">Добавить поле в таблице</button>
-                            <button class="btn btn-primary" type="submit" ng-click="savePhoneNumberList()">Сохранить&nbsp;&nbsp;</button>
-                            <button class="btn btn-primary" type="submit" ng-click="restorePhoneNumberList()">Отмена&nbsp;&nbsp;</button>
+                            <button class="btn btn-gray" type="submit" ng-click="addTariff()">Добавить</button>
+                            <button class="btn btn-primary" type="submit" ng-click="saveTariffList()">Сохранить&nbsp;&nbsp;</button>
+                            <button class="btn btn-primary" type="submit" ng-click="restoreTariffList()">Отмена&nbsp;&nbsp;</button>
                             </div>
                         </div>
                     </div>

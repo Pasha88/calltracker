@@ -3,11 +3,11 @@
 require_once (dirname(__DIR__)."/util/Util.php");
 require_once (dirname(__DIR__)."/commands/Command.php");
 
-class TariffPoolCommand extends Command {
+class TariffCommand extends Command {
 
-    private $insertTariffToPoolSQL = "INSERT INTO tariff(tariff_name, max_phone_number, rate, is_deleted) VALUES(?,?,?,?)";
-    private $updateTariffToPoolSQL = "UPDATE tariff SET tariff_name = ?, max_phone_number = ?, rate = ?, is_deleted = ? WHERE tariff_id = ?";
-    private $deleteTariffPoolSQL = "UPDATE tariff SET is_deleted = ? WHERE tariff_id = ?";
+    private $insertTariffSetSQL = "INSERT INTO tariff(tariff_name, max_phone_number, rate, is_deleted) VALUES(?,?,?,?)";
+    private $updateTariffSetSQL = "UPDATE tariff SET tariff_name = ?, max_phone_number = ?, rate = ?, is_deleted = ? WHERE tariff_id = ?";
+    private $deleteTariffSetSQL = "UPDATE tariff SET is_deleted = ? WHERE tariff_id = ?";
     private $getExistingIdsSQL = "SELECT tariff_id FROM tariff";
 
     private $args;
@@ -18,8 +18,7 @@ class TariffPoolCommand extends Command {
     }
 
     public function execute($conn) {
-        $newNumberPool = $this->args['numberPool'];
-        $customerUid = $this->args['customerUid'];
+        $newTariffSet = $this->args['tariffSet'];
 
         $isDeleted = 0;
         $forDelete = array();
@@ -31,11 +30,14 @@ class TariffPoolCommand extends Command {
             $stmt->execute();
 
             while($stmt->fetch()) {
-                for($j=0; $j<count($newNumberPool); $j++) {
-                    if($newNumberPool[$j]->tariff_id == $existingId) {
-                        array_push($forUpdate, $newNumberPool[$j]);
-                        continue 2;
+                for($j=0; $j<count($newTariffSet); $j++) {
+                    if(!empty($newTariffSet[$j]->tariff_id)) {
+                        if($newTariffSet[$j]->tariff_id == $existingId) {
+                            array_push($forUpdate, $newTariffSet[$j]);
+                            continue 2;
+                        }
                     }
+
                 }
                 array_push($forDelete, $existingId);
             }
@@ -45,7 +47,7 @@ class TariffPoolCommand extends Command {
         }
 
         $idsToDelete = null;
-        if ($stmt_del = $conn->prepare($this->deleteTariffPoolSQL)) {
+        if ($stmt_del = $conn->prepare($this->deleteTariffSetSQL)) {
             $isDeleted = 1;
             $idsToDelete = null;
             $stmt_del->bind_param("ii", $isDeleted, $idsToDelete);
@@ -60,20 +62,20 @@ class TariffPoolCommand extends Command {
 
         $isDeleted = 0;
 
-        if ($stmt = $conn->prepare($this->insertTariffToPoolSQL)) {
+        if ($stmt = $conn->prepare($this->insertTariffSetSQL)) {
             $tariffName = null;
             $maxPhoneNumber = null;
             $rate = null;
 
             $stmt->bind_param("sidi", $tariffName, $maxPhoneNumber, $rate, $isDeleted);
 
-            for($i=0; $i<count($this->args['numberPool']); $i++) {
-                $item = $this->args['numberPool'][$i];
+            for($i=0; $i<count($this->args['tariffSet']); $i++) {
+                $item = $this->args['tariffSet'][$i];
                 if(empty($item->tariff_id)) {
                     $tariffName = $item->tariff_name;
                     $maxPhoneNumber = $item->max_phone_number;
                     $rate = $item->rate;
-                    $fdt = Util::getCurrentDateFormatted();
+
                     $stmt->execute();
                 }
             }
@@ -82,7 +84,7 @@ class TariffPoolCommand extends Command {
             throw new Exception( $this->getErrorRegistry()->USER_ERR_GET_TARIFF_POOL->message);
         }
 
-        if ($stmt = $conn->prepare($this->updateTariffToPoolSQL)) {
+        if ($stmt = $conn->prepare($this->updateTariffSetSQL)) {
             $tariffName = null;
             $maxPhoneNumber = null;
             $rate = null;
@@ -90,7 +92,7 @@ class TariffPoolCommand extends Command {
             $stmt->bind_param("sidii", $tariffName, $maxPhoneNumber, $rate, $isDeleted, $updateNumberId);
 
             for($i=0; $i<count($forUpdate); $i++) {
-                $item = $this->args['numberPool'][$i];
+                $item = $this->args['tariffSet'][$i];
                 if(!empty($item->tariff_id)) {
                     $updateNumberId = $item->tariff_id;
                     $tariffName = $item->tariff_name;

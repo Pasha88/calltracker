@@ -29,16 +29,15 @@ Class Tariff {
         return $result;
     }
 
-    public static function createDefault($customerId, $number) {
+    public static function createDefault() {
         $result = new Tariff();
 
-            $result->tariff_id = -1;
-            $result ->tariff_name = '0';
-            $result->max_phone_number = 0;
-            $result->rate = 0.00;
-            $result->is_deleted = 1;
+        $result->tariff_id = -1;
+        $result ->tariff_name = '0';
+        $result->max_phone_number = 0;
+        $result->rate = 0.00;
+        $result->is_deleted = 1;
 
         return $result;
     }
-
 }

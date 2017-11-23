@@ -3,9 +3,9 @@
 require_once (dirname(__DIR__)."/commands/Command.php");
 require_once(dirname(__DIR__) . '/domain/Tariff.php');
 
-class GetTariffsPoolCommand extends Command {
+class GetTariffsCommand extends Command {
 
-    private $getTariffPoolSQL = "SELECT tariff_id, tariff_name, max_phone_number, rate, is_deleted FROM tariff WHERE is_deleted = 0";
+    private $getTariffSQL = "SELECT tariff_id, tariff_name, max_phone_number, rate, is_deleted FROM tariff WHERE is_deleted = 0";
     private $args;
 
     function __construct($a) {
@@ -15,7 +15,7 @@ class GetTariffsPoolCommand extends Command {
 
     public function execute($conn) {
 
-        if ($stmt = $conn->prepare($this->getTariffPoolSQL)) {
+        if ($stmt = $conn->prepare($this->getTariffSQL)) {
             $row = array();
             $stmt->bind_result($row['tariff_id'], $row['tariff_name'], $row['max_phone_number'],   $row['rate'], $row['is_deleted']);
             $stmt->execute();

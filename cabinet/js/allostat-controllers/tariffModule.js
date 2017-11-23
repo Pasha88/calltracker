@@ -2,9 +2,9 @@ var app = angular.module('inspinia.tariffsettings', [ 'inspinia.services' ]);
 
 app.service('TariffSettingsService', function(Restangular) {
     return {
-        saveTariffList: function(customerUid, phoneNumberList) {
+        saveTariffList: function(customerUid, tariffList) {
             var params = {
-                phoneNumberList: phoneNumberList,
+                tariffList: tariffList,
                 customerUid: customerUid
             };
             return Restangular.all("install/saveTariffList").post(params);
@@ -18,21 +18,21 @@ app.service('TariffSettingsService', function(Restangular) {
     }
 });
 
-function TariffSettingsCtrl ($rootScope, $scope, notify, TariffSettingsService, util, $stateParams, $http) {
+function TariffSettingsCtrl ($rootScope, $scope, notify, TariffSettingsService, util) {
 
     $scope.installConditions = {
-        phoneNumbers: false,
+        tariffs: false,
         defaultDomain: false
     };
 
-    $scope.phoneNumberList = [];
-    $scope.phoneNumberListBkp = [];
+    $scope.tariffList = [];
+    $scope.tariffListBkp = [];
 
-    $scope.loadPhoneNumberList = function() {
+    $scope.loadTariffList = function() {
         TariffSettingsService.getTariffList($rootScope.user.customerUid).then(
             function(res) {
-                $scope.phoneNumberList = res.itemArray.slice();
-                $scope.phoneNumberListBkp = res.itemArray.slice();
+                $scope.tariffList = res.itemArray.slice();
+                $scope.tariffListBkp = res.itemArray.slice();
             },
             function(err) {
                 notify({
@@ -45,31 +45,27 @@ function TariffSettingsCtrl ($rootScope, $scope, notify, TariffSettingsService, 
         );
     };
 
-    $scope.onBlur = function(ind, item) {
-        $scope.phoneNumberList[ind] = item;
-    };
-
-    $scope.addPhoneNumber = function() {
-        if($scope.phoneNumberList.length > 0 && util.isEmpty($scope.phoneNumberList[$scope.phoneNumberList.length-1]) ) {
+    $scope.addTariff = function() {
+        if($scope.tariffList.length > 0 && util.isEmpty($scope.tariffList[$scope.tariffList.length-1]) ) {
             return;
         }
-        $scope.phoneNumberList.push({});
+        $scope.tariffList.push({});
     };
 
-    $scope.removePhoneNumber = function(elem) {
-        var ind = $scope.phoneNumberList.indexOf(elem);
-        $scope.phoneNumberList.splice(ind, 1);
+    $scope.removeTariff = function(elem) {
+        var ind = $scope.tariffList.indexOf(elem);
+        $scope.tariffList.splice(ind, 1);
     };
 
-    $scope.restorePhoneNumberList = function() {
-        $scope.phoneNumberList = $scope.phoneNumberListBkp.slice();
+    $scope.restoreTariffList = function() {
+        $scope.tariffList = $scope.tariffListBkp.slice();
     };
 
-    $scope.savePhoneNumberList = function() {
-        TariffSettingsService.saveTariffList($rootScope.user.customerUid, $scope.phoneNumberList).then(
+    $scope.saveTariffList = function() {
+        TariffSettingsService.saveTariffList($rootScope.user.customerUid, $scope.tariffList).then(
             function(res) {
                 notify({
-                    message: "Номера сохранены2",
+                    message: "Тарифы сохранены",
                     position: 'center',
                     duration: '5000'
                 });
@@ -83,14 +79,10 @@ function TariffSettingsCtrl ($rootScope, $scope, notify, TariffSettingsService, 
                 });
             }
         );
-    };
-
-    $scope.isEmpty = function(val) {
-        return util.isEmpty(val);
     };
 
     //================================= DEBUG ====================================
 
-    $scope.loadPhoneNumberList();
+    $scope.loadTariffList();
 
 }

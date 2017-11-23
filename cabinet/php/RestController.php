@@ -33,7 +33,7 @@ register_shutdown_function('catch_fatal_error');
 
 
 require_once("handlers/PhoneNumberPoolHandler.php");
-require_once("handlers/TariffsPoolHandler.php");
+require_once("handlers/TariffsHandler.php");
 require_once("handlers/AuthHandler.php");
 require_once("handlers/CallsHandler.php");
 require_once("handlers/CustomerHandler.php");
@@ -88,8 +88,8 @@ switch ($view) {
         break;
 
     case "saveTariffList":
-        $numberRestHandler = new TariffsPoolHandler();
-        $numberRestHandler->savePhoneNumberList($requestObj->phoneNumberList, $requestObj->customerUid);
+        $numberRestHandler = new TariffsHandler();
+        $numberRestHandler->saveTariffList($requestObj->tariffList, $requestObj->customerUid);
         break;
 
     case "getPhoneList":
@@ -98,8 +98,8 @@ switch ($view) {
         break;
 
     case "getTariffList":
-        $numberRestHandler = new TariffsPoolHandler();
-        $numberRestHandler->getPhoneNumberList($requestObj->customerUid);
+        $numberRestHandler = new TariffsHandler();
+        $numberRestHandler->getTariffList($requestObj->customerUid);
         break;
 
     case "callspage":
