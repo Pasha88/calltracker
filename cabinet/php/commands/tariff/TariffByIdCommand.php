@@ -3,7 +3,7 @@
 require_once(dirname(__DIR__) . '/Command.php');
 require_once(dirname(__DIR__) . '/../domain/Tariff.php');
 
-class TariffListCommand  extends Command {
+class TariffByIdCommand  extends Command {
 
     private $getAllTariffsSQL = 'select * from tariff where tariff_id = ?';
     private $args;
