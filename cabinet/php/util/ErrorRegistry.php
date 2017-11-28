@@ -15,6 +15,8 @@ class ErrorRegistry
     public $USER_ERR_CHANGE_PWD;
     public $USER_ERR_GET_PHONE_NUMBER_POOL;
     public $USER_ERR_GET_TARIFF_POOL;
+    public $USER_ERR_GET_USER_TARIFF;
+    public $USER_ERR_SAVE_USER_TARIFF;
     public $USER_ERR_CUSTOMER_NOT_EXISTS;
     public $USER_ERR_PASSWORD_ERROR;
     public $USER_ERR_SEARCH_CALLS;
@@ -95,6 +97,8 @@ class ErrorRegistry
         $this->USER_ERR_CHANGE_PWD = new ErrCode('USER_ERR_CHANGE_PWD', "Ошибка смены пароля");
         $this->USER_ERR_GET_PHONE_NUMBER_POOL = new ErrCode('USER_ERR_GET_PHONE_NUMBER_POOL', "Ошибка получения пула номеров");
         $this->USER_ERR_GET_TARIFF_POOL = new ErrCode('USER_ERR_GET_TARIFF_POOL', "Ошибка получения пула тарифов");
+        $this->USER_ERR_GET_USER_TARIFF= new ErrCode('USER_ERR_GET_USER_TARIFF', "Ошибка при получении тарифа пользователя");
+        $this->USER_ERR_SAVE_USER_TARIFF= new ErrCode('USER_ERR_SAVE_USER_TARIFF', "Ошибка при сохранении тарифа пользователя");
         $this->USER_ERR_CUSTOMER_NOT_EXISTS = new ErrCode('USER_ERR_CUSTOMER_NOT_EXISTS', "Клиент с указанными реквизитами не найден");
         $this->USER_ERR_PASSWORD_ERROR = new ErrCode('USER_ERR_PASSWORD_ERROR', "Неверный пароль");
         $this->USER_ERR_SEARCH_CALLS = new ErrCode('USER_ERR_SEARCH_CALLS', "Ошибка при поиске звонков");

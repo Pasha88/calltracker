@@ -34,6 +34,7 @@ register_shutdown_function('catch_fatal_error');
 
 require_once("handlers/PhoneNumberPoolHandler.php");
 require_once("handlers/TariffsHandler.php");
+require_once("handlers/UserTariffHandler.php");
 require_once("handlers/AuthHandler.php");
 require_once("handlers/CallsHandler.php");
 require_once("handlers/CustomerHandler.php");
@@ -92,6 +93,11 @@ switch ($view) {
         $numberRestHandler->saveTariffList($requestObj->tariffList, $requestObj->customerUid);
         break;
 
+    case "saveUserTariff":
+        $numberRestHandler = new UserTariffHandler();
+        $numberRestHandler->saveUserTariff($requestObj->selectedTariff, $requestObj->customerUid);
+        break;
+
     case "getPhoneList":
         $numberRestHandler = new PhoneNumberPoolHandler();
         $numberRestHandler->getPhoneNumberList($requestObj->customerUid);
@@ -100,6 +106,11 @@ switch ($view) {
     case "getTariffList":
         $numberRestHandler = new TariffsHandler();
         $numberRestHandler->getTariffList($requestObj->customerUid);
+        break;
+
+    case "getUserTariff":
+        $numberRestHandler = new UserTariffHandler();
+        $numberRestHandler->getUserTariff($requestObj->customerUid);
         break;
 
     case "callspage":

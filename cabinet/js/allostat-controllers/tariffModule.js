@@ -7,13 +7,18 @@ app.service('TariffSettingsService', function(Restangular) {
                 tariffList: tariffList,
                 customerUid: customerUid
             };
-            return Restangular.all("install/saveTariffList").post(params);
+            return Restangular.all("install/saveTariffList2").post(params);
         },
         getTariffList: function(customerUid) {
             var params = {
                 customerUid: customerUid
             };
             return Restangular.all("install/getTariffList").post(params);
+        }, getTariffList2: function(customerUid) {
+            var params = {
+                customerUid: customerUid
+            };
+            return Restangular.all("install/getTariffList2").post(params);
         }
     }
 });
@@ -25,14 +30,22 @@ function TariffSettingsCtrl ($rootScope, $scope, notify, TariffSettingsService, 
         defaultDomain: false
     };
 
+    $scope.customerTimeZone = {
+        offset: 0,
+        value: ""
+    };
+
     $scope.tariffList = [];
     $scope.tariffListBkp = [];
+    $scope.tariffList2 = [];
+    $scope.tariffListBkp2 = [];
 
     $scope.loadTariffList = function() {
         TariffSettingsService.getTariffList($rootScope.user.customerUid).then(
             function(res) {
                 $scope.tariffList = res.itemArray.slice();
                 $scope.tariffListBkp = res.itemArray.slice();
+                $scope.customerTimeZone = "" + res.customerTimeZone;
             },
             function(err) {
                 notify({
@@ -43,6 +56,7 @@ function TariffSettingsCtrl ($rootScope, $scope, notify, TariffSettingsService, 
                 });
             }
         );
+
     };
 
     $scope.addTariff = function() {

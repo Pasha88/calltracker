@@ -1,5 +1,25 @@
 var app = angular.module('inspinia.payment', [ 'inspinia.services' ]);
 
+app.directive("mwConfirmClick", [
+    function() {
+        return {
+            priority: -1,
+            restrict: 'A',
+            scope: {confirmFunction: "&mwConfirmClick" },
+            link: function(scope, element, attrs){
+                element.bind('click', function(e){
+                    //default message
+                    var tariffName = $('#selected_user_tariff').find(":selected").text();
+                    var message = attrs.mwConfirmClickMessage ? (attrs.mwConfirmClickMessage + " " + tariffName) : "Будет произведена смена тарифа!?";
+                    if(confirm(message)) {
+                        scope.confirmFunction();
+                    }
+                });
+            }
+        }
+    }
+]);
+
 // datepicker empty input workaround: See  https://github.com/g00fy-/angular-datepicker/issues/199#issuecomment-154249452
 // dpapp = angular.module('datePicker', []);
 // dpapp.filter('mFormat', function () {
@@ -21,6 +41,19 @@ app.service('PaymentService', function(Restangular) {
         },
         makePayment: function(customerUid, sum) {
             return Restangular.all("order/makePayment").post( {customerUid: customerUid, sum: sum } );
+        },
+        saveUserTariff: function(customerUid, selectedTariff) {
+            var params = {
+                selectedTariff: selectedTariff,
+                customerUid: customerUid
+            };
+            return Restangular.all("install/saveUserTariff").post(params);
+        },
+        getUserTariff: function(customerUid) {
+            var params = {
+                customerUid: customerUid
+            };
+            return Restangular.all("install/getUserTariff").post(params);
         }
     }
 });
@@ -102,5 +135,50 @@ function PaymentHistoryCtrl ($rootScope, $scope, notify, PaymentService, util, l
 }
 
 function PaymentTariffCtrl ($rootScope, $scope, notify, PaymentService, util) {
+    $scope.userTariff = [];
+    $scope.tariffList = [];
+    $scope.selectedTariff = 0;
+    $scope.selectedTariff = $scope.tariffList[0];
 
+    $scope.loadTariffList = function() {
+        PaymentService.getUserTariff($rootScope.user.customerUid).then(
+            function(res) {
+                $scope.userTariff = res.itemArray.slice();
+                $scope.tariffList = res.itemArray2.slice();
+                $scope.selectedTariff = $scope.tariffList[0];
+            },
+            function(err) {
+                notify({
+                    message: 'Ошибка при загрузке первоначальных данных',
+                    classes: 'allostat-alert-danger',
+                    position: 'center',
+                    duration: '5000'
+                });
+            }
+        );
+    };
+
+    $scope.saveUserTariff = function() {
+        PaymentService.saveUserTariff($rootScope.user.customerUid, $scope.selectedTariff).then(
+            function(res) {
+                notify({
+                    message: 'Тариф изменен',
+                    classes: 'allostat-success-green',
+                    position: 'center',
+                    duration: '5000'
+                });
+                $scope.loadTariffList();
+            },
+            function(err) {
+                notify({
+                    message: 'Ошибка сохранения тарифа пользователя',
+                    classes: 'allostat-alert-danger',
+                    position: 'center',
+                    duration: '5000'
+                });
+            }
+        );
+    };
+
+    $scope.loadTariffList();
 }

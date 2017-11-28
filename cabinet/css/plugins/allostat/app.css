@@ -4,6 +4,12 @@
     color: #a94442;
 }
 
+.allostat-success-green {
+    background-color: #9bf29a;
+    border-color: #74f269;
+    color: #000000;
+}
+
 table.callstable td,
 table.callstable th {
     text-align: center;
