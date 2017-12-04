@@ -15,7 +15,7 @@ class SaveUserTariffCommand extends Command {
     }
 
     public function execute($conn) {
-        $newTariffSet = $this->args['selectedTariff'];
+        $selectedTariff = $this->args['selectedTariff'];
         $customerUid = $this->args['customerUid'];
 
         $existingId = null;
@@ -29,7 +29,7 @@ class SaveUserTariffCommand extends Command {
 
             $stmt->bind_param("ii", $customerId, $updateNumberId);
 
-            $updateNumberId = $newTariffSet->tariff_id;
+            $updateNumberId = $selectedTariff;
             $customerId = $customer->customerId;
 
             $stmt->execute();

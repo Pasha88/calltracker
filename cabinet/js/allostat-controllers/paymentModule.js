@@ -43,7 +43,7 @@ app.service('PaymentService', function(Restangular) {
             return Restangular.all("order/makePayment").post( {customerUid: customerUid, sum: sum } );
         },
         saveUserTariff: function(customerUid, selectedTariff) {
-            var params = {
+             var params = {
                 selectedTariff: selectedTariff,
                 customerUid: customerUid
             };
@@ -139,6 +139,11 @@ function PaymentTariffCtrl ($rootScope, $scope, notify, PaymentService, util) {
     $scope.tariffList = [];
     $scope.selectedTariff = 0;
     $scope.selectedTariff = $scope.tariffList[0];
+
+    $scope.itemList = [];
+    $scope.changedValue  = function(item) {
+        $scope.selectedTariff = item;
+    }
 
     $scope.loadTariffList = function() {
         PaymentService.getUserTariff($rootScope.user.customerUid).then(
