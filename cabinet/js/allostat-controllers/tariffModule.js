@@ -7,7 +7,7 @@ app.service('TariffSettingsService', function(Restangular) {
                 tariffList: tariffList,
                 customerUid: customerUid
             };
-            return Restangular.all("install/saveTariffList2").post(params);
+            return Restangular.all("install/saveTariffList").post(params);
         },
         getTariffList: function(customerUid) {
             var params = {
@@ -18,7 +18,7 @@ app.service('TariffSettingsService', function(Restangular) {
             var params = {
                 customerUid: customerUid
             };
-            return Restangular.all("install/getTariffList2").post(params);
+            return Restangular.all("install/getTariffList").post(params);
         }
     }
 });
