@@ -26,12 +26,12 @@ class SaveUserTariffCommand extends Command {
         if ($stmt = $conn->prepare($this->insertNewUserTariff)) {
             $updateNumberId = null;
             $customerId = null;
+
             $stmt->bind_param("ii", $customerId, $updateNumberId);
 
-            $item = $this->args['selectedTariff'][0];
-
-            $updateNumberId = $newTariffSet;
+            $updateNumberId = $newTariffSet->tariff_id;
             $customerId = $customer->customerId;
+
             $stmt->execute();
         }
         else {
