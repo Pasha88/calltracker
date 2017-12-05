@@ -14,32 +14,48 @@
                     <div class="col-sm-12">
                         <div ng-repeat="item in userTariff" class="m-b form-inline">
                             <div class="m-b form-inline">
-                                <h2 style="clear: both; float: left; width: 38%; text-align: left; "><b>Тариф</b></h2>
-                                <h2 style="float: left; width: 25%; text-align: left; "><b>{{ item.tariffName }}</b></h2>
+                                <div class="col-lg-5" style="clear: both; float: left; min-width: 200px">
+                                    <h2 style="text-align: left; "><b>Тариф</b></h2>
+                                </div>
+                                <div class="col-lg-4" style="float: left;">
+                                    <h2 style="float: left; width: 30%; text-align: left; "><b>{{ item.tariffName }}</b></h2>
+                                </div>
                             </div>
                             <div class="m-b form-inline">
-                                <span style="clear: both; float: left; width: 38%; text-align: left; font-size: 16px;">Количество телефонных номеров</span>
-                                <span style="float: left; width: 25%; text-align: left; font-size: 16px;">{{ item.maxPhoneNumber }}</span>
+                                <div class="col-lg-5" style="clear: both; float: left; min-width: 200px">
+                                    <span style="clear: both; float: left; text-align: left; font-size: 16px;">Количество телефонных номеров</span>
+                                </div>
+                                <div class="col-lg-4" style="float: left;">
+                                    <span style="float: left; text-align: left; font-size: 16px;">{{ item.maxPhoneNumber }}</span>
+                                </div>
                             </div>
                             <div class="m-b form-inline">
-                                <span style="clear: both; float: left; width: 38%; text-align: left; font-size: 16px;">Стоимость в месяц</span>
-                                <span style="float: left; width: 25%; text-align: left; font-size: 16px;">{{ item.rate }} рублей</span>
+                                <div class="col-lg-5" style="clear: both; float: left; min-width: 200px">
+                                    <span style="clear: both; float: left;  text-align: left; font-size: 16px;">Стоимость в месяц</span>
+                                </div>
+                                <div class="col-lg-4" style="float: left;">
+                                    <span style="float: left; width: 30%; text-align: left; font-size: 16px;">{{ item.rate }} рублей</span>
+                                </div>
                             </div>
                             <div class="m-b form-inline">
-                                <span style="clear: both; float: left; width: 38%; text-align: left;  font-size: 16px;">Дата перехода на тариф</span>
-                                <span style="float: left; width: 25%; text-align: left; font-size: 16px;">{{ item.setDate }}</span>
+                                <div class="col-lg-5" style="clear: both; float: left; min-width: 200px">
+                                    <span style="clear: both; float: left; text-align: left;  font-size: 16px;">Дата перехода на тариф</span>
+                                </div>
+                                <div class="col-lg-4" style="float: left;">
+                                    <span style="float: left; text-align: left; font-size: 16px;">{{ item.setDate }}</span>
+                                </div>
                             </div>
                             </hr>
                             <div class="m-b form-inline">
-                                <div style="clear: both; float: left; width: 38%; padding-top: 50px">
+                                <div class="col-lg-5" style="clear: both; float: left; min-width: 200px; margin-top: 30px;">
                                     <span style="text-align: left; font-size: 16px" >Сменить тариф</span></br>
                                     <span style="font-size: 10px">Списания по новому тарифу</br> начнут осуществляться после 00:00</span>
                                 </div>
-                                <div style="float: left; width: 25%; padding-top: 50px">
+                                <div class="col-lg-4" style="float: left; margin-top: 30px;">
                                     <select id="selected_user_tariff" ng-model="selectedTariff" ng-change="changedValue(selectedTariff)" ng-options="item.tariff_id as item.tariff_name + ' (' + item.max_phone_number + ' номеров,'  + ' ' + item.max_phone_number + ' руб.)'  for item in tariffList">
                                     </select>
                                 </div>
-                                <div style="float: left; width: 15%; padding-top: 50px">
+                                <div class="col-lg-2" style="float: left; margin-right: 20px; margin-top: 30px;" >
                                     <button class="btn btn-primary" type="submit" mw-confirm-click="saveUserTariff()" mw-confirm-click-message="Будет произведена смена тарифа на">Сохранить</button>
                                 </div>
                             </div>
