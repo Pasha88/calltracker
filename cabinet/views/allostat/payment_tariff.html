@@ -3,59 +3,56 @@
         <h2>Смена тарифа</h2>
         <div ncy-breadcrumb></div>
     </div>
-    <div class="col-lg-3">
-    </div>
 </div>
 <div class="wrapper animated fadeInRight">
     <div class="ibox-content">
-            <div ng-repeat="item in userTariff">
-                <div class="row">
-                    <div class="col-lg-3" style="clear: both; float: left; min-width: 200px">
-                        <h2 style="text-align: left; "><b>Тариф</b></h2>
-                    </div>
-                    <div class="col-lg-3">
-                        <h2 style="text-align: left; "><b>{{ item.tariffName }}</b></h2>
-                    </div>
+        <div ng-repeat="item in userTariff">
+            <div class="row">
+                <div class="col-lg-3" style="clear: both; float: left; min-width: 200px">
+                    <h2 style="text-align: left; "><b>Тариф</b></h2>
                 </div>
-                <div class="row">
-                    <div class="col-lg-3" style="clear: both; float: left; min-width: 200px">
-                        <span style="text-align: left; font-size: 16px;">Количество телефонных номеров</span>
-                    </div>
-                    <div class="col-lg-3">
-                        <span style="text-align: left; font-size: 16px;">{{ item.maxPhoneNumber }}</span>
-                    </div>
+                <div class="col-lg-3">
+                    <h2 style="text-align: left; "><b>{{ item.tariffName }}</b></h2>
                 </div>
-                <div class="row">
-                    <div class="col-lg-3" style="clear: both; float: left; min-width: 200px">
-                        <span style="text-align: left; font-size: 16px;">Стоимость в месяц</span>
-                    </div>
-                    <div class="col-lg-3">
-                        <span style="text-align: left; font-size: 16px;">{{ item.rate }} рублей</span>
-                    </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3" style="clear: both; float: left; min-width: 200px">
+                    <span style="text-align: left; font-size: 16px;">Количество телефонных номеров</span>
                 </div>
-                <div class="row">
-                    <div class="col-lg-3" style="clear: both; float: left; min-width: 200px">
-                        <span style="text-align: left;  font-size: 16px;">Дата перехода на тариф</span>
-                    </div>
-                    <div class="col-lg-3">
-                        <span style="text-align: left; font-size: 16px;">{{ item.setDate }}</span>
-                    </div>
+                <div class="col-lg-3">
+                    <span style="text-align: left; font-size: 16px;">{{ item.maxPhoneNumber }}</span>
                 </div>
-                </hr>
-                <div class="row">
-                    <div class="col-lg-3" style="clear: both; float: left; min-width: 200px; margin-top: 30px;">
-                        <span style="text-align: left; font-size: 16px" >Сменить тариф</span></br>
-                        <span style="font-size: 10px">Списания по новому тарифу</br> начнут осуществляться после 00:00</span>
-                    </div>
-                    <div class="col-lg-3" style="margin-top: 30px;" >
-                        <select id="selected_user_tariff" ng-model="selectedTariff" ng-change="changedValue(selectedTariff)" ng-options="item.tariff_id as item.tariff_name + ' (' + item.max_phone_number + ' номеров,'  + ' ' + item.max_phone_number + ' руб.)'  for item in tariffList">
-                        </select>
-                    </div>
-                    <div class="col-lg-1" style="margin-left: 20px; margin-right: 20px; margin-top: 30px;" >
-                        <button class="btn btn-primary" type="submit" mw-confirm-click="saveUserTariff()" mw-confirm-click-message="Будет произведена смена тарифа на">Сохранить</button>
-                    </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3" style="clear: both; float: left; min-width: 200px">
+                    <span style="text-align: left; font-size: 16px;">Стоимость в месяц</span>
+                </div>
+                <div class="col-lg-3">
+                    <span style="text-align: left; font-size: 16px;">{{ item.rate }} рублей</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3" style="clear: both; float: left; min-width: 200px">
+                    <span style="text-align: left;  font-size: 16px;">Дата перехода на тариф</span>
+                </div>
+                <div class="col-lg-3">
+                    <span style="text-align: left; font-size: 16px;">{{ item.setDate }}</span>
+                </div>
+            </div>
+            </hr>
+            <div class="row">
+                <div class="col-lg-3" style="clear: both; float: left; min-width: 200px; margin-top: 30px;">
+                    <span style="text-align: left; font-size: 16px" >Сменить тариф</span></br>
+                    <span style="font-size: 10px">Списания по новому тарифу</br> начнут осуществляться после 00:00</span>
+                </div>
+                <div class="col-lg-3" style="margin-top: 30px;" >
+                    <select id="selected_user_tariff" ng-model="selectedTariff" ng-change="changedValue(selectedTariff)" ng-options="item.tariff_id as item.tariff_name + ' (' + item.max_phone_number + ' номеров,'  + ' ' + item.max_phone_number + ' руб.)'  for item in tariffList">
+                    </select>
+                </div>
+                <div class="col-lg-1" style="margin-left: 20px; margin-right: 20px; margin-top: 30px;" >
+                    <button class="btn btn-primary" type="submit" mw-confirm-click="saveUserTariff()" mw-confirm-click-message="Будет произведена смена тарифа на">Сохранить</button>
                 </div>
             </div>
         </div>
-
+    </div>
 </div>
