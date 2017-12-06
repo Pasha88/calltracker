@@ -1,5 +1,5 @@
 var app = angular.module('inspinia.payment', [ 'inspinia.services' ]);
-
+app.controller('CallsCtrl', CallsCtrl);
 app.directive("mwConfirmClick", [
     function() {
         return {
@@ -134,7 +134,7 @@ function PaymentHistoryCtrl ($rootScope, $scope, notify, PaymentService, util, l
     }
 }
 
-function PaymentTariffCtrl ($rootScope, $scope, notify, PaymentService, util) {
+function PaymentTariffCtrl ($rootScope, $scope, notify, PaymentService, confirmation) {
     $scope.userTariff = [];
     $scope.tariffList = [];
     $scope.selectedTariff = 0;
@@ -164,23 +164,28 @@ function PaymentTariffCtrl ($rootScope, $scope, notify, PaymentService, util) {
     };
 
     $scope.saveUserTariff = function() {
-        PaymentService.saveUserTariff($rootScope.user.customerUid, $scope.selectedTariff).then(
-            function(res) {
-                notify({
-                    message: 'Тариф изменен',
-                    classes: 'allostat-success-green',
-                    position: 'center',
-                    duration: '5000'
-                });
-                $scope.loadTariffList();
-            },
-            function(err) {
-                notify({
-                    message: 'Ошибка сохранения тарифа пользователя',
-                    classes: 'allostat-alert-danger',
-                    position: 'center',
-                    duration: '5000'
-                });
+        var tariffName = $('#selected_user_tariff').find(":selected").text();
+        confirmation.confirm("Смена тарифа", "Будет произведена смена тарифа на " + tariffName).then(
+            function() {
+                PaymentService.saveUserTariff($rootScope.user.customerUid, $scope.selectedTariff).then(
+                    function(res) {
+                        notify({
+                            message: 'Тариф изменен',
+                            classes: 'allostat-success-green',
+                            position: 'center',
+                            duration: '5000'
+                        });
+                        $scope.loadTariffList();
+                    },
+                    function(err) {
+                        notify({
+                            message: 'Ошибка сохранения тарифа пользователя',
+                            classes: 'allostat-alert-danger',
+                            position: 'center',
+                            duration: '5000'
+                        });
+                    }
+                );
             }
         );
     };
