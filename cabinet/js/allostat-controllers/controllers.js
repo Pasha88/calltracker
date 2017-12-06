@@ -3655,6 +3655,21 @@ function ForgotPwdCtrl($scope, $http, notify) {
     }
 }
 
+function ConfirmationCtrl($scope, $uibModalInstance, message, header, okButtonText) {
+    $scope.confirmation = {message: message, header: header};
+
+    $scope.okButtonText = okButtonText;
+    $scope.getOkButtonText = function() { return $scope.okButtonText; };
+
+    $scope.yes = function () {
+        $uibModalInstance.close(true);
+    };
+
+    $scope.no = function () {
+        $uibModalInstance.dismiss(false);
+    };
+}
+
 /**
  *
  * Pass all functions into module
@@ -3666,6 +3681,7 @@ angular
     .controller('TopHeaderController', TopHeaderController)
     .controller('LoginCtrl', LoginCtrl)
     .controller('RegisterCtrl', RegisterCtrl)
+    .controller('ConfirmationCtrl', ConfirmationCtrl)
     .controller('CallsCtrl', CallsCtrl)
     .controller('InstallWizardCtrl', InstallWizardCtrl)
     .controller('UserSettingsCtrl', UserSettingsCtrl)

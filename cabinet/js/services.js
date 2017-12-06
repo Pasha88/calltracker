@@ -122,6 +122,9 @@ app.factory('confirmation', function($uibModal) {
                     },
                     message: function () {
                         return messageText;
+                    },
+                    okButtonText: function() {
+                        return 'ОК';
                     }
                 }
             });
