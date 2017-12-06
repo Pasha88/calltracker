@@ -87,8 +87,9 @@ function PaymentHistoryCtrl ($rootScope, $scope, notify, PaymentService, util, l
 
     util.pager($scope, localStorageService);
     util.searchPage($scope, localStorageService, "allostat_payment_history_filters_v1.0");
-    $scope.filters['orderDateFrom'] = moment();
+    $scope.filters['orderDateFrom'] = moment().add(-30, 'days');
     $scope.filters['orderDateTo'] = moment();
+    $scope.filters['customerEmail'] = $rootScope.user.role < 100 ? $rootScope.user.email : '';
 
     PaymentService.loadOrderStatuses().then(
         function(data) {
@@ -104,7 +105,7 @@ function PaymentHistoryCtrl ($rootScope, $scope, notify, PaymentService, util, l
             page: $scope.filters['page'],
             size: $scope.filters['size'],
             orderId: $scope.filters['orderId'],
-            customerUid: $rootScope.user.customerUid,
+            customerUid: null,//$rootScope.user.customerUid,
             customerEmail: $scope.filters['customerEmail'],
             orderStatusId: $scope.filters['orderStatusId'],
             orderStatusName: $scope.filters['orderStatusName'],
@@ -113,6 +114,9 @@ function PaymentHistoryCtrl ($rootScope, $scope, notify, PaymentService, util, l
             sumFrom: $scope.filters['sumFrom'],
             sumTo: $scope.filters['sumTo']
         };
+
+        $scope.saveFilters("allostat_payment_history_filters_v1.0");
+
         PaymentService.getOrders(filters).then(
             function(data){
                 $scope.items = data.orders;
@@ -130,8 +134,14 @@ function PaymentHistoryCtrl ($rootScope, $scope, notify, PaymentService, util, l
                     position: 'center',
                     duration: '5000'
                 });
-            });
-    }
+        });
+    };
+
+    $scope.customerFilterDisabled = function() {
+        return $rootScope.user.role < 100;
+    };
+
+    $scope.load();
 }
 
 function PaymentTariffCtrl ($rootScope, $scope, notify, PaymentService, confirmation) {
@@ -143,7 +153,7 @@ function PaymentTariffCtrl ($rootScope, $scope, notify, PaymentService, confirma
     $scope.itemList = [];
     $scope.changedValue  = function(item) {
         $scope.selectedTariff = item;
-    }
+    };
 
     $scope.loadTariffList = function() {
         PaymentService.getUserTariff($rootScope.user.customerUid).then(

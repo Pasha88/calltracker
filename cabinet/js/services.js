@@ -104,6 +104,14 @@ app.service('util', function() {
                     scope.pageSize = scope.filters['size'];
                 }
             };
+            scope.saveFilters = function(filtername) {
+                if(obj.isEmpty(scope.filters)) {
+                    scope.filters = {};
+                    scope.filters['page'] = 0;
+                    scope.filters['size'] = scope.pageSize;
+                }
+                localStorageService.set(filtername, scope.filters);
+            };
             scope.loadFilters(filtername);
         }
 	}
