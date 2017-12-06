@@ -112,6 +112,12 @@ app.service('util', function() {
                 }
                 localStorageService.set(filtername, scope.filters);
             };
+            scope.clearFilters = function(filtername) {
+                scope.filters = {};
+                scope.filters['page'] = 0;
+                scope.filters['size'] = scope.pageSize;
+                scope.saveFilters(filtername);
+            };
             scope.loadFilters(filtername);
         }
 	}

@@ -82,14 +82,20 @@ function PaymentCtrl ($rootScope, $scope, notify, PaymentService, util) {
 
 function PaymentHistoryCtrl ($rootScope, $scope, notify, PaymentService, util, localStorageService, $filter) {
 
+    $scope.filtername = "allostat_payment_history_filters_v1.0";
     $scope.items = [];
     $scope.orderStatuses = [];
 
+    $scope.initDateFilters = function() {
+        $scope.filters['orderDateFrom'] = moment().add(-30, 'days');
+        $scope.filters['orderDateTo'] = moment();
+    };
+
     util.pager($scope, localStorageService);
-    util.searchPage($scope, localStorageService, "allostat_payment_history_filters_v1.0");
-    $scope.filters['orderDateFrom'] = moment().add(-30, 'days');
-    $scope.filters['orderDateTo'] = moment();
+    util.searchPage($scope, localStorageService, $scope.filtername);
+    $scope.initDateFilters();
     $scope.filters['customerEmail'] = $rootScope.user.role < 100 ? $rootScope.user.email : '';
+
 
     PaymentService.loadOrderStatuses().then(
         function(data) {
@@ -115,7 +121,7 @@ function PaymentHistoryCtrl ($rootScope, $scope, notify, PaymentService, util, l
             sumTo: $scope.filters['sumTo']
         };
 
-        $scope.saveFilters("allostat_payment_history_filters_v1.0");
+        $scope.saveFilters($scope.filtername);
 
         PaymentService.getOrders(filters).then(
             function(data){
@@ -135,6 +141,11 @@ function PaymentHistoryCtrl ($rootScope, $scope, notify, PaymentService, util, l
                     duration: '5000'
                 });
         });
+    };
+
+    $scope.clear = function() {
+        $scope.clearFilters($scope.filtername);
+        $scope.initDateFilters();
     };
 
     $scope.customerFilterDisabled = function() {
