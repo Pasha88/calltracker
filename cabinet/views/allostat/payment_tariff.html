@@ -45,11 +45,11 @@
                     <span style="text-align: left; font-size: 16px" >Сменить тариф</span></br>
                     <span style="font-size: 10px">Списания по новому тарифу</br> начнут осуществляться после 00:00</span>
                 </div>
-                <div class="col-lg-3" style="margin-top: 30px;" >
-                    <select id="selected_user_tariff" ng-model="selectedTariff" ng-change="changedValue(selectedTariff)" ng-options="item.tariff_id as item.tariff_name + ' (' + item.max_phone_number + ' номеров,'  + ' ' + item.max_phone_number + ' руб.)'  for item in tariffList">
+                <div class="col-lg-3" style="margin-top: 30px; max-width: 200px;"  >
+                    <select style="padding-left: 0px; max-width: 200px;" id="selected_user_tariff" ng-model="selectedTariff" ng-change="changedValue(selectedTariff)" ng-options="item.tariff_id as item.tariff_name + ' (' + item.max_phone_number + ' номеров,'  + ' ' + item.max_phone_number + ' руб.)'  for item in tariffList">
                     </select>
                 </div>
-                <div class="col-lg-1" style="margin-left: 20px; margin-right: 20px; margin-top: 30px;" >
+                <div class="col-lg-2" style="margin-left: 20px; margin-right: 20px; margin-top: 30px;" >
                     <button class="btn btn-primary" type="submit" ng-click="saveUserTariff()">Сохранить</button>
                 </div>
             </div>
