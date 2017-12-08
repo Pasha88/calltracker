@@ -90,6 +90,7 @@ class ErrorRegistry
     public $USER_ERR_USER_TARIFF_QUERY;
     public $USER_ERR_MAX_PHONE_NUMBER_EXCEEDED;
     public $USER_ERR_SAVE_USER_TARIFF_MAX_PHONE_NUMBER_TOO_SMALL;
+    public $USER_ERR_SAVE_USER_TARIFF_NO_SUCH_TARIFF;
 
     public function __construct()
     {
@@ -177,6 +178,6 @@ class ErrorRegistry
         $this->USER_ERR_USER_TARIFF_QUERY = new ErrCode('USER_ERR_USER_TARIFF_QUERY', "Ошибка получения тарифа клиента");
         $this->USER_ERR_MAX_PHONE_NUMBER_EXCEEDED = new ErrCode('USER_ERR_MAX_PHONE_NUMBER_EXCEEDED', "Превышено максимальное количество номеров для вашего тарифа");
         $this->USER_ERR_SAVE_USER_TARIFF_MAX_PHONE_NUMBER_TOO_SMALL = new ErrCode('USER_ERR_SAVE_USER_TARIFF_MAX_PHONE_NUMBER_TOO_SMALL', "Невозможно перейти на этот тариф: уменьшите количество используемых телефонов");
-
+        $this->USER_ERR_SAVE_USER_TARIFF_NO_SUCH_TARIFF = new ErrCode('USER_ERR_SAVE_USER_TARIFF_NO_SUCH_TARIFF', "Тариф не найден. Возможно, этот тариф удален");
     }
 }

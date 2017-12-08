@@ -22,11 +22,16 @@ class TariffRepo extends Repository {
         return self::$_instance;
     }
     public function tariffById($id) {
-        $params = array('id' => $id);
+        $params = array('id' => $id, 'isDeleted' => null);
         $c = new TariffByIdCommand($params);
         return  $this->executeTransaction($c);
     }
 
+    public function tariffByIdNotDeleted($id) {
+        $params = array('id' => $id, 'isDeleted' => 0);
+        $c = new TariffByIdCommand($params);
+        return  $this->executeTransaction($c);
+    }
 
     public function tariffList() {
         $c = new TariffListCommand(null);

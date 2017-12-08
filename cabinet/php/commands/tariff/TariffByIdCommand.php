@@ -21,7 +21,9 @@ class TariffByIdCommand  extends Command {
         $rate = null;
         $isDeleted = null;
 
-        if ($stmt = $conn->prepare($this->getAllTariffsSQL)) {
+        $sqlAppend = isset($this->args['isDeleted']) && $this->args['isDeleted'] == 0 ? " and is_deleted = 0 " : "";
+
+        if ($stmt = $conn->prepare($this->getAllTariffsSQL . $sqlAppend)) {
             $stmt->bind_param("i", $this->args['id']);
             $stmt->bind_result($tariffId, $tariffName, $maxPhoneNumber, $rate, $isDeleted);
             $stmt->execute();
