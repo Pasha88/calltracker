@@ -5,8 +5,8 @@ app.service('PaymentService', function(Restangular) {
         loadOrderStatuses: function() {
             return Restangular.all("order/allstatuses").post();
         },
-        getOrders: function(filters) {
-            return Restangular.all("order/getOrders").post({filters: filters});
+        getOrders: function(filters, customerUid) {
+            return Restangular.all("order/getOrders").post({filters: filters, customerUid: customerUid});
         },
         makePayment: function(customerUid, sum) {
             return Restangular.all("order/makePayment").post( {customerUid: customerUid, sum: sum } );
@@ -92,7 +92,7 @@ function PaymentHistoryCtrl ($rootScope, $scope, notify, PaymentService, util, l
 
         $scope.saveFilters($scope.filtername);
 
-        PaymentService.getOrders(filters).then(
+        PaymentService.getOrders(filters, $rootScope.user.customerUid).then(
             function(data){
                 $scope.items = data.orders;
                 for(var i=0; i<$scope.items.length; i++) {

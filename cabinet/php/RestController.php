@@ -69,6 +69,7 @@ function forbid($msg) {
 }
 
 $headers = apache_request_headers();
+$token = null;
 if(isset($headers["Authorization"])) {
 	$token = preg_replace("/Bearer/", "", $headers["Authorization"]);  ;
 	if(!AuthHandler::checkToken( trim($token) )) {
@@ -298,6 +299,15 @@ switch ($view) {
         break;
 
     case "getOrders":
+        $auth = new AuthHandler();
+        $auth->checkCustomerToken($token, $requestObj->customerUid);
+
+        $customer = CustomerRepo::getInstance()->getCustomerByUid($requestObj->customerUid);
+        if($customer->role < 100 && $requestObj->filters->customerEmail != $customer->email) {
+            $auth->handleError("Неверный идентификатор клиента");
+            break;
+        }
+
         $handler = new OrderHandler();
         $list = $handler->getOrders($requestObj);
         $result = new stdClass();
