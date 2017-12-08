@@ -1,35 +1,4 @@
 var app = angular.module('inspinia.payment', [ 'inspinia.services' ]);
-app.controller('CallsCtrl', CallsCtrl);
-app.directive("mwConfirmClick", [
-    function() {
-        return {
-            priority: -1,
-            restrict: 'A',
-            scope: {confirmFunction: "&mwConfirmClick" },
-            link: function(scope, element, attrs){
-                element.bind('click', function(e){
-                    //default message
-                    var tariffName = $('#selected_user_tariff').find(":selected").text();
-                    var message = attrs.mwConfirmClickMessage ? (attrs.mwConfirmClickMessage + " " + tariffName) : "Будет произведена смена тарифа!?";
-                    if(confirm(message)) {
-                        scope.confirmFunction();
-                    }
-                });
-            }
-        }
-    }
-]);
-
-// datepicker empty input workaround: See  https://github.com/g00fy-/angular-datepicker/issues/199#issuecomment-154249452
-// dpapp = angular.module('datePicker', []);
-// dpapp.filter('mFormat', function () {
-//     return function (m, format, tz) {
-//         if (!(moment.isMoment(m))) {
-//             return '';
-//         }
-//         return tz ? moment.tz(m, tz).format(format) : m.format(format);
-//     };
-// });
 
 app.service('PaymentService', function(Restangular) {
     return {
@@ -169,8 +138,8 @@ function PaymentTariffCtrl ($rootScope, $scope, notify, PaymentService, confirma
     $scope.loadTariffList = function() {
         PaymentService.getUserTariff($rootScope.user.customerUid).then(
             function(res) {
-                $scope.userTariff = res.itemArray.slice();
-                $scope.tariffList = res.itemArray2.slice();
+                $scope.userTariff = res.userTariffArray.slice();
+                $scope.tariffList = res.tariffForChangeArray.slice();
                 $scope.selectedTariff = $scope.tariffList[0];
             },
             function(err) {
@@ -213,3 +182,35 @@ function PaymentTariffCtrl ($rootScope, $scope, notify, PaymentService, confirma
 
     $scope.loadTariffList();
 }
+
+
+// app.directive("mwConfirmClick", [
+//     function() {
+//         return {
+//             priority: -1,
+//             restrict: 'A',
+//             scope: {confirmFunction: "&mwConfirmClick" },
+//             link: function(scope, element, attrs){
+//                 element.bind('click', function(e){
+//                     //default message
+//                     var tariffName = $('#selected_user_tariff').find(":selected").text();
+//                     var message = attrs.mwConfirmClickMessage ? (attrs.mwConfirmClickMessage + " " + tariffName) : "Будет произведена смена тарифа!?";
+//                     if(confirm(message)) {
+//                         scope.confirmFunction();
+//                     }
+//                 });
+//             }
+//         }
+//     }
+// ]);
+
+// datepicker empty input workaround: See  https://github.com/g00fy-/angular-datepicker/issues/199#issuecomment-154249452
+// dpapp = angular.module('datePicker', []);
+// dpapp.filter('mFormat', function () {
+//     return function (m, format, tz) {
+//         if (!(moment.isMoment(m))) {
+//             return '';
+//         }
+//         return tz ? moment.tz(m, tz).format(format) : m.format(format);
+//     };
+// });

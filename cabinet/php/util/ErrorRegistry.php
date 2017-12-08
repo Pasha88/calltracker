@@ -86,6 +86,9 @@ class ErrorRegistry
     public $USER_ERR_GET_EXPENSE_OPERATIONS;
     public $USER_ERR_SAVE_TARIFF_HISTORY;
     public $USER_ERR_GET_CUSTOMER_TARIFF_HISTORY;
+    public $USER_ERR_USER_TARIFF_STATEMENT;
+    public $USER_ERR_USER_TARIFF_QUERY;
+    public $USER_ERR_MAX_PHONE_NUMBER_EXCEEDED;
 
     public function __construct()
     {
@@ -97,8 +100,8 @@ class ErrorRegistry
         $this->USER_ERR_CHANGE_PWD = new ErrCode('USER_ERR_CHANGE_PWD', "Ошибка смены пароля");
         $this->USER_ERR_GET_PHONE_NUMBER_POOL = new ErrCode('USER_ERR_GET_PHONE_NUMBER_POOL', "Ошибка получения пула номеров");
         $this->USER_ERR_GET_TARIFF_POOL = new ErrCode('USER_ERR_GET_TARIFF_POOL', "Ошибка получения пула тарифов");
-        $this->USER_ERR_GET_USER_TARIFF= new ErrCode('USER_ERR_GET_USER_TARIFF', "Ошибка при получении тарифа пользователя");
-        $this->USER_ERR_SAVE_USER_TARIFF= new ErrCode('USER_ERR_SAVE_USER_TARIFF', "Ошибка при сохранении тарифа пользователя");
+        $this->USER_ERR_GET_USER_TARIFF= new ErrCode('USER_ERR_GET_USER_TARIFF', "Ошибка при получении тарифа клиента");
+        $this->USER_ERR_SAVE_USER_TARIFF= new ErrCode('USER_ERR_SAVE_USER_TARIFF', "Ошибка при сохранении тарифа клиента");
         $this->USER_ERR_CUSTOMER_NOT_EXISTS = new ErrCode('USER_ERR_CUSTOMER_NOT_EXISTS', "Клиент с указанными реквизитами не найден");
         $this->USER_ERR_PASSWORD_ERROR = new ErrCode('USER_ERR_PASSWORD_ERROR', "Неверный пароль");
         $this->USER_ERR_SEARCH_CALLS = new ErrCode('USER_ERR_SEARCH_CALLS', "Ошибка при поиске звонков");
@@ -110,12 +113,12 @@ class ErrorRegistry
         $this->USER_ERR_CALL_STATE_CHANGE = new ErrCode('USER_ERR_CALL_STATE_CHANGE', "Ошибка смены статуса звонка");
         $this->USER_ERR_FIND_CUSTOMER_BY_ID = new ErrCode('USER_ERR_FIND_CUSTOMER_BY_ID', "Ошибка получения данных клиента по ID");
         $this->USER_ERR_SAVE_RESTORE_TOKEN = new ErrCode('USER_ERR_SAVE_RESTORE_TOKEN', "Ошибка сохранения токена восстановления пароля");
-        $this->USER_ERR_NO_SUCH_USER_OR_RESTORE_EXPIRED = new ErrCode('USER_ERR_NO_SUCH_USER_OR_RESTORE_EXPIRED', "Ссылка на восстановление устарела или пользователя не существует");
+        $this->USER_ERR_NO_SUCH_USER_OR_RESTORE_EXPIRED = new ErrCode('USER_ERR_NO_SUCH_USER_OR_RESTORE_EXPIRED', "Ссылка на восстановление устарела или клиента не существует");
         $this->USER_ERR_FIND_RESTORE = new ErrCode('USER_ERR_FIND_RESTORE', "Ошибка поиска токена восстановления");
-        $this->USER_ERR_FIND_CUSTOMER_BY_EMAIL = new ErrCode('USER_ERR_FIND_CUSTOMER_BY_EMAIL', "Ошибка поиска пользователя по email");
+        $this->USER_ERR_FIND_CUSTOMER_BY_EMAIL = new ErrCode('USER_ERR_FIND_CUSTOMER_BY_EMAIL', "Ошибка поиска клиента по email");
         $this->USER_ERR_CLEAR_RESTORE_TOKEN = new ErrCode('USER_ERR_CLEAR_RESTORE_TOKEN', "Ошибка очистки токена");
         $this->USER_ERR_SAVE_RESET_PWD_TOKEN = new ErrCode('USER_ERR_SAVE_RESTORE_PWD_TOKEN', "Ошибка сохранения токена сброса пароля");
-        $this->USER_ERR_NO_SUCH_USER_OR_RESTORE_PWD_TOKEN_EXPIRED = new ErrCode('USER_ERR_NO_SUCH_USER_OR_RESTORE_PWD_TOKEN_EXPIRED', "Ссылка на изменение пароля устарела или пользователя не существует");
+        $this->USER_ERR_NO_SUCH_USER_OR_RESTORE_PWD_TOKEN_EXPIRED = new ErrCode('USER_ERR_NO_SUCH_USER_OR_RESTORE_PWD_TOKEN_EXPIRED', "Ссылка на изменение пароля устарела или клиента не существует");
         $this->USER_ERR_CLEAR_RESTORE_PWD_TOKEN = new ErrCode('USER_ERR_CLEAR_RESTORE_PWD_TOKEN', "Ошибка очистки токена изменения пароля");
         $this->USER_ERR_GET_GA_ID = new ErrCode('USER_ERR_GET_GA_ID', "Ошибка при получении GA ID");
         $this->USER_ERR_NO_GA_ID = new ErrCode('USER_ERR_NO_GA_ID', "Не удается получить GA ID");
@@ -168,7 +171,9 @@ class ErrorRegistry
         $this->USER_ERR_INSERT_CASH_OPERATION = new ErrCode('USER_ERR_INSERT_CASH_OPERATION', "Ошибка добавления операции списания/зачисления на баланс клиента");
         $this->USER_ERR_GET_EXPENSE_OPERATIONS = new ErrCode('USER_ERR_GET_EXPENSE_OPERATIONS', "Ошибка получения расходов за прошедшие сутки");
         $this->USER_ERR_SAVE_TARIFF_HISTORY = new ErrCode('USER_ERR_SAVE_TARIFF_HISTORY', "Ошибка сохранения тарифа в историю");
-        $this->USER_ERR_GET_CUSTOMER_TARIFF_HISTORY = new ErrCode('USER_ERR_GET_CUSTOMER_TARIFF_HISTORY', "Ошибка получения исторических данных о тарифах для пользователя");
+        $this->USER_ERR_GET_CUSTOMER_TARIFF_HISTORY = new ErrCode('USER_ERR_GET_CUSTOMER_TARIFF_HISTORY', "Ошибка получения исторических данных о тарифах для клиента");
+        $this->USER_ERR_USER_TARIFF_STATEMENT = new ErrCode('USER_ERR_USER_TARIFF_STATEMENT', "Ошибка формирования запроса получения тарифа клиента");
+        $this->USER_ERR_USER_TARIFF_QUERY = new ErrCode('USER_ERR_USER_TARIFF_QUERY', "Ошибка получения тарифа клиента");
+        $this->USER_ERR_MAX_PHONE_NUMBER_EXCEEDED = new ErrCode('USER_ERR_MAX_PHONE_NUMBER_EXCEEDED', "Превышено максимальное количество номеров для вашего тарифа");
     }
-
 }

@@ -5,7 +5,7 @@ require_once(dirname(__DIR__) . '/domain/UserTariff.php');
 
 class GetUserTariffCommand extends Command {
 
-    private $getCurrentUserTariff = "
+    private $getCurrentUserTariffSQL = "
         SELECT cth.tariff_id, t.tariff_name, t.max_phone_number, t.rate, cth.set_date
         FROM customer_tariff_history cth
         LEFT JOIN tariff t ON t.tariff_id=cth.tariff_id
@@ -13,7 +13,7 @@ class GetUserTariffCommand extends Command {
         ORDER BY cth.set_date DESC
         LIMIT 1";
 
-    private $getTariffs = "
+    private $getTariffsSQL = "
         SELECT tariff_id, tariff_name, max_phone_number, rate, is_deleted 
         FROM tariff WHERE is_deleted = 0
         AND  tariff_id != ?";
@@ -26,7 +26,7 @@ class GetUserTariffCommand extends Command {
     }
 
     public function execute($conn) {
-        if ($stmt = $conn->prepare($this->getCurrentUserTariff)) {
+        if ($stmt = $conn->prepare($this->getCurrentUserTariffSQL)) {
             $customerUid = $this->args['customerUid'];
             $c = new FindCustomerCommandByUid( array( 'customerUid' => $this->args['customerUid'] ) );
             $customer = $c->execute($conn);
@@ -40,11 +40,11 @@ class GetUserTariffCommand extends Command {
             $stmt->execute();
 
             $i=0;
-            $resultArray = array();
+            $userTariffArray = array();
             while ($stmt->fetch())
             {
                 $excludeTariffId = $row['tariff_id'];
-                $resultArray[$i] = UserTariff::create($row);
+                $userTariffArray[$i] = UserTariff::create($row);
                 $i++;
             }
             $stmt->close();
@@ -53,7 +53,7 @@ class GetUserTariffCommand extends Command {
             throw new Exception( $this->getErrorRegistry()->USER_ERR_GET_USER_TARIFF->message);
         }
 
-        if ($stmt = $conn->prepare($this->getTariffs)) {
+        if ($stmt = $conn->prepare($this->getTariffsSQL)) {
             $row = array();
             $stmt->bind_param("i", $excludeTariffId);
 
@@ -61,10 +61,10 @@ class GetUserTariffCommand extends Command {
             $stmt->execute();
 
             $i=0;
-            $resultArray2 = array();
+            $tariffForChangeArray = array();
             while ($stmt->fetch())
             {
-                $resultArray2[$i] = Tariff::create($row);
+                $tariffForChangeArray[$i] = Tariff::create($row);
                 $i++;
             }
             $stmt->close();
@@ -74,8 +74,8 @@ class GetUserTariffCommand extends Command {
         }
 
         $result = new stdClass();
-        $result->itemArray = $resultArray;
-        $result->itemArray2 = $resultArray2;
+        $result->userTariffArray = $userTariffArray;
+        $result->tariffForChangeArray = $tariffForChangeArray;
         return $result;
     }
 

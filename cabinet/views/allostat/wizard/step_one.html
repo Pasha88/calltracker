@@ -15,13 +15,18 @@
                             <button class="btn btn-primary" type="submit" ng-click="freeNumber(item)">Освободить</button>
                             <!--================================= DEBUG ====================================-->
                         </div>
-                        <button class="btn btn-gray" type="submit" ng-click="addPhoneNumber()">Добавить поле для номера</button>
+                        <button class="btn btn-gray" type="submit" ng-click="addPhoneNumber()" ng-disabled="availablePhoneNumCount() < 1">Добавить</button>
                         <button class="btn btn-primary" type="submit" ng-click="savePhoneNumberList()">Сохранить&nbsp;&nbsp;</button>
                         <button class="btn btn-primary" type="submit" ng-click="restorePhoneNumberList()">Отмена&nbsp;&nbsp;</button>
                         <!--================================= DEBUG ====================================-->
                         <button class="btn btn-primary" type="submit" ng-click="freeAllNumbers()">Освободить все номера&nbsp;&nbsp;</button>
                         <!--================================= DEBUG ====================================-->
                     </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 10px;">
+                <div class="col-sm-9">
+                    <span>Доступно {{availablePhoneNumCount()}} номеров</span>
                 </div>
             </div>
         </fieldset>

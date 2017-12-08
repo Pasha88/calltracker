@@ -14,11 +14,6 @@ app.service('TariffSettingsService', function(Restangular) {
                 customerUid: customerUid
             };
             return Restangular.all("install/getTariffList").post(params);
-        }, getTariffList2: function(customerUid) {
-            var params = {
-                customerUid: customerUid
-            };
-            return Restangular.all("install/getTariffList").post(params);
         }
     }
 });
@@ -94,8 +89,6 @@ function TariffSettingsCtrl ($rootScope, $scope, notify, TariffSettingsService, 
             }
         );
     };
-
-    //================================= DEBUG ====================================
 
     $scope.loadTariffList();
 

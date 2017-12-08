@@ -1,4 +1,4 @@
-var app = angular.module('inspinia.install', ['ui.router']);
+var app = angular.module('inspinia.install', ['ui.router', 'inspinia.payment']);
 
 app.controller('InstallWizardCtrl', InstallWizardCtrl);
 app.controller('InstallCheckCtrl', InstallCheckCtrl);
@@ -67,7 +67,7 @@ app.service('InstallService', function(Restangular) {
 });
 
 
-function InstallWizardCtrl($rootScope, $scope, InstallService, util, notify, $stateParams, $http) {
+function InstallWizardCtrl($rootScope, $scope, InstallService, util, notify, $stateParams, PaymentService) {
 
     $scope.installConditions = {
         phoneNumbers: false,
@@ -100,6 +100,19 @@ function InstallWizardCtrl($rootScope, $scope, InstallService, util, notify, $st
     $scope.yaIdBkp = {};
 
     $scope.hasYaId = false;
+
+    PaymentService.getUserTariff($rootScope.user.customerUid).then(
+        function(result) { $scope.userTariff = result.userTariffArray.slice()[0]; },
+        function(err) {
+            notify({
+                messageTemplate: '<span>' + err.data.error + '<span>',
+                classes: 'allostat-alert-danger',
+                position: 'center',
+                duration: '10000'
+            });
+        }
+    );
+
 
     var confirmYaToken = function($stateParams) {
 
@@ -170,6 +183,10 @@ function InstallWizardCtrl($rootScope, $scope, InstallService, util, notify, $st
 
     $scope.onBlur = function(ind, item) {
         $scope.phoneNumberList[ind] = item;
+    };
+
+    $scope.availablePhoneNumCount = function() {
+        return angular.isDefined($scope.userTariff) ? $scope.userTariff.maxPhoneNumber - $scope.phoneNumberList.length : '';
     };
 
     $scope.addPhoneNumber = function() {

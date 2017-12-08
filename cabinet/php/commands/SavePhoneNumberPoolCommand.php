@@ -2,6 +2,8 @@
 
 require_once (dirname(__DIR__)."/util/Util.php");
 require_once (dirname(__DIR__)."/commands/Command.php");
+require_once (dirname(__DIR__)."/repo/TariffRepo.php");
+require_once (dirname(__DIR__)."/repo/CustomerRepo.php");
 
 class SavePhoneNumberPoolCommand  extends Command {
 
@@ -28,8 +30,12 @@ class SavePhoneNumberPoolCommand  extends Command {
         $forUpdate = array();
         $existingId = null;
 
-        $c = new FindCustomerCommandByUid( array( 'customerUid' => $this->args['customerUid'] ) );
-        $customer = $c->execute($conn);
+        $customer = CustomerRepo::getInstance()->getCustomerByUid($this->args['customerUid']);
+        $userTariff = TariffRepo::getInstance()->getUserTarif($customer->customerUid);
+
+        if(count($newNumberPool) > $userTariff->maxPhoneNumber) {
+            throw new Exception($this->getErrorRegistry()->USER_ERR_MAX_PHONE_NUMBER_EXCEEDED->message);
+        }
 
         if ($stmt = $conn->prepare($this->getExistingIdsSQL)) {
             $stmt->bind_param("i", $customer->customerId);
