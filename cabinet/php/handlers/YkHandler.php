@@ -1,6 +1,6 @@
-﻿<?php
+<?php
 
-require_once("SimpleRest.php");
+require_once(dirname(__DIR__)."/handlers/SimpleRest.php");
 require_once(dirname(__DIR__).'/util/billing/YKUtil.php');
 require_once(dirname(__DIR__).'/domain/Status.php');
 require_once(dirname(__DIR__).'/domain/Order.php');
@@ -346,34 +346,3 @@ error_log("stageCANCELED");
         return $orders;
     }
 }
-
-//$param = new stdClass();
-//$param->type = "notification";
-//$param->event = "payment.waiting_for_capture";
-//$object = new stdClass();
-//$object->id = "21a0f4b4-000f-500a-b000-02b090209c40";
-//$object->status = "waiting_for_capture";
-//$object->paid = true;
-//$amount = new stdClass();
-//$amount->value = "100.00";
-//$amount->currency = "RUB";
-//$object->amount = $amount;
-//$object->created_at = "2017-11-17T16:15:32.007Z";
-//$object->expires_at =  "2017-12-30T10:39:15.469Z";
-//$object->metadata =  "";
-//$payment_method = new stdClass();
-//$payment_method->type = "bank_card";
-//$payment_method->id = "8f8daf85-86ce-4f7b-94e1-196b4a56f12e";
-//$payment_method->saved = false;
-//$payment_method->title = "Bank card *1062";
-//$card = new stdClass();
-//$card ->last4 = "4448";
-//$card ->expiry_month = "04";
-//$card ->expiry_year = "2018";
-//$card ->card_type = "MasterCard";
-//$payment_method->card =$card;
-//$object->payment_method = $payment_method;
-//$param->object = $object;
-//
-//$y = new YkHandler();
-//$y->process($param);

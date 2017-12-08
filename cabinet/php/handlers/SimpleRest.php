@@ -168,4 +168,3 @@ class SimpleRest {
         return iconv('cp1251', 'utf-8', $str);
     }
 }
-?>

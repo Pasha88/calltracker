@@ -34,9 +34,9 @@ function catch_fatal_error()
 }
 register_shutdown_function('catch_fatal_error');
 
-require_once("handlers/AuthHandler.php");
-require_once("handlers/CustomerHandler.php");
-require_once("handlers/YkHandler.php");
+require_once(dirname(__DIR__). "/php/handlers/AuthHandler.php");
+require_once(dirname(__DIR__). "/php/handlers/CustomerHandler.php");
+require_once(dirname(__DIR__). "/php/handlers/YkHandler.php");
 
 $view = "";
 if(isset($_GET["view"])) {
