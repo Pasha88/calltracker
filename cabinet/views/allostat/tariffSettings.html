@@ -24,8 +24,8 @@
                                     <h4 style="float: left; width: 10%; text-align: center; ">&#160;</h4>
                                 </div>
                                 <div ng-repeat="item in tariffList" class="m-b form-inline">
-                                    <input type="text" ng-model="item.tariff_name" class="form-control" ng-maxlength="128" placeholder="Название тарифа" style="clear: both; float: left; width: 40%;">
-                                    <input ng-model="item.max_phone_number" type="number" name="input" min="{{0}}" max="{{50}}" class="form-control" placeholder="0" style="float: left; width: 20%;">
+                                    <input type="text" ng-model="item.tariffName" class="form-control" ng-maxlength="128" placeholder="Название тарифа" style="clear: both; float: left; width: 40%;">
+                                    <input ng-model="item.maxPhoneNumber" type="number" name="input" min="{{0}}" max="{{50}}" class="form-control" placeholder="0" style="float: left; width: 20%;">
                                     <input type="number" ng-model="item.rate" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01"  class="form-control" placeholder="0.0" style=" float: left; width: 20%;">
                                     <button ng-click="removeTariff(item)" class="btn-default form-control" style=" float: left; width: 10%;"><i class="fa fa-trash"></i></button>
                                 </div>

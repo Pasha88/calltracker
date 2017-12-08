@@ -23,6 +23,13 @@ class SaveUserTariffCommand extends Command {
         $c = new FindCustomerCommandByUid( array( 'customerUid' => $this->args['customerUid'] ) );
         $customer = $c->execute($conn);
 
+        $phoneNumberList = PhoneNumberPoolRepo::getInstance()->getPhoneNumberList($customer->customerUid)->itemArray;
+        $currentTariff = TariffRepo::getInstance()->tariffById($selectedTariff);
+
+        if(count($phoneNumberList) > $currentTariff->maxPhoneNumber) {
+            throw new Exception($this->getErrorRegistry()->USER_ERR_SAVE_USER_TARIFF_MAX_PHONE_NUMBER_TOO_SMALL->message);
+        }
+
         if ($stmt = $conn->prepare($this->insertNewUserTariff)) {
             $updateNumberId = null;
             $customerId = null;

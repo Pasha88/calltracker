@@ -8,24 +8,25 @@ Class Tariff {
 	public $tariffName;
 	public $maxPhoneNumber;
 	public $rate;
-    public $is_deleted;
+    public $isDeleted;
 
     public static function create($bdRow) {
         $result = new Tariff();
-        if($bdRow == null) {
-            $result->tariff_id = -1;
-            $result->tariff_name = '0';
-            $result->max_phone_number = 0;
-            $result->rate = 0.00;
-            $result->is_deleted = 1;
-        }
-        else {
-            $result->tariff_id = $bdRow['tariff_id'];
-            $result->tariff_name = $bdRow['tariff_name'];
-            $result->max_phone_number = $bdRow['max_phone_number'];
-            $result->rate = (float) $bdRow['rate'];
-            $result->is_deleted = $bdRow['is_deleted'];
-        }
+        $result->tariffId = $bdRow['tariff_id'];
+        $result->tariffName = $bdRow['tariff_name'];
+        $result->maxPhoneNumber = $bdRow['max_phone_number'];
+        $result->rate = (float) $bdRow['rate'];
+        $result->isDeleted = $bdRow['is_deleted'];
+        return $result;
+    }
+
+    public static function createByArg($tariffId, $tariffName, $maxPhoneNumber, $rate, $isDeleted) {
+        $result = new Tariff();
+        $result->tariffId = $tariffId;
+        $result->tariffName = $tariffName;
+        $result->maxPhoneNumber = $maxPhoneNumber;
+        $result->rate = (float) $rate;
+        $result->isDeleted = $isDeleted;
         return $result;
     }
 

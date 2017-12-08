@@ -4,6 +4,7 @@ require_once(dirname(__DIR__) . '/util/Repository.php');
 require_once(dirname(__DIR__) . '/commands/FindAllNumberPoolCommand.php');
 require_once(dirname(__DIR__) . '/commands/FindNumberPoolCommand.php');
 require_once(dirname(__DIR__) . '/commands/SaveNumberPoolCommand.php');
+require_once(dirname(__DIR__) . '/commands/GetPhoneNumberPoolCommand.php');
 
 class PhoneNumberPoolRepo extends Repository {
 
@@ -35,6 +36,12 @@ class PhoneNumberPoolRepo extends Repository {
         $params = array('id' => $phoneNumberPool->id, 'number' => $phoneNumberPool->number, 'description' => $phoneNumberPool->description,
             'freeDateTime' => $phoneNumberPool->freeDateTime, 'customerId' => $phoneNumberPool->customerId);
         $c = new SaveNumberPoolCommand($params);
+        return  $this->executeTransaction($c);
+    }
+
+    public function getPhoneNumberList($customerUid) {
+        $params = array('customerUid' => $customerUid);
+        $c = new GetPhoneNumberPoolCommand($params);
         return  $this->executeTransaction($c);
     }
 

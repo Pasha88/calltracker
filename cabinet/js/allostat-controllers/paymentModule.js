@@ -169,7 +169,7 @@ function PaymentTariffCtrl ($rootScope, $scope, notify, PaymentService, confirma
                     },
                     function(err) {
                         notify({
-                            message: 'Ошибка сохранения тарифа пользователя',
+                            message: err.data.error,
                             classes: 'allostat-alert-danger',
                             position: 'center',
                             duration: '5000'

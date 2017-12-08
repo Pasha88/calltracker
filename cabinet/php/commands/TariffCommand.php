@@ -31,8 +31,8 @@ class TariffCommand extends Command {
 
             while($stmt->fetch()) {
                 for($j=0; $j<count($newTariffSet); $j++) {
-                    if(!empty($newTariffSet[$j]->tariff_id)) {
-                        if($newTariffSet[$j]->tariff_id == $existingId) {
+                    if(!empty($newTariffSet[$j]->tariffId)) {
+                        if($newTariffSet[$j]->tariffId == $existingId) {
                             array_push($forUpdate, $newTariffSet[$j]);
                             continue 2;
                         }
@@ -71,9 +71,9 @@ class TariffCommand extends Command {
 
             for($i=0; $i<count($this->args['tariffSet']); $i++) {
                 $item = $this->args['tariffSet'][$i];
-                if(empty($item->tariff_id)) {
-                    $tariffName = $item->tariff_name;
-                    $maxPhoneNumber = $item->max_phone_number;
+                if(empty($item->tariffId)) {
+                    $tariffName = $item->tariffMame;
+                    $maxPhoneNumber = $item->maxPhoneNumber;
                     $rate = $item->rate;
 
                     $stmt->execute();
@@ -93,10 +93,10 @@ class TariffCommand extends Command {
 
             for($i=0; $i<count($forUpdate); $i++) {
                 $item = $this->args['tariffSet'][$i];
-                if(!empty($item->tariff_id)) {
-                    $updateNumberId = $item->tariff_id;
-                    $tariffName = $item->tariff_name;
-                    $maxPhoneNumber = $item->max_phone_number;
+                if(!empty($item->tariffId)) {
+                    $updateNumberId = $item->tariffId;
+                    $tariffName = $item->tariffName;
+                    $maxPhoneNumber = $item->maxPhoneNumber;
                     $rate = $item->rate;
                     $stmt->execute();
                 }
