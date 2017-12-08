@@ -72,7 +72,7 @@ class TariffCommand extends Command {
             for($i=0; $i<count($this->args['tariffSet']); $i++) {
                 $item = $this->args['tariffSet'][$i];
                 if(empty($item->tariffId)) {
-                    $tariffName = $item->tariffMame;
+                    $tariffName = $item->tariffName;
                     $maxPhoneNumber = $item->maxPhoneNumber;
                     $rate = $item->rate;
 
