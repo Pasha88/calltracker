@@ -47,7 +47,7 @@
                 </div>
                 <div class="col-lg-3" style="margin-top: 30px; max-width: 200px;"  >
                     <select style="padding-left: 0px; max-width: 200px;" id="selected_user_tariff" ng-model="selectedTariff" ng-change="changedValue(selectedTariff)"
-                            ng-options="item.tariffId as item.tariffName + ' (' + item.maxPhoneNumber + ' номеров,'  + ' ' + item.maxPhoneNumber + ' руб.)'  for item in tariffList">
+                            ng-options="item.tariffId as item.tariffName + ' (' + item.maxPhoneNumber + ' номеров,'  + ' ' + item.rate + ' руб.)'  for item in tariffList">
                     </select>
                 </div>
                 <div class="col-lg-2" style="margin-left: 20px; margin-right: 20px; margin-top: 30px;" >
